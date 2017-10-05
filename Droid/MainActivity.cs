@@ -1,20 +1,32 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
+using static Android.Locations.GpsStatus;
+using Xamarin.Facebook;
+using Xamarin.Facebook.Login.Widget;
 
 namespace Playfie.Droid
 {
     [Activity(Label = "Playfie", MainLauncher = true, Icon = "@mipmap/icon")]
     public class MainActivity : Activity
     {
-        int count = 1;
-
-        protected override void OnCreate(Bundle savedInstanceState)
+        TextView t;
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(savedInstanceState);
-
+            base.OnCreate(bundle);
+            FacebookSdk.SdkInitialize(this.ApplicationContext);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
+            t = (TextView)FindViewById(Resource.Id.registrText);
+            t.Click += Btn_Click;
+        }
+        
+
+        private void Btn_Click(object sender, System.EventArgs e)
+        {
+            t = (TextView)FindViewById(Resource.Id.registrText);
+            SetContentView(Resource.Layout.registration);
+            //OverridePendingTransition(Resource.Animation.slide_in_left, Resource.Animation.slide_out_left);
         }
     }
 }
