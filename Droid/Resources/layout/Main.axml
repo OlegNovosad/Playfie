@@ -48,8 +48,8 @@
         android:gravity="center"
         android:id="@+id/registrText" />
     <com.facebook.login.widget.LoginButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/facebookLog"
-        android:layout_gravity="center" />
+    android:id="@+id/login_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"/> 
 </LinearLayout>

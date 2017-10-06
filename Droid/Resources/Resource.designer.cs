@@ -347,9 +347,6 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f09001f
 			public const int facebookB = 2131296287;
 			
-			// aapt resource value: 0x7f09001d
-			public const int facebookLog = 2131296285;
-			
 			// aapt resource value: 0x7f090007
 			public const int inline = 2131296263;
 			
@@ -364,6 +361,9 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f09001b
 			public const int loginB = 2131296283;
+			
+			// aapt resource value: 0x7f09001d
+			public const int login_button = 2131296285;
 			
 			// aapt resource value: 0x7f09001e
 			public const int messenger_send_button = 2131296286;
@@ -473,8 +473,8 @@ namespace Playfie.Droid
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050012
-			public const int app_name = 2131034130;
+			// aapt resource value: 0x7f050011
+			public const int app_name = 2131034129;
 			
 			// aapt resource value: 0x7f050000
 			public const int com_facebook_image_download_unknown_error = 2131034112;
@@ -524,8 +524,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f05000f
 			public const int com_facebook_tooltip_default = 2131034127;
 			
-			// aapt resource value: 0x7f050011
-			public const int hello = 2131034129;
+			// aapt resource value: 0x7f050012
+			public const int facebook_app_id = 2131034130;
+			
+			// aapt resource value: 0x7f050013
+			public const int fb_login_protocol_scheme = 2131034131;
 			
 			// aapt resource value: 0x7f050010
 			public const int messenger_send_button_text = 2131034128;

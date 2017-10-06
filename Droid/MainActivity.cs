@@ -4,6 +4,7 @@ using Android.OS;
 using static Android.Locations.GpsStatus;
 using Xamarin.Facebook;
 using Xamarin.Facebook.Login.Widget;
+using Android.Views;
 
 namespace Playfie.Droid
 {
@@ -14,8 +15,12 @@ namespace Playfie.Droid
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
             FacebookSdk.SdkInitialize(this.ApplicationContext);
-            // Set our view from the "main" layout resource
+
+            LoginButton loginButton = (LoginButton)this.FindViewById(Resource.Id.login_button);
+
+
             SetContentView(Resource.Layout.Main);
             t = (TextView)FindViewById(Resource.Id.registrText);
             t.Click += Btn_Click;
