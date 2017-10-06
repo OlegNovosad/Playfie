@@ -24,6 +24,7 @@ namespace Playfie.Droid
 
             FacebookSdk.SdkInitialize(this.ApplicationContext);
 
+            SetTheme(Android.Resource.Style.ThemeDeviceDefaultLight);
             SetContentView(Resource.Layout.login);
             t = (TextView)FindViewById(Resource.Id.registrText);
             t.Click += Btn_Click;
