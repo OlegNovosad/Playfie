@@ -347,6 +347,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f09001f
 			public const int facebookB = 2131296287;
 			
+			// aapt resource value: 0x7f09001d
+			public const int fbLogin = 2131296285;
+			
 			// aapt resource value: 0x7f090007
 			public const int inline = 2131296263;
 			
@@ -361,9 +364,6 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f09001b
 			public const int loginB = 2131296283;
-			
-			// aapt resource value: 0x7f09001d
-			public const int login_button = 2131296285;
 			
 			// aapt resource value: 0x7f09001e
 			public const int messenger_send_button = 2131296286;
