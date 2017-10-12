@@ -4,10 +4,14 @@
 <<<<<<< HEAD
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<<<<<<< HEAD
   <activity android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"/>
 =======
   
 >>>>>>> parent of 5b58ad2... fix for facebook button
+=======
+  
+>>>>>>> parent of e97249a... theme fix
 	<application android:label="Playfie">
     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"></meta-data>
     <uses-permission android:name="android.permission.INTERNET"/>

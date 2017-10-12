@@ -19,7 +19,10 @@ namespace Playfie.Droid
             FacebookSdk.SdkInitialize(this.ApplicationContext);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLight);
+=======
+>>>>>>> parent of e97249a... theme fix
             SetContentView(Resource.Layout.login);
 =======
             LoginButton loginButton = (LoginButton)this.FindViewById(Resource.Id.login_button);
