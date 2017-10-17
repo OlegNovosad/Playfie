@@ -1,29 +1,49 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
-using static Android.Locations.GpsStatus;
 using Xamarin.Facebook;
-using Android.Views;
 using Xamarin.Facebook.Login.Widget;
 using System;
-using Xamarin.Facebook.Login;
+using Android.Content;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "Playfie", MainLauncher = true, Icon = "@mipmap/icon")]
-    public class MainActivity : Activity
+    [Activity(Label = "Playfie", MainLauncher = true)]
+    public class MainActivity : Activity, IFacebookCallback
     {
+        private ICallbackManager Callbacker;
         TextView t;
+
+        public void OnCancel()
+        {
+            
+        }
+
+        public void OnError(FacebookException error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnSuccess(Java.Lang.Object result)
+        {
+            
+        }
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            Callbacker.OnActivityResult(requestCode, (int)resultCode, data);
+        }
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
             FacebookSdk.SdkInitialize(this.ApplicationContext);
-            SetTheme(Android.Resource.Style.ThemeDeviceDefaultLight);
+            SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.LoginP);
-            LoginButton loginButton = (LoginButton) this.FindViewById(Resource.Id.loginFB);
 
-            SetContentView(Resource.Layout.LoginP);
+            LoginButton fbButton = (LoginButton) this.FindViewById(Resource.Id.loginFB);
+            fbButton.SetReadPermissions("user_friends");
+            Callbacker = CallbackManagerFactory.Create();
+            fbButton.RegisterCallback(Callbacker, this);
             t = (TextView)FindViewById(Resource.Id.registrText);
             t.Click += Btn_Click;
         }
@@ -34,21 +54,6 @@ namespace Playfie.Droid
             t = (TextView)FindViewById(Resource.Id.registrText);
             SetContentView(Resource.Layout.registration);
             //OverridePendingTransition(Resource.Animation.slide_in_left, Resource.Animation.slide_out_left);
-        }
-        public void OnCancel()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(FacebookException error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnSuccess(Java.Lang.Object result)
-        {
-            LoginResult res = (LoginResult)result;
-            //res.AccessToken.UserId.
         }
     }
 }

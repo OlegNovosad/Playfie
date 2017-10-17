@@ -288,7 +288,10 @@ namespace Playfie.Droid
 			public const int messenger_button_white_bg_selector = 2130837531;
 			
 			// aapt resource value: 0x7f02001c
-			public const int roundBtn = 2130837532;
+			public const int playfieIcon = 2130837532;
+			
+			// aapt resource value: 0x7f02001d
+			public const int roundBtn = 2130837533;
 			
 			static Drawable()
 			{
@@ -342,8 +345,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f09000d
 			public const int display_always = 2131296269;
 			
-			// aapt resource value: 0x7f09001a
-			public const int editText1 = 2131296282;
+			// aapt resource value: 0x7f09001b
+			public const int editText1 = 2131296283;
 			
 			// aapt resource value: 0x7f09001f
 			public const int facebookB = 2131296287;
@@ -357,14 +360,14 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f09000a
 			public const int left = 2131296266;
 			
+			// aapt resource value: 0x7f09001a
+			public const int login = 2131296282;
+			
+			// aapt resource value: 0x7f09001c
+			public const int loginB = 2131296284;
+			
 			// aapt resource value: 0x7f090019
-			public const int login = 2131296281;
-			
-			// aapt resource value: 0x7f09001b
-			public const int loginB = 2131296283;
-			
-			// aapt resource value: 0x7f09001d
-			public const int loginFB = 2131296285;
+			public const int loginFB = 2131296281;
 			
 			// aapt resource value: 0x7f09001e
 			public const int messenger_send_button = 2131296286;
@@ -381,8 +384,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f090001
 			public const int page = 2131296257;
 			
-			// aapt resource value: 0x7f09001c
-			public const int registrText = 2131296284;
+			// aapt resource value: 0x7f09001d
+			public const int registrText = 2131296285;
 			
 			// aapt resource value: 0x7f09000b
 			public const int right = 2131296267;
@@ -460,6 +463,9 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f030000
 			public const int Icon = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int playfieIcon = 2130903041;
 			
 			static Mipmap()
 			{

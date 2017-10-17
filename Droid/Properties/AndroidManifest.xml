@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.itstep.Playfie">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.itstep.Playfie" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="15" />
-  <uses-permission android:name="android.permission.INTERNET"/>
-  
-	<application android:label="Playfie">
-    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"></meta-data>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    
-  </application>
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="Playfie" android:icon="@drawable/playfieIcon">
+		<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"></meta-data>
+		<uses-permission android:name="android.permission.INTERNET" />
+	</application>
 </manifest>
