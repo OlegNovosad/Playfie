@@ -315,6 +315,15 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f090003
 			public const int box_count = 2131296259;
 			
+			// aapt resource value: 0x7f09001a
+			public const int btnLoginFB = 2131296282;
+			
+			// aapt resource value: 0x7f09001f
+			public const int btnSignIn = 2131296287;
+			
+			// aapt resource value: 0x7f09001e
+			public const int btnSignUp = 2131296286;
+			
 			// aapt resource value: 0x7f090004
 			public const int button = 2131296260;
 			
@@ -345,14 +354,17 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f09000d
 			public const int display_always = 2131296269;
 			
-			// aapt resource value: 0x7f09001b
-			public const int editText1 = 2131296283;
+			// aapt resource value: 0x7f09001c
+			public const int etLogin = 2131296284;
 			
-			// aapt resource value: 0x7f09001f
-			public const int facebookB = 2131296287;
+			// aapt resource value: 0x7f09001d
+			public const int etPassword = 2131296285;
 			
 			// aapt resource value: 0x7f090007
 			public const int inline = 2131296263;
+			
+			// aapt resource value: 0x7f090019
+			public const int ivAppIcon = 2131296281;
 			
 			// aapt resource value: 0x7f09000f
 			public const int large = 2131296271;
@@ -360,17 +372,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f09000a
 			public const int left = 2131296266;
 			
-			// aapt resource value: 0x7f09001a
-			public const int login = 2131296282;
-			
-			// aapt resource value: 0x7f09001c
-			public const int loginB = 2131296284;
-			
-			// aapt resource value: 0x7f090019
-			public const int loginFB = 2131296281;
-			
-			// aapt resource value: 0x7f09001e
-			public const int messenger_send_button = 2131296286;
+			// aapt resource value: 0x7f090020
+			public const int messenger_send_button = 2131296288;
 			
 			// aapt resource value: 0x7f09000e
 			public const int never_display = 2131296270;
@@ -384,9 +387,6 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f090001
 			public const int page = 2131296257;
 			
-			// aapt resource value: 0x7f09001d
-			public const int registrText = 2131296285;
-			
 			// aapt resource value: 0x7f09000b
 			public const int right = 2131296267;
 			
@@ -398,6 +398,9 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f090008
 			public const int top = 2131296264;
+			
+			// aapt resource value: 0x7f09001b
+			public const int tvOr = 2131296283;
 			
 			// aapt resource value: 0x7f090002
 			public const int unknown = 2131296258;
@@ -425,7 +428,7 @@ namespace Playfie.Droid
 			public const int com_facebook_tooltip_bubble = 2130968578;
 			
 			// aapt resource value: 0x7f040003
-			public const int LoginP = 2130968579;
+			public const int Login = 2130968579;
 			
 			// aapt resource value: 0x7f040004
 			public const int messenger_button_send_blue_large = 2130968580;
@@ -444,9 +447,6 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f040009
 			public const int messenger_button_send_white_small = 2130968585;
-			
-			// aapt resource value: 0x7f04000a
-			public const int registration = 2130968586;
 			
 			static Layout()
 			{
@@ -479,6 +479,9 @@ namespace Playfie.Droid
 		
 		public partial class String
 		{
+			
+			// aapt resource value: 0x7f05001a
+			public const int _or_ = 2131034138;
 			
 			// aapt resource value: 0x7f050012
 			public const int app_name = 2131034130;
@@ -542,6 +545,21 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f050010
 			public const int messenger_send_button_text = 2131034128;
+			
+			// aapt resource value: 0x7f050017
+			public const int need_account = 2131034135;
+			
+			// aapt resource value: 0x7f050015
+			public const int placeholder_email = 2131034133;
+			
+			// aapt resource value: 0x7f050016
+			public const int placeholder_password = 2131034134;
+			
+			// aapt resource value: 0x7f050018
+			public const int sign_in = 2131034136;
+			
+			// aapt resource value: 0x7f050019
+			public const int sign_up = 2131034137;
 			
 			static String()
 			{

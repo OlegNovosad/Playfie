@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Playfie.Droid</string>
-  <string name="facebook_app_id">1974988802720293</string>
-  <string name="fb_login_protocol_scheme">fb1974988802720293</string>
+    <string name="facebook_app_id">1974988802720293</string>
+    <string name="fb_login_protocol_scheme">fb1974988802720293</string>
+	<string name="placeholder_email">Enter your email</string>
+	<string name="placeholder_password">Enter your password</string>
+	<string name="need_account">I need an account</string>
+	<string name="sign_in">Sign In</string>
+	<string name="sign_up">Sign Up</string>
+	<string name="_or_">- OR -</string>
 </resources>
