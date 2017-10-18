@@ -5,6 +5,8 @@ using Xamarin.Facebook;
 using Xamarin.Facebook.Login.Widget;
 using System;
 using Android.Content;
+using Xamarin.Facebook.Login;
+using Android.Content.Res;
 
 namespace Playfie.Droid
 {
@@ -21,15 +23,16 @@ namespace Playfie.Droid
 
         public void OnError(FacebookException error)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnSuccess(Java.Lang.Object result)
         {
-            
+            LoginResult res = (LoginResult)result;
         }
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
+            base.OnActivityResult(requestCode, resultCode, data);
             Callbacker.OnActivityResult(requestCode, (int)resultCode, data);
         }
         protected override void OnCreate(Bundle bundle)
@@ -37,6 +40,7 @@ namespace Playfie.Droid
             base.OnCreate(bundle);
 
             FacebookSdk.SdkInitialize(this.ApplicationContext);
+
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.LoginP);
 
@@ -44,6 +48,7 @@ namespace Playfie.Droid
             fbButton.SetReadPermissions("user_friends");
             Callbacker = CallbackManagerFactory.Create();
             fbButton.RegisterCallback(Callbacker, this);
+
             t = (TextView)FindViewById(Resource.Id.registrText);
             t.Click += Btn_Click;
         }
@@ -52,7 +57,8 @@ namespace Playfie.Droid
         private void Btn_Click(object sender, System.EventArgs e)
         {
             t = (TextView)FindViewById(Resource.Id.registrText);
-            SetContentView(Resource.Layout.registration);
+            
+            //SetContentView(Resource.Layout.registration);
             //OverridePendingTransition(Resource.Animation.slide_in_left, Resource.Animation.slide_out_left);
         }
     }
