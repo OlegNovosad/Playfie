@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,12 +37,6 @@
     <ProjectReference Include="..\iOS\Playfie.iOS.csproj">
       <Project>{8F4B98D6-54B8-40D0-9E4F-E46EB0028E78}</Project>
       <Name>Playfie.iOS</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Droid\Playfie.Droid.csproj">
-      <Project>{F08FE931-A1DA-4F89-886D-EEA706D0E34C}</Project>
-      <Name>Playfie.Droid</Name>
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
       <Private>False</Private>
     </ProjectReference>
