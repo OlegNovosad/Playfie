@@ -95,6 +95,7 @@ namespace Playfie.Droid
         public void OnCancel()
         {
             Log.Debug(Constants.DEFAULT_TAG, "User cancelled FB authentication");
+            
         }
 
         public void OnError(FacebookException error)

@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:gridSpec="1|8|#0093eeff|K:#ee8700ff:16,l:72,l:16,r|S:#83ee00ff:16,0,l:16,56,l:16,0,r">
     <ImageView
         android:id="@+id/ivAppIcon"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_width="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_height="150dp"
         android:src="@drawable/playfieicon" />
     <com.facebook.login.widget.LoginButton
         android:layout_below="@id/ivAppIcon"
@@ -21,7 +24,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="@string/_or_"
+        android:text="- OR -"
         android:layout_below="@id/btnLoginFB"
         android:layout_centerHorizontal="true"
         android:id="@+id/tvOr"
@@ -53,26 +56,29 @@
     <LinearLayout
         android:layout_below="@id/etPassword"
         android:layout_centerHorizontal="true"
+        
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:weightSum="1"
-        android:orientation="horizontal">
+        android:layout_marginTop="5dp"
+        android:weightSum="2"
+        android:orientation="vertical">
         <Button
-            android:background="@android:color/holo_green_light"
+            android:background="@color/btn_2"
             android:clickable="false"
+            
             android:text="@string/sign_up"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:id="@+id/btnSignUp" />
         <Button
-            android:background="@android:color/holo_blue_light"
+            android:background="@color/btn_1"
             android:clickable="false"
+            
             android:text="@string/sign_in"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:id="@+id/btnSignIn" />
     </LinearLayout>
 </RelativeLayout>

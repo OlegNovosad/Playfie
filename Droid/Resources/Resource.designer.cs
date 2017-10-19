@@ -81,6 +81,12 @@ namespace Playfie.Droid
 		public partial class Color
 		{
 			
+			// aapt resource value: 0x7f06000d
+			public const int btn_1 = 2131099661;
+			
+			// aapt resource value: 0x7f06000e
+			public const int btn_2 = 2131099662;
+			
 			// aapt resource value: 0x7f060000
 			public const int com_facebook_blue = 2131099648;
 			
@@ -318,6 +324,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f09001a
 			public const int btnLoginFB = 2131296282;
 			
+			// aapt resource value: 0x7f090021
+			public const int btnPhoto = 2131296289;
+			
 			// aapt resource value: 0x7f09001f
 			public const int btnSignIn = 2131296287;
 			
@@ -448,6 +457,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f040009
 			public const int messenger_button_send_white_small = 2130968585;
 			
+			// aapt resource value: 0x7f04000a
+			public const int PhotoTutorial = 2130968586;
+			
 			static Layout()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -479,9 +491,6 @@ namespace Playfie.Droid
 		
 		public partial class String
 		{
-			
-			// aapt resource value: 0x7f05001a
-			public const int _or_ = 2131034138;
 			
 			// aapt resource value: 0x7f050012
 			public const int app_name = 2131034130;
