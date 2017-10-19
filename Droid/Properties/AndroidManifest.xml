@@ -17,6 +17,5 @@
 				<data android:scheme="@string/fb_login_protocol_scheme" />
 			</intent-filter>
 		</activity>
-		<uses-permission android:name="android.permission.INTERNET" />
 	</application>
 </manifest>
