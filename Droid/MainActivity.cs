@@ -58,6 +58,8 @@ namespace Playfie.Droid
         {
             t = (TextView)FindViewById(Resource.Id.registrText);
             
+            Intent mainMenu = new Intent(this, typeof(MainMenuActivity));
+            this.StartActivity(mainMenu);
             //SetContentView(Resource.Layout.registration);
             //OverridePendingTransition(Resource.Animation.slide_in_left, Resource.Animation.slide_out_left);
         }

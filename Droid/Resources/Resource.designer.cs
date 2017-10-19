@@ -318,6 +318,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f090004
 			public const int button = 2131296260;
 			
+			// aapt resource value: 0x7f090020
+			public const int button1 = 2131296288;
+			
 			// aapt resource value: 0x7f090009
 			public const int center = 2131296265;
 			
@@ -447,6 +450,9 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f04000a
 			public const int registration = 2130968586;
+			
+			// aapt resource value: 0x7f04000b
+			public const int TutorialPhoto = 2130968587;
 			
 			static Layout()
 			{
