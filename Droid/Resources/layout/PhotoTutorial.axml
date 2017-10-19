@@ -6,9 +6,30 @@
     android:minWidth="25px"
     android:minHeight="25px">
     <Button
-        android:text="Button"
+        android:text="+"
+        android:textSize="35sp"
+        android:background="@drawable/round_btn"
         android:layout_centerInParent="true"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:textColor="@android:color/white"
         android:id="@+id/btnPhoto" />
+    <TextView
+        android:layout_below="@id/btnPhoto"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:hint="Try take a photo!"
+        android:layout_width="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tlTip1" />
+    <TextView
+        android:layout_below="@id/tlTip1"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:hint="Let us know how are you looking!"
+        android:layout_width="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tlTip2" />
 </RelativeLayout>

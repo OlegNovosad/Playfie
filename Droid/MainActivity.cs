@@ -10,9 +10,9 @@ using Java.Lang;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "Playfie", MainLauncher = true)]
+    [Activity(Label = "Playfie", MainLauncher = true, Theme = "@android:style/ThemeDeviceDefaultLightNoActionBar")]
     public class MainActivity : Activity, IFacebookCallback
-    {
+    { 
         private ICallbackManager CallbackManager;
         Button btnSignIn;
         Button btnSignUp;
@@ -84,7 +84,6 @@ namespace Playfie.Droid
             }
 
             signInToast.Show();
-
             // TODO: Add authentication via email and password in the future.
         }
 
@@ -107,8 +106,18 @@ namespace Playfie.Droid
         {
             LoginResult res = (LoginResult) result;
             Log.Info(Constants.DEFAULT_TAG, "Result of authentication is: " + result);
+            GoPhotoTutorial();
         }
 
+
+        #endregion
+
+        #region Links
+        private void GoPhotoTutorial()
+        {
+            Intent tutor = new Intent(this, typeof(PhotoTutorialActivity));
+            StartActivity(tutor);
+        }
         #endregion
     }
 }

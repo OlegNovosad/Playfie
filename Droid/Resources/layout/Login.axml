@@ -56,7 +56,6 @@
     <LinearLayout
         android:layout_below="@id/etPassword"
         android:layout_centerHorizontal="true"
-        
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -65,7 +64,6 @@
         <Button
             android:background="@color/btn_2"
             android:clickable="false"
-            
             android:text="@string/sign_up"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -74,7 +72,6 @@
         <Button
             android:background="@color/btn_1"
             android:clickable="false"
-            
             android:text="@string/sign_in"
             android:layout_width="match_parent"
             android:layout_weight="1"

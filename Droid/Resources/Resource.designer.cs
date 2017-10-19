@@ -297,7 +297,7 @@ namespace Playfie.Droid
 			public const int playfieIcon = 2130837532;
 			
 			// aapt resource value: 0x7f02001d
-			public const int roundBtn = 2130837533;
+			public const int round_btn = 2130837533;
 			
 			static Drawable()
 			{
@@ -404,6 +404,12 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f090005
 			public const int standard = 2131296261;
+			
+			// aapt resource value: 0x7f090022
+			public const int tlTip1 = 2131296290;
+			
+			// aapt resource value: 0x7f090023
+			public const int tlTip2 = 2131296291;
 			
 			// aapt resource value: 0x7f090008
 			public const int top = 2131296264;
