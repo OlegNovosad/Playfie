@@ -8,5 +8,5 @@
 	<string name="need_account">I need an account</string>
 	<string name="sign_in">Sign In</string>
 	<string name="sign_up">Sign Up</string>
-
+  <string name="next">Next</string>
 </resources>

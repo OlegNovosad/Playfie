@@ -41,6 +41,10 @@
     <Reference Include="Facebook">
       <HintPath>..\Components\facebook-sdk-6.2.2\lib\android\Facebook.dll</HintPath>
     </Reference>
+    <Reference Include="Refractored.Controls.CircleImageView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Refractored.Controls.CircleImageView.1.0.1\lib\MonoAndroid10\Refractored.Controls.CircleImageView.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -72,6 +76,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\PhotoTutorial.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\PhotoTutorialResult.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -109,6 +116,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Colors.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\animAlpha.xml" />
   </ItemGroup>
   <Import Project="..\Playfie\Playfie.projitems" Label="Shared" Condition="Exists('..\Playfie\Playfie.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
