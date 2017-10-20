@@ -12,7 +12,7 @@ namespace Playfie.Droid
 {
     [Activity(Label = "Playfie", MainLauncher = true)]
     public class MainActivity : Activity, IFacebookCallback
-    {
+    { 
         private ICallbackManager CallbackManager;
         Button btnSignIn;
         Button btnSignUp;
@@ -67,7 +67,10 @@ namespace Playfie.Droid
             }
 
             signUpToast.Show();
+            GoPhotoTutorial();
 
+            GoPhotoTutorial();
+            
             // TODO: Add registration via email and password in the future.
         }
 
@@ -84,7 +87,6 @@ namespace Playfie.Droid
             }
 
             signInToast.Show();
-
             // TODO: Add authentication via email and password in the future.
         }
 
@@ -95,6 +97,7 @@ namespace Playfie.Droid
         public void OnCancel()
         {
             Log.Debug(Constants.DEFAULT_TAG, "User cancelled FB authentication");
+            
         }
 
         public void OnError(FacebookException error)
@@ -105,9 +108,20 @@ namespace Playfie.Droid
         public void OnSuccess(Object result)
         {
             LoginResult res = (LoginResult) result;
-            Log.Info(Constants.DEFAULT_TAG, "Result of authentication is: " + result);
+            Log.Info(Constants.DEFAULT_TAG, "Result of authentication is: " + result + " " + AccessToken.CurrentAccessToken);
+            GoPhotoTutorial();
         }
 
+
+        #endregion
+
+        #region Links
+        //link to phototutorial
+        private void GoPhotoTutorial()
+        {
+            Intent tutor = new Intent(this, typeof(PhotoTutorialActivity));
+            StartActivity(tutor);
+        }
         #endregion
     }
 }
