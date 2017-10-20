@@ -35,6 +35,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f050000
 			public const int animAlpha = 2131034112;
 			
+			// aapt resource value: 0x7f050001
+			public const int animJumper = 2131034113;
+			
 			static Animation()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();

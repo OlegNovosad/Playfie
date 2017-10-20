@@ -68,6 +68,9 @@ namespace Playfie.Droid
 
             signUpToast.Show();
             GoPhotoTutorial();
+
+            GoPhotoTutorial();
+            
             // TODO: Add registration via email and password in the future.
         }
 
@@ -105,7 +108,7 @@ namespace Playfie.Droid
         public void OnSuccess(Object result)
         {
             LoginResult res = (LoginResult) result;
-            Log.Info(Constants.DEFAULT_TAG, "Result of authentication is: " + result);
+            Log.Info(Constants.DEFAULT_TAG, "Result of authentication is: " + result + " " + AccessToken.CurrentAccessToken);
             GoPhotoTutorial();
         }
 

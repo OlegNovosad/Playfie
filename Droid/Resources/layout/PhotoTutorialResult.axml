@@ -8,8 +8,8 @@
     <refractored.controls.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:src="@android:drawable/ic_menu_gallery"
         android:layout_centerInParent="true"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/ivAvatar" />
     <TextView
         android:layout_below="@id/ivAvatar"

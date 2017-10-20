@@ -71,10 +71,13 @@ namespace Playfie.Droid
                 
                 avatar.SetImageBitmap(yourPhoto);
                 
-
                 TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);
-                Animation anim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlpha);
-                txt.StartAnimation(anim);                
+                Animation textAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlpha);
+                txt.StartAnimation(textAnim);
+
+                Resource.UpdateIdValues();
+                Animation photoAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animJumper);
+                avatar.StartAnimation(photoAnim);        
             }
         }
     }
