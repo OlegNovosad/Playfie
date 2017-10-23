@@ -30,8 +30,16 @@ namespace Playfie.Droid
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.PhotoTutorial);
 
+            MainActivity m = new MainActivity();
+            Toast isLogged;
+            if (m.isLoggedInFB())
+                isLogged = Toast.MakeText(this, "user already logged in Facebook", ToastLength.Short);
+            else
+                isLogged = Toast.MakeText(this, "user was not logged in Facebook. Maybe you are developer", ToastLength.Short);
+            isLogged.Show();
+
             time.Interval = 1000;
-            time.Elapsed += AnimTest;
+            time.Elapsed += StartTextAnim;
             time.Start();
 
             TextView t1 = (TextView)FindViewById(Resource.Id.tlTip1);
@@ -45,7 +53,10 @@ namespace Playfie.Droid
             photoB.Click += PhotoTake;
         }
 
-        private void AnimTest(object sender, EventArgs e)
+        /// <summary>
+        /// if timer ended - we start animation on text
+        /// </summary>
+        private void StartTextAnim(object sender, EventArgs e)
         {
             time.Stop();
             TextView t2 = (TextView)FindViewById(Resource.Id.tlTip2);
@@ -54,13 +65,19 @@ namespace Playfie.Droid
             t2.StartAnimation(anim);
         }
 
+        /// <summary>
+        /// start face camera
+        /// </summary>
         private void PhotoTake(object sender, EventArgs e)
         {
-            int frontCamId=0;
             Intent photo = new Intent(MediaStore.ActionImageCapture);
             photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
+            //here we start photoActivity (12 - request photo code)
             StartActivityForResult(photo, 12);
         }
+        /// <summary>
+        /// if photo were taken and resultCode equals 12 (it's my photoTake code) we are save this photo
+        /// </summary>
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             if(requestCode==12 && resultCode==Result.Ok)
@@ -68,16 +85,23 @@ namespace Playfie.Droid
                 Bitmap yourPhoto=(Bitmap)data.GetParcelableExtra("data");
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
-                
+
                 avatar.SetImageBitmap(yourPhoto);
                 
                 TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);
+                Random rnd = new Random();
+                switch(rnd.Next(0, 3))
+                {
+                    case (0): txt.Text = "DAMN! You looks amazing!"; break;
+                    case (1): txt.Text = "You are just beautiful!"; break;
+                    case (2): txt.Text = "You have the best face in our Data base!"; break;
+                }
                 Animation textAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlpha);
                 txt.StartAnimation(textAnim);
 
                 Resource.UpdateIdValues();
                 Animation photoAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animJumper);
-                avatar.StartAnimation(photoAnim);        
+                avatar.StartAnimation(photoAnim);
             }
         }
     }

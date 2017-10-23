@@ -32,4 +32,26 @@
         android:layout_margin="10dp"
         android:layout_height="wrap_content"
         android:id="@+id/tlTip2" />
+    <LinearLayout
+        android:layout_below="@id/tlTip2"
+        android:layout_top="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:layout_centerVertical="true">
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:text="Developer Block"
+            android:layout_width="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/btnLoginFB"
+            android:layout_centerHorizontal="true"
+            android:layout_width="300dp"
+            android:layout_height="65dp" />
+    </LinearLayout>
 </RelativeLayout>
