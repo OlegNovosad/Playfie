@@ -31,6 +31,9 @@ namespace Playfie.Droid
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.Login);
 
+            //chek if user logged in fb
+            if (isLoggedInFB()) GoPhotoTutorial();
+
             // Initialize login button with permissions and manager
             LoginButton btnLoginWithFacebook = (LoginButton) FindViewById(Resource.Id.btnLoginFB);
             btnLoginWithFacebook.SetReadPermissions(new string[] { "user_friends", "email" });
@@ -90,6 +93,15 @@ namespace Playfie.Droid
             // TODO: Add authentication via email and password in the future.
         }
 
+        /// <summary>
+        /// chek if user logged in facebook. Cheking if current tocken is not null.
+        /// </summary>
+        /// <returns></returns>
+        public bool isLoggedInFB()
+        {
+            if (AccessToken.CurrentAccessToken != null) return true;
+            else return false;
+        }
         #endregion
 
         #region Facebook Callbacks
@@ -120,6 +132,7 @@ namespace Playfie.Droid
         private void GoPhotoTutorial()
         {
             Intent tutor = new Intent(this, typeof(PhotoTutorialActivity));
+            Finish();
             StartActivity(tutor);
         }
         #endregion
