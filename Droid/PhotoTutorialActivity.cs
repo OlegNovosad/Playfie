@@ -17,6 +17,8 @@ using Android.Media;
 using static Android.Hardware.Camera;
 using Android.Graphics;
 using Refractored.Controls;
+using Java.IO;
+using System.IO;
 
 namespace Playfie.Droid
 {
@@ -52,7 +54,7 @@ namespace Playfie.Droid
             Button photoB = (Button)FindViewById(Resource.Id.btnPhoto);
             photoB.Click += PhotoTake;
         }
-
+        
         /// <summary>
         /// if timer ended - we start animation on text
         /// </summary>
@@ -72,8 +74,26 @@ namespace Playfie.Droid
         {
             Intent photo = new Intent(MediaStore.ActionImageCapture);
             photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
+            
+      
             //here we start photoActivity (12 - request photo code)
             StartActivityForResult(photo, 12);
+        }
+        public string generatePhotoName()
+        {
+            DateTime d = DateTime.UtcNow;
+            Java.IO.File sdCardPath =new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
+            Java.IO.File pics = new Java.IO.File(Android.OS.Environment.DirectoryPictures);
+            Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath+"/Playfie");
+            if (!fin.Exists()) { sdCardPath.Mkdir(); }
+            return fin+"/Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpeg";
+        }
+        public void savePhoto(Bitmap yourPhoto)
+        {
+            var filePath = generatePhotoName();
+            var stream = new FileStream(filePath, FileMode.Create);
+            yourPhoto.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+            stream.Close();
         }
         /// <summary>
         /// if photo were taken and resultCode equals 12 (it's my photoTake code) we are save this photo
@@ -83,6 +103,10 @@ namespace Playfie.Droid
             if(requestCode==12 && resultCode==Result.Ok)
             {
                 Bitmap yourPhoto=(Bitmap)data.GetParcelableExtra("data");
+                Intent inten = new Intent(Intent.ActionMediaScannerScanFile);
+
+                savePhoto(yourPhoto);
+
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
 

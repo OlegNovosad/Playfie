@@ -34,7 +34,7 @@
         android:id="@+id/tlTip2" />
     <LinearLayout
         android:layout_below="@id/tlTip2"
-        android:layout_top="10dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
