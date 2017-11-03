@@ -19,6 +19,7 @@ using Android.Graphics;
 using Refractored.Controls;
 using Java.IO;
 using System.IO;
+using static Android.Graphics.BitmapFactory;
 
 namespace Playfie.Droid
 {
@@ -67,17 +68,23 @@ namespace Playfie.Droid
             t2.StartAnimation(anim);
         }
 
+        string photoPath;
         /// <summary>
         /// start face camera
         /// </summary>
         private void PhotoTake(object sender, EventArgs e)
         {
             Intent photo = new Intent(MediaStore.ActionImageCapture);
+
+            var photoUrl = Android.Net.Uri.FromFile(new Java.IO.File(generatePhotoName()));
+            photoPath = photoUrl.Path;
+            photo.PutExtra(MediaStore.ExtraOutput, photoUrl);
             photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
-            
       
             //here we start photoActivity (12 - request photo code)
             StartActivityForResult(photo, 12);
+
+            
         }
         public string generatePhotoName()
         {
@@ -86,14 +93,7 @@ namespace Playfie.Droid
             Java.IO.File pics = new Java.IO.File(Android.OS.Environment.DirectoryPictures);
             Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath+"/Playfie");
             if (!fin.Exists()) { sdCardPath.Mkdir(); }
-            return fin+"/Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpeg";
-        }
-        public void savePhoto(Bitmap yourPhoto)
-        {
-            var filePath = generatePhotoName();
-            var stream = new FileStream(filePath, FileMode.Create);
-            yourPhoto.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
-            stream.Close();
+            return fin+"/Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg";
         }
         /// <summary>
         /// if photo were taken and resultCode equals 12 (it's my photoTake code) we are save this photo
@@ -102,19 +102,15 @@ namespace Playfie.Droid
         {
             if(requestCode==12 && resultCode==Result.Ok)
             {
-                Bitmap yourPhoto=(Bitmap)data.GetParcelableExtra("data");
-                Intent inten = new Intent(Intent.ActionMediaScannerScanFile);
-
-                savePhoto(yourPhoto);
-
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
 
+                Bitmap yourPhoto = BitmapFactory.DecodeFile(photoPath);
                 avatar.SetImageBitmap(yourPhoto);
-                
+
                 TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);
                 Random rnd = new Random();
-                switch(rnd.Next(0, 3))
+                switch (rnd.Next(0, 3))
                 {
                     case (0): txt.Text = "DAMN! You looks amazing!"; break;
                     case (1): txt.Text = "You are just beautiful!"; break;
