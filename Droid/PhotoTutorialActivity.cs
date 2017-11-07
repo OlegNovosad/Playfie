@@ -49,13 +49,13 @@ namespace Playfie.Droid
             TextView t2 = (TextView)FindViewById(Resource.Id.tlTip2);
             t2.Alpha = 0;
             Animation anim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlpha);
-            
+
             t1.StartAnimation(anim);
 
             Button photoB = (Button)FindViewById(Resource.Id.btnPhoto);
             photoB.Click += PhotoTake;
         }
-        
+
         /// <summary>
         /// if timer ended - we start animation on text
         /// </summary>
@@ -80,27 +80,33 @@ namespace Playfie.Droid
             photoPath = photoUrl.Path;
             photo.PutExtra(MediaStore.ExtraOutput, photoUrl);
             photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
-      
+
             //here we start photoActivity (12 - request photo code)
             StartActivityForResult(photo, 12);
 
-            
+
         }
+        public void ToMainScreen(object sender, EventArgs e)
+        {
+            Intent next = new Intent(this, typeof(MainScreenActivity));
+            StartActivity(next);
+        }
+
         public string generatePhotoName()
         {
             DateTime d = DateTime.UtcNow;
-            Java.IO.File sdCardPath =new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
+            Java.IO.File sdCardPath = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
             Java.IO.File pics = new Java.IO.File(Android.OS.Environment.DirectoryPictures);
-            Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath+"/Playfie");
+            Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath + "/Playfie");
             if (!fin.Exists()) { sdCardPath.Mkdir(); }
-            return fin+"/Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg";
+            return fin + "/Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg";
         }
         /// <summary>
         /// if photo were taken and resultCode equals 12 (it's my photoTake code) we are save this photo
         /// </summary>
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            if(requestCode==12 && resultCode==Result.Ok)
+            if (requestCode == 12 && resultCode == Result.Ok)
             {
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
@@ -122,6 +128,9 @@ namespace Playfie.Droid
                 Resource.UpdateIdValues();
                 Animation photoAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animJumper);
                 avatar.StartAnimation(photoAnim);
+
+                Button Next = (Button) FindViewById(Resource.Id.btnNext);
+                Next.Click += ToMainScreen;
             }
         }
     }
