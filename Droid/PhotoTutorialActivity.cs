@@ -13,7 +13,7 @@ using static Android.Graphics.BitmapFactory;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "PhotoTutorialActivity")]
+    [Activity(Label = "PhotoTutorialActivity", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class PhotoTutorialActivity : Activity
     {
         Timer time = new Timer(1000);
@@ -103,8 +103,8 @@ namespace Playfie.Droid
         /// </summary>
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            //if (requestCode == 12 && resultCode == Result.Ok)
-            //{
+            if (requestCode == 12 && resultCode == Result.Ok)
+            {
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
 
@@ -128,7 +128,7 @@ namespace Playfie.Droid
 
                 Button Next = (Button) FindViewById(Resource.Id.btnNext);
                 Next.Click += ToMainScreen;
-            //}
+            }
         }
     }
 }

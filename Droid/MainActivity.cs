@@ -10,7 +10,7 @@ using Java.Lang;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "Playfie", MainLauncher = true)]
+    [Activity(Label = "Playfie", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity, IFacebookCallback
     { 
         private ICallbackManager CallbackManager;
@@ -20,9 +20,9 @@ namespace Playfie.Droid
         Toast signUpToast;
         Toast signInToast;
 
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
+            base.OnCreate(savedInstanceState);
 
             // Init Facebook manager and SDK
             FacebookSdk.SdkInitialize(ApplicationContext);

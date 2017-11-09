@@ -12,7 +12,7 @@ using static Android.Gms.Common.Apis.GoogleApiClient;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "MainScreenActivity")]
+    [Activity(Label = "MainScreenActivity", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainScreenActivity : FragmentActivity, View.IOnClickListener, IOnMapReadyCallback, IOnConnectionFailedListener
     {
         PhotoListFragment photoListFragment;
@@ -33,9 +33,6 @@ namespace Playfie.Droid
             SupportFragmentManager.BeginTransaction()
                                   .Add(Resource.Id.Container, mapFragment, "")
                                   .Commit();
-
-            SupportMapFragment f;
-            f.GetMapAsync(this);
 
             ImageView BtnHm = (ImageView)FindViewById(Resource.Id.Home);
             BtnHm.SetOnClickListener(this);
