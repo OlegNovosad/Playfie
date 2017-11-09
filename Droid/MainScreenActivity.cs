@@ -1,14 +1,19 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Gms.Common;
+using Android.Gms.Common.Apis;
+using Android.Gms.Location.Places;
+using Android.Gms.Maps;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
+using static Android.Gms.Common.Apis.GoogleApiClient;
 
 namespace Playfie.Droid
 {
     [Activity(Label = "MainScreenActivity")]
-    public class MainScreenActivity : FragmentActivity, View.IOnClickListener
+    public class MainScreenActivity : FragmentActivity, View.IOnClickListener, IOnMapReadyCallback, IOnConnectionFailedListener
     {
         PhotoListFragment photoListFragment;
         MainMapFragment mapFragment;
@@ -28,6 +33,9 @@ namespace Playfie.Droid
             SupportFragmentManager.BeginTransaction()
                                   .Add(Resource.Id.Container, mapFragment, "")
                                   .Commit();
+
+            SupportMapFragment f;
+            f.GetMapAsync(this);
 
             ImageView BtnHm = (ImageView)FindViewById(Resource.Id.Home);
             BtnHm.SetOnClickListener(this);
@@ -81,6 +89,30 @@ namespace Playfie.Droid
             }
 
             //StartActivity(intent);
+        }
+
+        /// <summary>
+        /// Ons the map ready.
+        /// </summary>
+        /// <param name="googleMap">Google map.</param>
+        public void OnMapReady(GoogleMap googleMap)
+        {
+            GoogleApiClient googleApiClient = new Builder(this)
+                .AddApi(PlacesClass.GEO_DATA_API)
+                .AddApi(PlacesClass.PLACE_DETECTION_API)
+                .EnableAutoManage(this, this)
+                .Build();
+
+            // TODO: Retrieve places
+        }
+
+        /// <summary>
+        /// Ons the connection failed.
+        /// </summary>
+        /// <param name="result">Result.</param>
+        public void OnConnectionFailed(ConnectionResult result)
+        {
+            // TODO: Add implementation
         }
     }
 }
