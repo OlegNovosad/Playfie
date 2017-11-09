@@ -40,44 +40,34 @@ namespace Playfie.Droid
 
         public void SwitchActivity(object sender, EventArgs e)
         {
-            List<Type> list = new List<Type>
-            {
-                typeof(MainScreenActivity),
-                typeof(SearchActivity),
-                typeof(ListOfPhotoActivity),
-                typeof(GloryActivity),
-                typeof(UserActivity)
-            };
+         
             Button sendBtn = (Button)sender;
 
-            switch (sendBtn.Tag)
+            switch ((int) (sendBtn.Tag))
             {
                 case 1:
-                    Intent next = new Intent(this, typeof(MainScreenActivity));
-                    StartActivity(next);
+                    Intent toMain = new Intent(this, typeof(MainScreenActivity));
+                    StartActivity(toMain);
                     break;
                 case 2:
-                    Intent next = new Intent(this, typeof(SearchActivity));
-                    StartActivity(next);
+                    Intent toSearch = new Intent(this, typeof(SearchActivity));
+                    StartActivity(toSearch);
                     break;
                 case 3:
-                    Intent next = new Intent(this, typeof(ListOfPhotoActivity));
-                    StartActivity(next);
+                    Intent toPhoto = new Intent(this, typeof(ListOfPhotoActivity));
+                    StartActivity(toPhoto);
                     break;
                 case 4:
-                    Intent next = new Intent(this, typeof(GloryActivity));
-                    StartActivity(next);
+                    Intent toGlory = new Intent(this, typeof(GloryActivity));
+                    StartActivity(toGlory);
                     break;
                 case 5:
-                    Intent next = new Intent(this, typeof(UserActivity));
-                    StartActivity(next);
+                    Intent toUser = new Intent(this, typeof(UserActivity));
+                    StartActivity(toUser);
                     break;
             }
 
-            Intent next = new Intent(this, list[num]);
-            StartActivity(next);
         }
-
 
     }
 }
