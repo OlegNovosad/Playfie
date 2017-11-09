@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
+using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
 
 namespace Playfie.Droid
 {
     [Activity(Label = "MainScreenActivity")]
-    public class MainScreenActivity : Activity
+    public class MainScreenActivity : FragmentActivity, View.IOnClickListener
     {
+        PhotoListFragment photoListFragment;
+        MainMapFragment mapFragment;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -22,52 +20,67 @@ namespace Playfie.Droid
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.MainScreen);
 
-            Button BtnHm = (Button)FindViewById(Resource.Id.Home);
-            BtnHm.Click += SwitchActivity;
+            FrameLayout container = (FrameLayout)FindViewById(Resource.Id.Container);
 
-            Button BtnSrch = (Button)FindViewById(Resource.Id.Search);
-            BtnSrch.Click += SwitchActivity;
+            photoListFragment = new PhotoListFragment();
+            mapFragment = new MainMapFragment();
 
-            Button BtnLstOfPh = (Button)FindViewById(Resource.Id.ListOfPhotos);
-            BtnLstOfPh.Click += SwitchActivity;
+            SupportFragmentManager.BeginTransaction()
+                                  .Add(Resource.Id.Container, mapFragment, "")
+                                  .Commit();
 
-            Button BtnGlr = (Button)FindViewById(Resource.Id.Glory);
-            BtnGlr.Click += SwitchActivity;
+            ImageView BtnHm = (ImageView)FindViewById(Resource.Id.Home);
+            BtnHm.SetOnClickListener(this);
 
-            Button BtnMyAcc = (Button)FindViewById(Resource.Id.MyAcc);
-            BtnMyAcc.Click += SwitchActivity;
+            ImageView BtnSrch = (ImageView)FindViewById(Resource.Id.Search);
+            BtnSrch.SetOnClickListener(this);
+
+            ImageView BtnLstOfPh = (ImageView)FindViewById(Resource.Id.ListOfPhotos);
+            BtnLstOfPh.SetOnClickListener(this);
+
+            ImageView BtnGlr = (ImageView)FindViewById(Resource.Id.Glory);
+            BtnGlr.SetOnClickListener(this);
+
+            ImageView BtnMyAcc = (ImageView)FindViewById(Resource.Id.MyAcc);
+            BtnMyAcc.SetOnClickListener(this);
         }
 
-        public void SwitchActivity(object sender, EventArgs e)
+        /// <summary>
+        /// Handles click on buttons in view.
+        /// </summary>
+        /// <param name="v">View that called on click.</param>
+        public void OnClick(View v)
         {
-         
-            Button sendBtn = (Button)sender;
+            Intent intent;
 
-            switch ((int) (sendBtn.Tag))
+            switch (v.Id)
             {
-                case 1:
-                    Intent toMain = new Intent(this, typeof(MainScreenActivity));
-                    StartActivity(toMain);
+                case Resource.Id.Home:
+                    SupportFragmentManager.BeginTransaction()
+                        .Replace(Resource.Id.Container, mapFragment)
+                        .Commit();
                     break;
-                case 2:
-                    Intent toSearch = new Intent(this, typeof(SearchActivity));
-                    StartActivity(toSearch);
+                case Resource.Id.Search:
+                    intent = new Intent(this, typeof(SearchActivity));
                     break;
-                case 3:
-                    Intent toPhoto = new Intent(this, typeof(ListOfPhotoActivity));
-                    StartActivity(toPhoto);
+                case Resource.Id.ListOfPhotos:
+                    SupportFragmentManager.BeginTransaction()
+                        .Replace(Resource.Id.Container, photoListFragment)
+                        .Commit();
                     break;
-                case 4:
-                    Intent toGlory = new Intent(this, typeof(GloryActivity));
-                    StartActivity(toGlory);
+                case Resource.Id.Glory:
+                    intent = new Intent(this, typeof(GloryActivity));
                     break;
-                case 5:
-                    Intent toUser = new Intent(this, typeof(UserActivity));
-                    StartActivity(toUser);
+                case Resource.Id.MyAcc:
+                    intent = new Intent(this, typeof(UserActivity));
+                    break;
+                default:
+                    // default move to main screen activity
+                    intent = new Intent(this, typeof(MainScreenActivity));
                     break;
             }
 
+            //StartActivity(intent);
         }
-
     }
 }

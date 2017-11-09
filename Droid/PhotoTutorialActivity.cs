@@ -1,24 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using Android.Views.Animations;
 using Android.Provider;
-using Android.Hardware;
 using System.Timers;
-using Android.Media;
-using static Android.Hardware.Camera;
 using Android.Graphics;
 using Refractored.Controls;
-using Java.IO;
-using System.IO;
 using static Android.Graphics.BitmapFactory;
 
 namespace Playfie.Droid
@@ -34,11 +24,9 @@ namespace Playfie.Droid
             SetContentView(Resource.Layout.PhotoTutorial);
 
             MainActivity m = new MainActivity();
-            Toast isLogged;
-            if (m.isLoggedInFB())
-                isLogged = Toast.MakeText(this, "user already logged in Facebook", ToastLength.Short);
-            else
-                isLogged = Toast.MakeText(this, "user was not logged in Facebook. Maybe you are developer", ToastLength.Short);
+            Toast isLogged = Toast.MakeText(this, m.isLoggedInFB() 
+                  ? "user already logged in Facebook" 
+                  : "user was not logged in Facebook. Maybe you are developer", ToastLength.Short);
             isLogged.Show();
 
             time.Interval = 1000;
@@ -76,23 +64,31 @@ namespace Playfie.Droid
         {
             Intent photo = new Intent(MediaStore.ActionImageCapture);
 
-            var photoUrl = Android.Net.Uri.FromFile(new Java.IO.File(generatePhotoName()));
+            var photoUrl = Android.Net.Uri.FromFile(new Java.IO.File(GeneratePhotoName()));
             photoPath = photoUrl.Path;
             photo.PutExtra(MediaStore.ExtraOutput, photoUrl);
             photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
 
             //here we start photoActivity (12 - request photo code)
             StartActivityForResult(photo, 12);
-
-
         }
+
+        /// <summary>
+        /// Goes to the main screen.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         public void ToMainScreen(object sender, EventArgs e)
         {
             Intent next = new Intent(this, typeof(MainScreenActivity));
             StartActivity(next);
         }
 
-        public string generatePhotoName()
+        /// <summary>
+        /// Generates the name of the photo.
+        /// </summary>
+        /// <returns>The photo name.</returns>
+        public string GeneratePhotoName()
         {
             DateTime d = DateTime.UtcNow;
             Java.IO.File sdCardPath = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
@@ -101,17 +97,18 @@ namespace Playfie.Droid
             if (!fin.Exists()) { sdCardPath.Mkdir(); }
             return fin + "/Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg";
         }
+
         /// <summary>
         /// if photo were taken and resultCode equals 12 (it's my photoTake code) we are save this photo
         /// </summary>
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            if (requestCode == 12 && resultCode == Result.Ok)
-            {
+            //if (requestCode == 12 && resultCode == Result.Ok)
+            //{
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
 
-                Bitmap yourPhoto = BitmapFactory.DecodeFile(photoPath);
+                Bitmap yourPhoto = DecodeFile(photoPath);
                 avatar.SetImageBitmap(yourPhoto);
 
                 TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);
@@ -131,7 +128,7 @@ namespace Playfie.Droid
 
                 Button Next = (Button) FindViewById(Resource.Id.btnNext);
                 Next.Click += ToMainScreen;
-            }
+            //}
         }
     }
 }
