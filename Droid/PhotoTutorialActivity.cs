@@ -10,6 +10,8 @@ using System.Timers;
 using Android.Graphics;
 using Refractored.Controls;
 using static Android.Graphics.BitmapFactory;
+using Android.Support.V4.Content;
+using Android;
 
 namespace Playfie.Droid
 {
@@ -64,13 +66,21 @@ namespace Playfie.Droid
         {
             Intent photo = new Intent(MediaStore.ActionImageCapture);
 
-            var photoUrl = Android.Net.Uri.FromFile(new Java.IO.File(GeneratePhotoName()));
-            photoPath = photoUrl.Path;
+            var photoName = GeneratePhotoName();
+            var photoUrl = FileProvider.GetUriForFile(this.ApplicationContext, "com.itstep.Playfie.fileprovider", photoName);
+            photoPath = photoName.Path;
             photo.PutExtra(MediaStore.ExtraOutput, photoUrl);
             photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
 
+            if(ContextCompat.CheckSelfPermission(this, Manifest.Permission.Camera)==Android.Content.PM.Permission.Denied)
+            {
+                RequestPermissions(new string[] { Manifest.Permission.Camera, Manifest.Permission.WriteExternalStorage }, 11);
+            }
+            else
+            {
+                StartActivityForResult(photo, 12);
+            }
             //here we start photoActivity (12 - request photo code)
-            StartActivityForResult(photo, 12);
         }
 
         /// <summary>
@@ -88,14 +98,14 @@ namespace Playfie.Droid
         /// Generates the name of the photo.
         /// </summary>
         /// <returns>The photo name.</returns>
-        public string GeneratePhotoName()
+        public Java.IO.File GeneratePhotoName()
         {
             DateTime d = DateTime.UtcNow;
             Java.IO.File sdCardPath = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
             Java.IO.File pics = new Java.IO.File(Android.OS.Environment.DirectoryPictures);
-            Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath + "/Playfie");
-            if (!fin.Exists()) { sdCardPath.Mkdir(); }
-            return fin + "/Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg";
+            Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath + "/Playfie/"+ "Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg");
+            //if (!fin.Exists()) { sdCardPath.Mkdir(); }
+            return fin;
         }
 
         /// <summary>
@@ -115,9 +125,9 @@ namespace Playfie.Droid
                 Random rnd = new Random();
                 switch (rnd.Next(0, 3))
                 {
-                    case (0): txt.Text = "DAMN! You looks amazing!"; break;
+                    case (0): txt.Text = "DAMN! You look amazing!"; break;
                     case (1): txt.Text = "You are just beautiful!"; break;
-                    case (2): txt.Text = "You have the best face in our Data base!"; break;
+                    case (2): txt.Text = "You have the best face in our Database!"; break;
                 }
                 Animation textAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlpha);
                 txt.StartAnimation(textAnim);
