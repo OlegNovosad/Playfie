@@ -26,7 +26,7 @@ namespace Playfie.Droid
             // Use this to return your custom view for this Fragment
             // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
 
-            return inflater.Inflate(Resource.Layout.Login, container, false);
+            return inflater.Inflate(Resource.Layout.Fragment_Photo_List, container, false);
         }
     }
 }

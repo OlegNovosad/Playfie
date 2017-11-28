@@ -3,11 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-  
-      <fragment
-          class="Playfie.TestFragment"
-          android:id="@+id/map1"
-          android:layout_height="match_parent"
-          android:layout_width="match_parent"/>
-
+    <fragment
+        class="playfie.droid.TestFragment"
+        android:id="@+id/map1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 </LinearLayout>

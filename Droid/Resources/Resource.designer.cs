@@ -2531,11 +2531,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d008d
 			public const int btnLoginFB = 2131558541;
 			
-			// aapt resource value: 0x7f0d00ad
-			public const int btnNext = 2131558573;
+			// aapt resource value: 0x7f0d00ae
+			public const int btnNext = 2131558574;
 			
-			// aapt resource value: 0x7f0d00a8
-			public const int btnPhoto = 2131558568;
+			// aapt resource value: 0x7f0d00a9
+			public const int btnPhoto = 2131558569;
 			
 			// aapt resource value: 0x7f0d0092
 			public const int btnSignIn = 2131558546;
@@ -2684,8 +2684,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d008c
 			public const int ivAppIcon = 2131558540;
 			
-			// aapt resource value: 0x7f0d00ab
-			public const int ivAvatar = 2131558571;
+			// aapt resource value: 0x7f0d00ac
+			public const int ivAvatar = 2131558572;
 			
 			// aapt resource value: 0x7f0d0029
 			public const int large = 2131558441;
@@ -2714,8 +2714,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d009b
 			public const int media_actions = 2131558555;
 			
-			// aapt resource value: 0x7f0d00b6
-			public const int message = 2131558582;
+			// aapt resource value: 0x7f0d00b7
+			public const int message = 2131558583;
 			
 			// aapt resource value: 0x7f0d0094
 			public const int messenger_send_button = 2131558548;
@@ -2756,29 +2756,29 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0058
 			public const int parentPanel = 2131558488;
 			
-			// aapt resource value: 0x7f0d00b0
-			public const int place_autocomplete_clear_button = 2131558576;
-			
-			// aapt resource value: 0x7f0d00b2
-			public const int place_autocomplete_powered_by_google = 2131558578;
-			
-			// aapt resource value: 0x7f0d00b4
-			public const int place_autocomplete_prediction_primary_text = 2131558580;
-			
-			// aapt resource value: 0x7f0d00b5
-			public const int place_autocomplete_prediction_secondary_text = 2131558581;
+			// aapt resource value: 0x7f0d00b1
+			public const int place_autocomplete_clear_button = 2131558577;
 			
 			// aapt resource value: 0x7f0d00b3
-			public const int place_autocomplete_progress = 2131558579;
+			public const int place_autocomplete_powered_by_google = 2131558579;
 			
-			// aapt resource value: 0x7f0d00ae
-			public const int place_autocomplete_search_button = 2131558574;
+			// aapt resource value: 0x7f0d00b5
+			public const int place_autocomplete_prediction_primary_text = 2131558581;
+			
+			// aapt resource value: 0x7f0d00b6
+			public const int place_autocomplete_prediction_secondary_text = 2131558582;
+			
+			// aapt resource value: 0x7f0d00b4
+			public const int place_autocomplete_progress = 2131558580;
 			
 			// aapt resource value: 0x7f0d00af
-			public const int place_autocomplete_search_input = 2131558575;
+			public const int place_autocomplete_search_button = 2131558575;
 			
-			// aapt resource value: 0x7f0d00b1
-			public const int place_autocomplete_separator = 2131558577;
+			// aapt resource value: 0x7f0d00b0
+			public const int place_autocomplete_search_input = 2131558576;
+			
+			// aapt resource value: 0x7f0d00b2
+			public const int place_autocomplete_separator = 2131558578;
 			
 			// aapt resource value: 0x7f0d0080
 			public const int progress_bar = 2131558528;
@@ -2897,6 +2897,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0012
 			public const int terrain = 2131558418;
 			
+			// aapt resource value: 0x7f0d00a8
+			public const int testFragment = 2131558568;
+			
 			// aapt resource value: 0x7f0d000b
 			public const int text = 2131558411;
 			
@@ -2921,14 +2924,14 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0062
 			public const int title_template = 2131558498;
 			
-			// aapt resource value: 0x7f0d00a9
-			public const int tlTip1 = 2131558569;
-			
 			// aapt resource value: 0x7f0d00aa
-			public const int tlTip2 = 2131558570;
+			public const int tlTip1 = 2131558570;
 			
-			// aapt resource value: 0x7f0d00ac
-			public const int tlTip3 = 2131558572;
+			// aapt resource value: 0x7f0d00ab
+			public const int tlTip2 = 2131558571;
+			
+			// aapt resource value: 0x7f0d00ad
+			public const int tlTip3 = 2131558573;
 			
 			// aapt resource value: 0x7f0d0022
 			public const int top = 2131558434;
