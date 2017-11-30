@@ -3,9 +3,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <fragment
-        class="playfie.droid.TestFragment"
-        android:id="@+id/map1"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+    <RelativeLayout
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:minWidth="25px"
+        android:minHeight="25px">
+        <ImageView
+            android:src="@drawable/playfieLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/imageView1" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8">
+        <fragment
+            class="com.google.android.gms.maps.MapFragment"
+            android:id="@+id/mainMap"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+        <TextView
+            android:text="Text"
+            android:id="@+id/testText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/mainMap"
+            android:layout_alignParentTop="true" />
+        <TextView
+            android:text="Pos"
+            android:id="@+id/positionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/testText" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent">
+        <ImageButton
+            android:src="@drawable/btn_user"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:id="@+id/userBtn" />
+        <ImageButton
+            android:src="@drawable/btn_search"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:id="@+id/searchBtn" />
+        <ImageButton
+            android:src="@drawable/btn_menu"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:id="@+id/menuBtn" />
+    </LinearLayout>
 </LinearLayout>
