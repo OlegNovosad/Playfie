@@ -20,43 +20,91 @@ using System;
 using System.Timers;
 using Android.Views.Animations;
 using Android.Graphics;
+using Java.Util.Logging;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "MainScreenActivity", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    [Activity(Label = "MainScreenActivity",Theme = "@style/splashscreen", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainScreenActivity : FragmentActivity, IOnMapReadyCallback, ILocationListener, ISensorEventListener
     {
-        GoogleMap map;
-        Marker userMarker;
+        static GoogleMap map;
+        AnimatedMarker userMarker;
         SensorManager mManager;
         Sensor mSensor;
         Timer tm;
-        float[] mRotateMatrix = new float[3]; 
+
+        class AnimatedMarker
+        {
+            LatLng to { get; set; }
+
+            public enum markerType { userMarker, photoMarker }
+
+            public markerType type { get; set; }
+            private Android.OS.Handler hand { get; set; }
+            private Thread threader { get; set; }
+            public Marker marker { get; set; }
+            public int animSpeed { get; set; }
+
+            private LatLng current { get; set; }
+
+            void animate()
+            {
+                double delayLatitude = (current.Latitude - to.Latitude)/ animSpeed;
+                double delayLongitude = (current.Longitude - to.Longitude)/ animSpeed;
+
+                LatLng pos = new LatLng(current.Latitude, current.Longitude);
+                for(int i=0;i<animSpeed; i++)
+                {
+                    current.Latitude += delayLatitude; current.Longitude += delayLongitude;
+                    hand.SendEmptyMessage(1);
+                    Thread.Sleep(16);
+                }
+            }
+            void setPoses(Message msg)
+            {
+                MarkerOptions markOps = new MarkerOptions();
+                markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.playfieMarker));
+                markOps.SetTitle(marker.Title);
+                markOps.SetPosition(current);
+
+                marker.Position = current;
+            }
+
+            public void animate(LatLng to, int animSpeed)
+            {
+                this.to = to;
+                this.animSpeed = animSpeed;
+                hand = new Android.OS.Handler(new Action<Message>(setPoses));
+                threader = new Thread(new Action(animate));
+                threader.Start();
+            }
+
+            public AnimatedMarker(string title, LatLng position, markerType type)
+            {
+                this.type = type;
+
+                MarkerOptions markOps = new MarkerOptions();
+                if(type == markerType.photoMarker) markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.playfieMarker));
+                else markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.userCursor));
+
+                markOps.SetTitle(title);
+                markOps.SetPosition(position);
+
+                marker = map.AddMarker(markOps);
+                current = position;
+            }
+        }
 
         #region userFuncs
-        public void addNewPhotoMarker(LatLng position, string title)
-        {
-            MarkerOptions markOps = new MarkerOptions();
-            markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.playfieMarker));
-            markOps.SetTitle(title);
-            markOps.SetPosition(position);
-            var mMarker = map.AddMarker(markOps);
-        }
-        public void addUserMarker(LatLng position, float angle)
-        {
-            MarkerOptions markOps = new MarkerOptions();
-            markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.userCursor));
-            markOps.SetPosition(position);
-            markOps.SetRotation(angle);
-            markOps.Anchor((float)0.5,(float)0.8);
-            userMarker = map.AddMarker(markOps);
-        }
         private void MapBuild()
         {
             if (map == null)
             {
                 MapFragment mp = FragmentManager.FindFragmentById<MapFragment>(Resource.Id.mainMap);
-                mp.GetMapAsync(this);
+                if(ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) != Android.Content.PM.Permission.Denied)
+                {
+                    mp.GetMapAsync(this);
+                }
             }
             else try
                 {
@@ -69,11 +117,7 @@ namespace Playfie.Droid
                     Toast.MakeText(this, e.Message, ToastLength.Short);
                 }
         }
-
-        private void cursorAnimate()
-        {
-
-        }
+        
         #endregion
         #region callbacks
         #region googleMapsCallbacks
@@ -88,7 +132,6 @@ namespace Playfie.Droid
                 else
                 {
                     googleMap.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(this, Resource.Raw.style_json));
-                    
                 }
             }
             catch (Resources.NotFoundException e)
@@ -97,18 +140,20 @@ namespace Playfie.Droid
             }
 
             map = googleMap;
-            addNewPhotoMarker(new LatLng(-35, 150), "TEST");
-            map.MoveCamera(CameraUpdateFactory.NewCameraPosition(new CameraPosition(new LatLng(-35, 150), 10, 0, 0)));
         }
+
         #endregion
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
             if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Android.Content.PM.Permission.Denied)
             {
                 RequestPermissions(new string[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.WriteExternalStorage }, 11);
-               
+                while(ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Android.Content.PM.Permission.Denied)
+                {
+
+                }
+                SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             }
             else
             {
@@ -135,16 +180,12 @@ namespace Playfie.Droid
                 Java.Lang.JavaSystem.CurrentTimeMillis()
                 );
 
-            if(userMarker==null) addUserMarker(new LatLng(location.Latitude, location.Longitude), field.Declination);
+            if(userMarker==null)
+            {
+                userMarker = new AnimatedMarker("user", new LatLng(location.Latitude, location.Longitude), AnimatedMarker.markerType.userMarker);
+            }
+            else { userMarker.animate(new LatLng(location.Latitude, location.Longitude), 1000); }
 
-
-            AccelerateInterpolator interp = new AccelerateInterpolator();
-            interp.GetInterpolation(0);
-            Handler handler = new Handler();
-            handler.Post(new Action(cursorAnimate));
-
-            userMarker.Position = new LatLng(location.Latitude, location.Longitude);
-            
             TextView text = (TextView)FindViewById(Resource.Id.positionText);
             text.Text = location.Latitude + " | " + location.Longitude;
         }
@@ -173,10 +214,6 @@ namespace Playfie.Droid
         {
             if (map != null)
             {
-                Log.Info("TEST", "START CASE" + e.GetType().ToString() + "|" + Sensor.StringTypeRotationVector);
-                for (int i = 0; i < e.Values.Count; i++)
-                    Log.Info("TEST", i + ". " + e.Values[i].ToString());
-                Log.Info("TEST", "END CASE");
 
                 CameraPosition camPos = map.CameraPosition;
                 float rotation = (e.Values[2] * 100) * 180 / 100 + camPos.Bearing;
@@ -184,10 +221,10 @@ namespace Playfie.Droid
                 t.Text = rotation.ToString();
 
                 double deg = Java.Lang.Math.ToDegrees(rotation);
-                Log.Info("DEGREES", "DEGREES: " + rotation);
+                //Log.Info("DEGREES", "DEGREES: " + rotation);
 
                 int degI = (int)deg;
-                if (userMarker != null) userMarker.Rotation = -rotation;
+                if (userMarker != null) userMarker.marker.Rotation = -rotation;
             }
         }
     }

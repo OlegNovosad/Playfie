@@ -10,7 +10,7 @@ using Java.Lang;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "Playfie", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    [Activity(Label = "Playfie",Theme = "@style/splashscreen", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity, IFacebookCallback
     { 
         private ICallbackManager CallbackManager;
