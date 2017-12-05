@@ -21,6 +21,8 @@ using System.Timers;
 using Android.Views.Animations;
 using Android.Graphics;
 using Java.Util.Logging;
+using Android.Graphics.Drawables;
+using Android.Content.PM;
 
 namespace Playfie.Droid
 {
@@ -28,10 +30,13 @@ namespace Playfie.Droid
     public class MainScreenActivity : FragmentActivity, IOnMapReadyCallback, ILocationListener, ISensorEventListener
     {
         static GoogleMap map;
+        static ImageButton searchB;
+        static Bitmap cursor;
         AnimatedMarker userMarker;
+        Circle radiusFind;
+
         SensorManager mManager;
         Sensor mSensor;
-        Timer tm;
 
         class AnimatedMarker
         {
@@ -40,43 +45,84 @@ namespace Playfie.Droid
             public enum markerType { userMarker, photoMarker }
 
             public markerType type { get; set; }
-            private Android.OS.Handler hand { get; set; }
-            private Thread threader { get; set; }
+            private Android.OS.Handler animHand { get; set; }
+            private Thread cursorThread { get; set; }
+            private Android.OS.Handler animSearchCircle { get; set; }
+            private Thread searchCirleThread { get; set; }
+
             public Marker marker { get; set; }
+            public Circle searchCircle { get; set; }
             public int animSpeed { get; set; }
 
             private LatLng current { get; set; }
 
             void animate()
             {
-                double delayLatitude = (current.Latitude - to.Latitude)/ animSpeed;
-                double delayLongitude = (current.Longitude - to.Longitude)/ animSpeed;
+                double delayLatitude = (current.Latitude - to.Latitude)/animSpeed;
+                double delayLongitude = (current.Longitude - to.Longitude)/animSpeed;
+
+                //Log.Info("DELAY", "from:"+current.Latitude+"|"+current.Longitude+"///"+to.Latitude+"|"+to.Longitude+" /// "+delayLatitude + "|" + delayLongitude);
 
                 LatLng pos = new LatLng(current.Latitude, current.Longitude);
                 for(int i=0;i<animSpeed; i++)
                 {
-                    current.Latitude += delayLatitude; current.Longitude += delayLongitude;
-                    hand.SendEmptyMessage(1);
-                    Thread.Sleep(16);
+                    current.Latitude -= delayLatitude; current.Longitude -= delayLongitude;
+                    animHand.SendEmptyMessage(1);
+                    Thread.Sleep(1);
                 }
             }
+
             void setPoses(Message msg)
             {
-                MarkerOptions markOps = new MarkerOptions();
-                markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.playfieMarker));
-                markOps.SetTitle(marker.Title);
-                markOps.SetPosition(current);
-
                 marker.Position = current;
+            }
+
+            public void findPoints()
+            {
+                if (searchCircle == null)
+                {
+                    CircleOptions circOps = new CircleOptions();
+                    circOps.InvokeCenter(current); circOps.InvokeFillColor(Color.Argb(100, 100, 100, 255));
+                    circOps.InvokeStrokeWidth(0);
+                    circOps.InvokeRadius(0);
+
+                    searchCircle = map.AddCircle(circOps);
+                }
+                else
+                {
+                    searchCircle.Radius = 0; searchCircle.FillColor = Color.Argb(100, 100, 100, 255);
+                }
+                
+                searchCirleThread = new Thread(new Action(animateSearch));
+                animSearchCircle = new Android.OS.Handler(alterSearch);
+                searchCirleThread.Start();
+            }
+            void animateSearch()
+            {
+                for(int i=0;i<2000;i++)
+                {
+                    animSearchCircle.SendEmptyMessage(i);
+                    Thread.Sleep(1);
+                }
+                animSearchCircle.SendEmptyMessage(-1);
+            }
+            void alterSearch(Message m)
+            {
+                if (m.What == -1) { searchB.Enabled = true; searchB.SetImageResource(Resource.Drawable.btn_search); }
+                if(Color.GetAlphaComponent(searchCircle.FillColor)!=0 && m.What%20==0)
+                {
+                    searchCircle.FillColor=Color.Argb(Color.GetAlphaComponent(searchCircle.FillColor)-1,100,100,255);
+                }
+                searchCircle.Radius++;
             }
 
             public void animate(LatLng to, int animSpeed)
             {
                 this.to = to;
                 this.animSpeed = animSpeed;
-                hand = new Android.OS.Handler(new Action<Message>(setPoses));
-                threader = new Thread(new Action(animate));
-                threader.Start();
+                animHand = new Android.OS.Handler(new Action<Message>(setPoses));
+                cursorThread = new Thread(new Action(animate));
+                cursorThread.Start();
             }
 
             public AnimatedMarker(string title, LatLng position, markerType type)
@@ -84,8 +130,9 @@ namespace Playfie.Droid
                 this.type = type;
 
                 MarkerOptions markOps = new MarkerOptions();
-                if(type == markerType.photoMarker) markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.playfieMarker));
-                else markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.userCursor));
+                Bitmap mrk = Bitmap.CreateScaledBitmap(cursor, 30, 60, false);
+                if (type == markerType.photoMarker) markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.playfieMarker));
+                else markOps.SetIcon(BitmapDescriptorFactory.FromBitmap(mrk));
 
                 markOps.SetTitle(title);
                 markOps.SetPosition(position);
@@ -118,6 +165,7 @@ namespace Playfie.Droid
                 }
         }
         
+
         #endregion
         #region callbacks
         #region googleMapsCallbacks
@@ -125,14 +173,7 @@ namespace Playfie.Droid
         {
             try
             {
-                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Android.Content.PM.Permission.Denied)
-                {
-                    RequestPermissions(new string[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.WriteExternalStorage }, 11);
-                }
-                else
-                {
-                    googleMap.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(this, Resource.Raw.style_json));
-                }
+                googleMap.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(this, Resource.Raw.style_json));
             }
             catch (Resources.NotFoundException e)
             {
@@ -149,28 +190,54 @@ namespace Playfie.Droid
             if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Android.Content.PM.Permission.Denied)
             {
                 RequestPermissions(new string[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.WriteExternalStorage }, 11);
-                while(ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Android.Content.PM.Permission.Denied)
-                {
-
-                }
-                SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             }
             else
             {
+                //gyroscope programm
                 mManager = (SensorManager)GetSystemService(Context.SensorService);
                 mManager.RegisterListener(this, mManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
-                
+
+                //theme for google maps
                 SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
+                //sinsert view
                 SetContentView(Resource.Layout.MainScreen);
 
                 var lm = (LocationManager)GetSystemService(Context.LocationService);
                 Criteria criteria = new Criteria();
                 lm.RequestLocationUpdates(LocationManager.NetworkProvider, 0, 0, this);
+
+                searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
+                searchB.Click += findPoints;
                 MapBuild();
             }
         }
-        
 
+        private void findPoints(object sender, EventArgs e)
+        {
+            searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
+            searchB.Enabled = false;
+            searchB.SetImageResource(Resource.Drawable.btn_search_pressed);
+            userMarker.findPoints();
+        }
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            //gyroscope programm
+            mManager = (SensorManager)GetSystemService(Context.SensorService);
+            mManager.RegisterListener(this, mManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
+
+            //theme for google maps
+            SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
+            //sinsert view
+            SetContentView(Resource.Layout.MainScreen);
+
+            var lm = (LocationManager)GetSystemService(Context.LocationService);
+            Criteria criteria = new Criteria();
+            lm.RequestLocationUpdates(LocationManager.NetworkProvider, 0, 0, this);
+
+            ImageButton searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
+            searchB.Click += findPoints;
+            MapBuild();
+        }
         public void OnLocationChanged(Location location)
         {
             GeomagneticField field = new GeomagneticField(
@@ -182,9 +249,18 @@ namespace Playfie.Droid
 
             if(userMarker==null)
             {
+                cursor = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.userCursor);
                 userMarker = new AnimatedMarker("user", new LatLng(location.Latitude, location.Longitude), AnimatedMarker.markerType.userMarker);
+                //userMarker.animate(new LatLng(location.Latitude - 1, location.Longitude + 1), 500);
+                userMarker.marker.Flat = true;
+
+                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude,location.Longitude),(float)10));
             }
-            else { userMarker.animate(new LatLng(location.Latitude, location.Longitude), 1000); }
+            else
+            {
+                userMarker.animate(new LatLng(location.Latitude, location.Longitude), 1000);
+                userMarker.searchCircle.Center = new LatLng(location.Latitude, location.Longitude);
+            }
 
             TextView text = (TextView)FindViewById(Resource.Id.positionText);
             text.Text = location.Latitude + " | " + location.Longitude;
