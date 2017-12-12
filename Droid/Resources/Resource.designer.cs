@@ -3519,6 +3519,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f090056
 			public const int googleMapKey = 2131296342;
 			
+			// aapt resource value: 0x7f090057
+			public const int googlePlacesKey = 2131296343;
+			
 			// aapt resource value: 0x7f09004c
 			public const int library_name = 2131296332;
 			

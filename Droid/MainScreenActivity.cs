@@ -23,20 +23,26 @@ using Android.Graphics;
 using Java.Util.Logging;
 using Android.Graphics.Drawables;
 using Android.Content.PM;
+using Android.Gms.Common.Apis;
+using Android.Gms.Location.Places.UI;
+using Android.Gms.Location.Places;
+using Android.Gms.Common;
+using System.Collections.Generic;
 
 namespace Playfie.Droid
 {
     [Activity(Label = "MainScreenActivity",Theme = "@style/splashscreen", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-    public class MainScreenActivity : FragmentActivity, IOnMapReadyCallback, ILocationListener, ISensorEventListener
+    public class MainScreenActivity : FragmentActivity, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
     {
         static GoogleMap map;
+        static GoogleApiClient GClient;
         static ImageButton searchB;
         static Bitmap cursor;
+        static Resources ResourceT;
+        static List<AnimatedMarker> FoundPlaces=new List<AnimatedMarker>();
         AnimatedMarker userMarker;
-        Circle radiusFind;
 
         SensorManager mManager;
-        Sensor mSensor;
 
         class AnimatedMarker
         {
@@ -50,11 +56,32 @@ namespace Playfie.Droid
             private Android.OS.Handler animSearchCircle { get; set; }
             private Thread searchCirleThread { get; set; }
 
+            private Thread placesThread { get; set; }
+            private PendingResult res;
+
             public Marker marker { get; set; }
             public Circle searchCircle { get; set; }
             public int animSpeed { get; set; }
 
             private LatLng current { get; set; }
+            
+            public class UserMarker:AnimatedMarker
+            {     
+                public UserMarker(LatLng position):base("userPosition",position,markerType.userMarker)
+                {
+                    this.current = position;
+                }
+            }
+
+            public class PhotoMarker:AnimatedMarker
+            {
+                public PhotoMarker(LatLng position, string title):base(title,position,markerType.photoMarker)
+                {
+                    this.current = new LatLng(position.Latitude+0.001,position.Longitude); to = position;
+                    marker.Position = current;
+                    //animate(to,10);
+                }
+            }
 
             void animate()
             {
@@ -71,7 +98,7 @@ namespace Playfie.Droid
                     Thread.Sleep(1);
                 }
             }
-
+            
             void setPoses(Message msg)
             {
                 marker.Position = current;
@@ -92,11 +119,70 @@ namespace Playfie.Droid
                 {
                     searchCircle.Radius = 0; searchCircle.FillColor = Color.Argb(100, 100, 100, 255);
                 }
-                
+
+                if (GClient.IsConnected == true)
+                {
+                    AutocompleteFilter.Builder Builder = new AutocompleteFilter.Builder();
+                    Builder.SetTypeFilter(AutocompleteFilter.TypeFilterEstablishment);
+                    var filter = Builder.Build();
+                    LatLng startP = new LatLng(current.Latitude - 0.1, current.Longitude - 0.1);
+                    LatLng endP = new LatLng(current.Latitude + 0.1, current.Longitude + 0.1);
+
+                    //res = PlacesClass.GeoDataApi.GetAutocompletePredictions(GClient, "cafe", new LatLngBounds(startP,endP),filter);
+                    res = PlacesClass.PlaceDetectionApi.GetCurrentPlace(GClient, new PlaceFilter());
+                    //res.SetResultCallback(this,10, Java.Util.Concurrent.TimeUnit.Seconds);
+                    
+                    res.SetResultCallback<PlaceLikelihoodBuffer>(places);
+                }
+                else Log.Info("ERROR CONNECT", "GClient is not connected");
+
                 searchCirleThread = new Thread(new Action(animateSearch));
                 animSearchCircle = new Android.OS.Handler(alterSearch);
                 searchCirleThread.Start();
             }
+            class ThreadPlaceInserter
+            {
+                System.Collections.Generic.IEnumerator<IPlaceLikelihood> en { get; set; }
+                private Thread th;
+                private int Count;
+                private PlaceLikelihoodBuffer buf;
+                private void inserting()
+                {
+                    for (int i = 0; i < Count; i++)
+                    {
+                        en.MoveNext();
+                        string id = en.Current.Place.Id;
+                        PendingResult placePend = PlacesClass.GeoDataApi.GetPlaceById(GClient, id);
+                        placePend.SetResultCallback<PlaceBuffer>(addPlace);
+                    }
+                    buf.Release();
+                }
+                void addPlace(PlaceBuffer p)
+                {
+                    var e = p.GetEnumerator();
+                    FoundPlaces.Clear();
+                    for (int i = 0; i < p.Count; i++)
+                    {
+                        e.MoveNext();
+                        string name = e.Current.NameFormatted.ToString(); LatLng pos = e.Current.LatLng;
+                        Log.Info("name", name); FoundPlaces.Add(new AnimatedMarker.PhotoMarker(pos, name));
+                    }
+                }
+                public ThreadPlaceInserter(PlaceLikelihoodBuffer buf,int Count)
+                {
+                    this.buf = buf;
+                    this.en = buf.GetEnumerator(); this.Count = Count; th= new Thread(new Action(inserting));
+                    th.Name="GetPlace Thread"; th.Start();
+                }
+            }
+            void places(PlaceLikelihoodBuffer element)
+            {
+                Log.Info("Buffer info", element.Status.StatusCode + "|"+ element.Status.StatusMessage+"|"+ element.Count);
+
+                ThreadPlaceInserter th = new ThreadPlaceInserter(element, element.Count);
+            }
+            
+
             void animateSearch()
             {
                 for(int i=0;i<2000;i++)
@@ -122,17 +208,18 @@ namespace Playfie.Droid
                 this.animSpeed = animSpeed;
                 animHand = new Android.OS.Handler(new Action<Message>(setPoses));
                 cursorThread = new Thread(new Action(animate));
+                cursorThread.Name = "Animation Thread";
                 cursorThread.Start();
             }
+            
 
-            public AnimatedMarker(string title, LatLng position, markerType type)
+            private AnimatedMarker(string title, LatLng position, markerType type)
             {
                 this.type = type;
-
+                Bitmap pic = BitmapFactory.DecodeResource(ResourceT, type==markerType.userMarker?Resource.Drawable.userCursor:Resource.Drawable.playfieMarker);
                 MarkerOptions markOps = new MarkerOptions();
-                Bitmap mrk = Bitmap.CreateScaledBitmap(cursor, 30, 60, false);
-                if (type == markerType.photoMarker) markOps.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.playfieMarker));
-                else markOps.SetIcon(BitmapDescriptorFactory.FromBitmap(mrk));
+                Bitmap mrk = Bitmap.CreateScaledBitmap(pic, type==markerType.userMarker?30:60, 60, false);       
+                markOps.SetIcon(BitmapDescriptorFactory.FromBitmap(mrk));
 
                 markOps.SetTitle(title);
                 markOps.SetPosition(position);
@@ -193,34 +280,18 @@ namespace Playfie.Droid
             }
             else
             {
-                //gyroscope programm
-                mManager = (SensorManager)GetSystemService(Context.SensorService);
-                mManager.RegisterListener(this, mManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
-
-                //theme for google maps
-                SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
-                //sinsert view
-                SetContentView(Resource.Layout.MainScreen);
-
-                var lm = (LocationManager)GetSystemService(Context.LocationService);
-                Criteria criteria = new Criteria();
-                lm.RequestLocationUpdates(LocationManager.NetworkProvider, 0, 0, this);
-
-                searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
-                searchB.Click += findPoints;
-                MapBuild();
+                BuildMainScreen();
             }
         }
+        private void BuildMainScreen()
+        {
+            GClient = new GoogleApiClient.Builder(this).AddApi(PlacesClass.GEO_DATA_API).AddApi(PlacesClass.PLACE_DETECTION_API).Build();
+            
+            GClient.RegisterConnectionFailedListener(this);
+            GClient.RegisterConnectionCallbacks(this);
+            GClient.Connect();
 
-        private void findPoints(object sender, EventArgs e)
-        {
-            searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
-            searchB.Enabled = false;
-            searchB.SetImageResource(Resource.Drawable.btn_search_pressed);
-            userMarker.findPoints();
-        }
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
-        {
+            ResourceT = this.Resources;
             //gyroscope programm
             mManager = (SensorManager)GetSystemService(Context.SensorService);
             mManager.RegisterListener(this, mManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
@@ -238,6 +309,18 @@ namespace Playfie.Droid
             searchB.Click += findPoints;
             MapBuild();
         }
+
+        private void findPoints(object sender, EventArgs e)
+        {
+            searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
+            searchB.Enabled = false;
+            searchB.SetImageResource(Resource.Drawable.btn_search_pressed);
+            userMarker.findPoints();
+        }
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            BuildMainScreen();
+        }
         public void OnLocationChanged(Location location)
         {
             GeomagneticField field = new GeomagneticField(
@@ -247,19 +330,22 @@ namespace Playfie.Droid
                 Java.Lang.JavaSystem.CurrentTimeMillis()
                 );
 
-            if(userMarker==null)
+            
+
+            if (userMarker==null)
             {
                 cursor = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.userCursor);
-                userMarker = new AnimatedMarker("user", new LatLng(location.Latitude, location.Longitude), AnimatedMarker.markerType.userMarker);
+                userMarker = new AnimatedMarker.UserMarker(new LatLng(location.Latitude, location.Longitude));
+                
                 //userMarker.animate(new LatLng(location.Latitude - 1, location.Longitude + 1), 500);
                 userMarker.marker.Flat = true;
 
-                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude,location.Longitude),(float)10));
+                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude,location.Longitude),(float)13));
             }
             else
             {
                 userMarker.animate(new LatLng(location.Latitude, location.Longitude), 1000);
-                userMarker.searchCircle.Center = new LatLng(location.Latitude, location.Longitude);
+                if(userMarker.searchCircle!=null) userMarker.searchCircle.Center = new LatLng(location.Latitude, location.Longitude);
             }
 
             TextView text = (TextView)FindViewById(Resource.Id.positionText);
@@ -302,6 +388,21 @@ namespace Playfie.Droid
                 int degI = (int)deg;
                 if (userMarker != null) userMarker.marker.Rotation = -rotation;
             }
+        }
+
+        public void OnConnectionFailed(ConnectionResult result)
+        {
+            Toast.MakeText(this,"error while connection to GClient", ToastLength.Short);
+        }
+
+        public void OnConnected(Bundle connectionHint)
+        {
+            Toast.MakeText(this, "connection to GClient seccessful", ToastLength.Short);
+        }
+
+        public void OnConnectionSuspended(int cause)
+        {
+            throw new NotImplementedException();
         }
     }
 
