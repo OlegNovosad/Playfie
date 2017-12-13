@@ -37,7 +37,7 @@ namespace Playfie.Droid
         static GoogleMap map;
         static GoogleApiClient GClient;
         static ImageButton searchB;
-        static Bitmap cursor;
+        static Bitmap cursorExample, PhotoExample;
         static Resources ResourceT;
         static List<AnimatedMarker> FoundPlaces=new List<AnimatedMarker>();
         AnimatedMarker userMarker;
@@ -216,9 +216,8 @@ namespace Playfie.Droid
             private AnimatedMarker(string title, LatLng position, markerType type)
             {
                 this.type = type;
-                Bitmap pic = BitmapFactory.DecodeResource(ResourceT, type==markerType.userMarker?Resource.Drawable.userCursor:Resource.Drawable.playfieMarker);
+                Bitmap mrk = type == markerType.userMarker ? cursorExample : PhotoExample;
                 MarkerOptions markOps = new MarkerOptions();
-                Bitmap mrk = Bitmap.CreateScaledBitmap(pic, type==markerType.userMarker?30:60, 60, false);       
                 markOps.SetIcon(BitmapDescriptorFactory.FromBitmap(mrk));
 
                 markOps.SetTitle(title);
@@ -285,13 +284,18 @@ namespace Playfie.Droid
         }
         private void BuildMainScreen()
         {
+            //picOps
+            Bitmap photoB = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.playfieMarker);
+            Bitmap cursorB= BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.userCursor);
+            Bitmap scaledCursor = Bitmap.CreateScaledBitmap(cursorB, 30, 60, false);
+            Bitmap scaledPhoto = Bitmap.CreateScaledBitmap(photoB, 60, 60, false);
+            PhotoExample = scaledPhoto; cursorExample = scaledCursor;
+            //Gclient ops
             GClient = new GoogleApiClient.Builder(this).AddApi(PlacesClass.GEO_DATA_API).AddApi(PlacesClass.PLACE_DETECTION_API).Build();
             
             GClient.RegisterConnectionFailedListener(this);
             GClient.RegisterConnectionCallbacks(this);
             GClient.Connect();
-
-            ResourceT = this.Resources;
             //gyroscope programm
             mManager = (SensorManager)GetSystemService(Context.SensorService);
             mManager.RegisterListener(this, mManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
@@ -334,7 +338,7 @@ namespace Playfie.Droid
 
             if (userMarker==null)
             {
-                cursor = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.userCursor);
+                
                 userMarker = new AnimatedMarker.UserMarker(new LatLng(location.Latitude, location.Longitude));
                 
                 //userMarker.animate(new LatLng(location.Latitude - 1, location.Longitude + 1), 500);
