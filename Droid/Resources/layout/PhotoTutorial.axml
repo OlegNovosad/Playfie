@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:minWidth="25px"
     android:minHeight="25px">
+    
     <Button
         android:text="+"
         android:textSize="35sp"

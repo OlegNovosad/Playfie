@@ -10,7 +10,7 @@ using Java.Lang;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "Playfie", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    [Activity(Label = "Playfie",Theme = "@style/splashscreen", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity, IFacebookCallback
     { 
         private ICallbackManager CallbackManager;
@@ -32,7 +32,7 @@ namespace Playfie.Droid
             SetContentView(Resource.Layout.Login);
 
             //chek if user logged in fb
-            if (isLoggedInFB()) GoPhotoTutorial();
+            if (isLoggedInFB()) goMainScreen();
 
             // Initialize login button with permissions and manager
             LoginButton btnLoginWithFacebook = (LoginButton) FindViewById(Resource.Id.btnLoginFB);
@@ -134,6 +134,13 @@ namespace Playfie.Droid
             Intent tutor = new Intent(this, typeof(PhotoTutorialActivity));
             Finish();
             StartActivity(tutor);
+        }
+
+        private void goMainScreen()
+        {
+            Intent main = new Intent(this, typeof(MainScreenActivity));
+            Finish();
+            StartActivity(main);
         }
         #endregion
     }

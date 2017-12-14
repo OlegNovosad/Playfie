@@ -1,60 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_alignParentBottom="true"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:minWidth="25dp"
-        android:minHeight="25dp"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:id="@+id/linearLayout1">
+        android:minWidth="25px"
+        android:minHeight="25px">
         <ImageView
-            android:src="@drawable/playfieicon"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_gravity="bottom"
+            android:src="@drawable/playfieLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/imageView1" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8">
+        <fragment
+            class="com.google.android.gms.maps.MapFragment"
+            android:id="@+id/mainMap"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+        <TextView
+            android:text="Text"
+            android:id="@+id/testText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/mainMap"
+            android:layout_alignParentTop="true" />
+        <TextView
+            android:text="Pos"
+            android:id="@+id/positionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/testText" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent">
+        <ImageButton
+            android:src="@drawable/btn_user"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:id="@+id/Home"
-            android:tag="@integer/btn1" />
-        <ImageView
-            android:src="@drawable/playfieicon"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:id="@+id/userBtn" />
+        <ImageButton
+            android:src="@drawable/btn_search"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:id="@+id/Search"
-            android:tag="@integer/btn2" />
-        <ImageView
-            android:src="@drawable/playfieicon"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:id="@+id/searchBtn" />
+        <ImageButton
+            android:src="@drawable/btn_menu"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:id="@+id/ListOfPhotos"
-            android:tag="@integer/btn3" />
-        <ImageView
-            android:src="@drawable/playfieicon"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:id="@+id/Glory"
-            android:tag="@integer/btn4" />
-        <ImageView
-            android:src="@drawable/playfieicon"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:id="@+id/MyAcc"
-            android:tag="@integer/btn5" />
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:id="@+id/menuBtn" />
     </LinearLayout>
-    <FrameLayout
-        android:id="@+id/Container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/linearLayout1" />
-</RelativeLayout>
+</LinearLayout>
