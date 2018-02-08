@@ -138,7 +138,7 @@ namespace Playfie.Droid
 
         private void goMainScreen()
         {
-            Intent main = new Intent(this, typeof(MainScreenActivity));
+            Intent main = new Intent(this, typeof(LoginActivity));
             Finish();
             StartActivity(main);
         }
