@@ -39,6 +39,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/testText" />
+        <View
+            android:id="@+id/btnShot_bg"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="invisible"
+            android:background="@drawable/round_btn_White" />
+        <Button
+            android:textSize="35sp"
+            android:background="@drawable/round_btn_Gray"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="invisible"
+            android:id="@+id/btnShot" />
+        <fragment
+            android:id="@+id/placeInfoF"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:visibility="invisible"
+            class="Playfie.Droid.PlaceInfoFragment" />
     </RelativeLayout>
     <LinearLayout
         android:layout_height="0dp"

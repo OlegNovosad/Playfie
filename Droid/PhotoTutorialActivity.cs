@@ -12,6 +12,7 @@ using Refractored.Controls;
 using static Android.Graphics.BitmapFactory;
 using Android.Support.V4.Content;
 using Android;
+using static Playfie.Droid.PhotoFuncs;
 
 namespace Playfie.Droid
 {
@@ -19,9 +20,12 @@ namespace Playfie.Droid
     public class PhotoTutorialActivity : Activity
     {
         Timer time = new Timer(1000);
+        PhotoFuncs photos;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            photos = new PhotoFuncs(this);
+
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.PhotoTutorial);
 
@@ -43,7 +47,7 @@ namespace Playfie.Droid
             t1.StartAnimation(anim);
 
             Button photoB = (Button)FindViewById(Resource.Id.btnPhoto);
-            photoB.Click += PhotoTake;
+            photoB.Click += photos.PhotoTake;
         }
 
         /// <summary>
@@ -58,30 +62,6 @@ namespace Playfie.Droid
             t2.StartAnimation(anim);
         }
 
-        string photoPath;
-        /// <summary>
-        /// start face camera
-        /// </summary>
-        private void PhotoTake(object sender, EventArgs e)
-        {
-            Intent photo = new Intent(MediaStore.ActionImageCapture);
-
-            var photoName = GeneratePhotoName();
-            var photoUrl = FileProvider.GetUriForFile(this.ApplicationContext, "com.itstep.Playfie.fileprovider", photoName);
-            photoPath = photoName.Path;
-            photo.PutExtra(MediaStore.ExtraOutput, photoUrl);
-            photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
-
-            if(ContextCompat.CheckSelfPermission(this, Manifest.Permission.Camera)==Android.Content.PM.Permission.Denied)
-            {
-                RequestPermissions(new string[] { Manifest.Permission.Camera, Manifest.Permission.WriteExternalStorage }, 11);
-            }
-            else
-            {
-                StartActivityForResult(photo, 12);
-            }
-            //here we start photoActivity (12 - request photo code)
-        }
 
         /// <summary>
         /// Goes to the main screen.
@@ -90,22 +70,8 @@ namespace Playfie.Droid
         /// <param name="e">E.</param>
         public void ToMainScreen(object sender, EventArgs e)
         {
-            Intent next = new Intent(this, typeof(MainScreenActivity));
+            Intent next = new Intent(this, typeof(LoginActivity));
             StartActivity(next);
-        }
-
-        /// <summary>
-        /// Generates the name of the photo.
-        /// </summary>
-        /// <returns>The photo name.</returns>
-        public Java.IO.File GeneratePhotoName()
-        {
-            DateTime d = DateTime.UtcNow;
-            Java.IO.File sdCardPath = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
-            Java.IO.File pics = new Java.IO.File(Android.OS.Environment.DirectoryPictures);
-            Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath + "/Playfie/"+ "Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg");
-            //if (!fin.Exists()) { sdCardPath.Mkdir(); }
-            return fin;
         }
 
         /// <summary>
@@ -118,7 +84,7 @@ namespace Playfie.Droid
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
 
-                Bitmap yourPhoto = DecodeFile(photoPath);
+                Bitmap yourPhoto = DecodeFile(photos.photoPath);
                 avatar.SetImageBitmap(yourPhoto);
 
                 TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);

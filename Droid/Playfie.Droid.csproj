@@ -149,18 +149,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedMarker.cs" />
+    <Compile Include="CompletingAnimation.cs" />
     <Compile Include="GloryActivity.cs" />
-    <Compile Include="ListOfPhotoActivity.cs" />
-    <Compile Include="MainActivity.cs" />
+    <Compile Include="LoginActivity.cs" />
+    <Compile Include="PhotoFuncs.cs" />
     <Compile Include="PhotoTutorialActivity.cs" />
+    <Compile Include="PlaceInfoFragment.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="SearchActivity.cs" />
-    <Compile Include="TestFragment.cs" />
     <Compile Include="UserActivity.cs" />
     <Compile Include="MainScreenActivity.cs" />
-    <Compile Include="PhotoListFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -184,7 +185,12 @@
     <AndroidResource Include="Resources\layout\MainScreen.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\Fragment_Photo_List.axml" />
+    <AndroidResource Include="Resources\layout\PlaceInfo.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\PlaceInfoShape.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -196,7 +202,9 @@
     <AndroidResource Include="Resources\drawable\round_btn.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\Colors.xml" />
+    <AndroidResource Include="Resources\values\Colors.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\anim\animAlpha.xml">
@@ -249,6 +257,28 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\btn_search_pressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\round_btn_Gray.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\round_btn_White.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\animAlerter.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\photoIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\RoundCornerBtn.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\animFromTop.xml" />
   </ItemGroup>
   <Import Project="..\Playfie\Playfie.projitems" Label="Shared" Condition="Exists('..\Playfie\Playfie.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

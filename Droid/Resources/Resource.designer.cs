@@ -63,16 +63,22 @@ namespace Playfie.Droid
 			public const int abc_slide_out_top = 2130968585;
 			
 			// aapt resource value: 0x7f04000a
-			public const int animAlpha = 2130968586;
+			public const int animAlerter = 2130968586;
 			
 			// aapt resource value: 0x7f04000b
-			public const int animJumper = 2130968587;
+			public const int animAlpha = 2130968587;
 			
 			// aapt resource value: 0x7f04000c
-			public const int tooltip_enter = 2130968588;
+			public const int animFromTop = 2130968588;
 			
 			// aapt resource value: 0x7f04000d
-			public const int tooltip_exit = 2130968589;
+			public const int animJumper = 2130968589;
+			
+			// aapt resource value: 0x7f04000e
+			public const int tooltip_enter = 2130968590;
+			
+			// aapt resource value: 0x7f04000f
+			public const int tooltip_exit = 2130968591;
 			
 			static Animation()
 			{
@@ -1061,44 +1067,44 @@ namespace Playfie.Droid
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f070066
-			public const int abc_background_cache_hint_selector_material_dark = 2131165286;
-			
-			// aapt resource value: 0x7f070067
-			public const int abc_background_cache_hint_selector_material_light = 2131165287;
-			
-			// aapt resource value: 0x7f070068
-			public const int abc_btn_colored_borderless_text_material = 2131165288;
-			
 			// aapt resource value: 0x7f070069
-			public const int abc_btn_colored_text_material = 2131165289;
+			public const int abc_background_cache_hint_selector_material_dark = 2131165289;
 			
 			// aapt resource value: 0x7f07006a
-			public const int abc_color_highlight_material = 2131165290;
+			public const int abc_background_cache_hint_selector_material_light = 2131165290;
 			
 			// aapt resource value: 0x7f07006b
-			public const int abc_hint_foreground_material_dark = 2131165291;
+			public const int abc_btn_colored_borderless_text_material = 2131165291;
 			
 			// aapt resource value: 0x7f07006c
-			public const int abc_hint_foreground_material_light = 2131165292;
+			public const int abc_btn_colored_text_material = 2131165292;
+			
+			// aapt resource value: 0x7f07006d
+			public const int abc_color_highlight_material = 2131165293;
+			
+			// aapt resource value: 0x7f07006e
+			public const int abc_hint_foreground_material_dark = 2131165294;
+			
+			// aapt resource value: 0x7f07006f
+			public const int abc_hint_foreground_material_light = 2131165295;
 			
 			// aapt resource value: 0x7f070026
 			public const int abc_input_method_navigation_guard = 2131165222;
 			
-			// aapt resource value: 0x7f07006d
-			public const int abc_primary_text_disable_only_material_dark = 2131165293;
-			
-			// aapt resource value: 0x7f07006e
-			public const int abc_primary_text_disable_only_material_light = 2131165294;
-			
-			// aapt resource value: 0x7f07006f
-			public const int abc_primary_text_material_dark = 2131165295;
-			
 			// aapt resource value: 0x7f070070
-			public const int abc_primary_text_material_light = 2131165296;
+			public const int abc_primary_text_disable_only_material_dark = 2131165296;
 			
 			// aapt resource value: 0x7f070071
-			public const int abc_search_url_text = 2131165297;
+			public const int abc_primary_text_disable_only_material_light = 2131165297;
+			
+			// aapt resource value: 0x7f070072
+			public const int abc_primary_text_material_dark = 2131165298;
+			
+			// aapt resource value: 0x7f070073
+			public const int abc_primary_text_material_light = 2131165299;
+			
+			// aapt resource value: 0x7f070074
+			public const int abc_search_url_text = 2131165300;
 			
 			// aapt resource value: 0x7f070027
 			public const int abc_search_url_text_normal = 2131165223;
@@ -1109,29 +1115,29 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f070029
 			public const int abc_search_url_text_selected = 2131165225;
 			
-			// aapt resource value: 0x7f070072
-			public const int abc_secondary_text_material_dark = 2131165298;
-			
-			// aapt resource value: 0x7f070073
-			public const int abc_secondary_text_material_light = 2131165299;
-			
-			// aapt resource value: 0x7f070074
-			public const int abc_tint_btn_checkable = 2131165300;
-			
 			// aapt resource value: 0x7f070075
-			public const int abc_tint_default = 2131165301;
+			public const int abc_secondary_text_material_dark = 2131165301;
 			
 			// aapt resource value: 0x7f070076
-			public const int abc_tint_edittext = 2131165302;
+			public const int abc_secondary_text_material_light = 2131165302;
 			
 			// aapt resource value: 0x7f070077
-			public const int abc_tint_seek_thumb = 2131165303;
+			public const int abc_tint_btn_checkable = 2131165303;
 			
 			// aapt resource value: 0x7f070078
-			public const int abc_tint_spinner = 2131165304;
+			public const int abc_tint_default = 2131165304;
 			
 			// aapt resource value: 0x7f070079
-			public const int abc_tint_switch_track = 2131165305;
+			public const int abc_tint_edittext = 2131165305;
+			
+			// aapt resource value: 0x7f07007a
+			public const int abc_tint_seek_thumb = 2131165306;
+			
+			// aapt resource value: 0x7f07007b
+			public const int abc_tint_spinner = 2131165307;
+			
+			// aapt resource value: 0x7f07007c
+			public const int abc_tint_switch_track = 2131165308;
 			
 			// aapt resource value: 0x7f07002a
 			public const int accent_material_dark = 2131165226;
@@ -1174,6 +1180,12 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f070065
 			public const int btn_2 = 2131165285;
+			
+			// aapt resource value: 0x7f070066
+			public const int btn_gray_bg = 2131165286;
+			
+			// aapt resource value: 0x7f070067
+			public const int btn_gray_fg = 2131165287;
 			
 			// aapt resource value: 0x7f070036
 			public const int button_material_dark = 2131165238;
@@ -1232,8 +1244,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f07001a
 			public const int com_facebook_button_send_background_color_pressed = 2131165210;
 			
-			// aapt resource value: 0x7f07007a
-			public const int com_facebook_button_text_color = 2131165306;
+			// aapt resource value: 0x7f07007d
+			public const int com_facebook_button_text_color = 2131165309;
 			
 			// aapt resource value: 0x7f07001b
 			public const int com_facebook_device_auth_text = 2131165211;
@@ -1250,8 +1262,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f07001f
 			public const int com_facebook_messenger_blue = 2131165215;
 			
-			// aapt resource value: 0x7f07007b
-			public const int com_facebook_send_button_text_color = 2131165307;
+			// aapt resource value: 0x7f07007e
+			public const int com_facebook_send_button_text_color = 2131165310;
 			
 			// aapt resource value: 0x7f070020
 			public const int com_facebook_share_button_text_color = 2131165216;
@@ -1259,8 +1271,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f070021
 			public const int com_smart_login_code = 2131165217;
 			
-			// aapt resource value: 0x7f07007c
-			public const int common_google_signin_btn_text_dark = 2131165308;
+			// aapt resource value: 0x7f07007f
+			public const int common_google_signin_btn_text_dark = 2131165311;
 			
 			// aapt resource value: 0x7f070006
 			public const int common_google_signin_btn_text_dark_default = 2131165190;
@@ -1274,8 +1286,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f070009
 			public const int common_google_signin_btn_text_dark_pressed = 2131165193;
 			
-			// aapt resource value: 0x7f07007d
-			public const int common_google_signin_btn_text_light = 2131165309;
+			// aapt resource value: 0x7f070080
+			public const int common_google_signin_btn_text_light = 2131165312;
 			
 			// aapt resource value: 0x7f07000a
 			public const int common_google_signin_btn_text_light_default = 2131165194;
@@ -1289,8 +1301,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f07000d
 			public const int common_google_signin_btn_text_light_pressed = 2131165197;
 			
-			// aapt resource value: 0x7f07007e
-			public const int common_google_signin_btn_tint = 2131165310;
+			// aapt resource value: 0x7f070081
+			public const int common_google_signin_btn_tint = 2131165313;
 			
 			// aapt resource value: 0x7f070038
 			public const int dim_foreground_disabled_material_dark = 2131165240;
@@ -1382,6 +1394,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f070005
 			public const int place_autocomplete_separator = 2131165189;
 			
+			// aapt resource value: 0x7f070068
+			public const int playfie_blue = 2131165288;
+			
 			// aapt resource value: 0x7f07004d
 			public const int primary_dark_material_dark = 2131165261;
 			
@@ -1430,11 +1445,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f07005c
 			public const int switch_thumb_disabled_material_light = 2131165276;
 			
-			// aapt resource value: 0x7f07007f
-			public const int switch_thumb_material_dark = 2131165311;
+			// aapt resource value: 0x7f070082
+			public const int switch_thumb_material_dark = 2131165314;
 			
-			// aapt resource value: 0x7f070080
-			public const int switch_thumb_material_light = 2131165312;
+			// aapt resource value: 0x7f070083
+			public const int switch_thumb_material_light = 2131165315;
 			
 			// aapt resource value: 0x7f07005d
 			public const int switch_thumb_normal_material_dark = 2131165277;
@@ -2377,11 +2392,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f020099
 			public const int notification_icon_background = 2130837657;
 			
-			// aapt resource value: 0x7f0200a8
-			public const int notification_template_icon_bg = 2130837672;
+			// aapt resource value: 0x7f0200ad
+			public const int notification_template_icon_bg = 2130837677;
 			
-			// aapt resource value: 0x7f0200a9
-			public const int notification_template_icon_low_bg = 2130837673;
+			// aapt resource value: 0x7f0200ae
+			public const int notification_template_icon_low_bg = 2130837678;
 			
 			// aapt resource value: 0x7f02009a
 			public const int notification_tile_bg = 2130837658;
@@ -2390,40 +2405,55 @@ namespace Playfie.Droid
 			public const int notify_panel_notification_icon_bg = 2130837659;
 			
 			// aapt resource value: 0x7f02009c
-			public const int places_ic_clear = 2130837660;
+			public const int photoIcon = 2130837660;
 			
 			// aapt resource value: 0x7f02009d
-			public const int places_ic_search = 2130837661;
+			public const int PlaceInfoShape = 2130837661;
 			
 			// aapt resource value: 0x7f02009e
-			public const int playfieIcon = 2130837662;
+			public const int places_ic_clear = 2130837662;
 			
 			// aapt resource value: 0x7f02009f
-			public const int playfieLogo = 2130837663;
+			public const int places_ic_search = 2130837663;
 			
 			// aapt resource value: 0x7f0200a0
-			public const int playfieMarker = 2130837664;
+			public const int playfieIcon = 2130837664;
 			
 			// aapt resource value: 0x7f0200a1
-			public const int powered_by_google_dark = 2130837665;
+			public const int playfieLogo = 2130837665;
 			
 			// aapt resource value: 0x7f0200a2
-			public const int powered_by_google_light = 2130837666;
+			public const int playfieMarker = 2130837666;
 			
 			// aapt resource value: 0x7f0200a3
-			public const int round_btn = 2130837667;
+			public const int powered_by_google_dark = 2130837667;
 			
 			// aapt resource value: 0x7f0200a4
-			public const int splashScreen = 2130837668;
+			public const int powered_by_google_light = 2130837668;
 			
 			// aapt resource value: 0x7f0200a5
-			public const int tooltip_frame_dark = 2130837669;
+			public const int round_btn = 2130837669;
 			
 			// aapt resource value: 0x7f0200a6
-			public const int tooltip_frame_light = 2130837670;
+			public const int round_btn_Gray = 2130837670;
 			
 			// aapt resource value: 0x7f0200a7
-			public const int userCursor = 2130837671;
+			public const int round_btn_White = 2130837671;
+			
+			// aapt resource value: 0x7f0200a8
+			public const int RoundCornerBtn = 2130837672;
+			
+			// aapt resource value: 0x7f0200a9
+			public const int splashScreen = 2130837673;
+			
+			// aapt resource value: 0x7f0200aa
+			public const int tooltip_frame_dark = 2130837674;
+			
+			// aapt resource value: 0x7f0200ab
+			public const int tooltip_frame_light = 2130837675;
+			
+			// aapt resource value: 0x7f0200ac
+			public const int userCursor = 2130837676;
 			
 			static Drawable()
 			{
@@ -2450,14 +2480,23 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0041
 			public const int META = 2131558465;
 			
+			// aapt resource value: 0x7f0d00c0
+			public const int PlaceInfoMain = 2131558592;
+			
+			// aapt resource value: 0x7f0d00bf
+			public const int PlaceMoreBtn = 2131558591;
+			
+			// aapt resource value: 0x7f0d00c1
+			public const int PlacePhoto = 2131558593;
+			
 			// aapt resource value: 0x7f0d0042
 			public const int SHIFT = 2131558466;
 			
 			// aapt resource value: 0x7f0d0043
 			public const int SYM = 2131558467;
 			
-			// aapt resource value: 0x7f0d009e
-			public const int action0 = 2131558558;
+			// aapt resource value: 0x7f0d00a0
+			public const int action0 = 2131558560;
 			
 			// aapt resource value: 0x7f0d006f
 			public const int action_bar = 2131558511;
@@ -2480,17 +2519,17 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d004d
 			public const int action_bar_title = 2131558477;
 			
-			// aapt resource value: 0x7f0d009b
-			public const int action_container = 2131558555;
+			// aapt resource value: 0x7f0d009d
+			public const int action_container = 2131558557;
 			
 			// aapt resource value: 0x7f0d0070
 			public const int action_context_bar = 2131558512;
 			
-			// aapt resource value: 0x7f0d00a2
-			public const int action_divider = 2131558562;
+			// aapt resource value: 0x7f0d00a4
+			public const int action_divider = 2131558564;
 			
-			// aapt resource value: 0x7f0d009c
-			public const int action_image = 2131558556;
+			// aapt resource value: 0x7f0d009e
+			public const int action_image = 2131558558;
 			
 			// aapt resource value: 0x7f0d0002
 			public const int action_menu_divider = 2131558402;
@@ -2507,11 +2546,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d004f
 			public const int action_mode_close_button = 2131558479;
 			
-			// aapt resource value: 0x7f0d009d
-			public const int action_text = 2131558557;
+			// aapt resource value: 0x7f0d009f
+			public const int action_text = 2131558559;
 			
-			// aapt resource value: 0x7f0d00ab
-			public const int actions = 2131558571;
+			// aapt resource value: 0x7f0d00ad
+			public const int actions = 2131558573;
 			
 			// aapt resource value: 0x7f0d0050
 			public const int activity_chooser_view_content = 2131558480;
@@ -2552,20 +2591,26 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d001e
 			public const int box_count = 2131558430;
 			
-			// aapt resource value: 0x7f0d008d
-			public const int btnLoginFB = 2131558541;
+			// aapt resource value: 0x7f0d008c
+			public const int btnLoginFB = 2131558540;
 			
-			// aapt resource value: 0x7f0d00b3
-			public const int btnNext = 2131558579;
+			// aapt resource value: 0x7f0d00b5
+			public const int btnNext = 2131558581;
 			
-			// aapt resource value: 0x7f0d00ae
-			public const int btnPhoto = 2131558574;
+			// aapt resource value: 0x7f0d00b0
+			public const int btnPhoto = 2131558576;
 			
-			// aapt resource value: 0x7f0d0092
-			public const int btnSignIn = 2131558546;
+			// aapt resource value: 0x7f0d0097
+			public const int btnShot = 2131558551;
+			
+			// aapt resource value: 0x7f0d0096
+			public const int btnShot_bg = 2131558550;
 			
 			// aapt resource value: 0x7f0d0091
-			public const int btnSignUp = 2131558545;
+			public const int btnSignIn = 2131558545;
+			
+			// aapt resource value: 0x7f0d0090
+			public const int btnSignUp = 2131558544;
 			
 			// aapt resource value: 0x7f0d001f
 			public const int button = 2131558431;
@@ -2573,8 +2618,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0056
 			public const int buttonPanel = 2131558486;
 			
-			// aapt resource value: 0x7f0d009f
-			public const int cancel_action = 2131558559;
+			// aapt resource value: 0x7f0d00a1
+			public const int cancel_action = 2131558561;
 			
 			// aapt resource value: 0x7f0d0082
 			public const int cancel_button = 2131558530;
@@ -2585,8 +2630,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0066
 			public const int checkbox = 2131558502;
 			
-			// aapt resource value: 0x7f0d00a7
-			public const int chronometer = 2131558567;
+			// aapt resource value: 0x7f0d00a9
+			public const int chronometer = 2131558569;
 			
 			// aapt resource value: 0x7f0d0045
 			public const int collapseActionView = 2131558469;
@@ -2654,14 +2699,14 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d003c
 			public const int end = 2131558460;
 			
-			// aapt resource value: 0x7f0d00ad
-			public const int end_padder = 2131558573;
+			// aapt resource value: 0x7f0d00af
+			public const int end_padder = 2131558575;
+			
+			// aapt resource value: 0x7f0d008e
+			public const int etLogin = 2131558542;
 			
 			// aapt resource value: 0x7f0d008f
-			public const int etLogin = 2131558543;
-			
-			// aapt resource value: 0x7f0d0090
-			public const int etPassword = 2131558544;
+			public const int etPassword = 2131558543;
 			
 			// aapt resource value: 0x7f0d0051
 			public const int expand_activities_button = 2131558481;
@@ -2684,8 +2729,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0055
 			public const int icon = 2131558485;
 			
-			// aapt resource value: 0x7f0d00ac
-			public const int icon_group = 2131558572;
+			// aapt resource value: 0x7f0d00ae
+			public const int icon_group = 2131558574;
 			
 			// aapt resource value: 0x7f0d0015
 			public const int icon_only = 2131558421;
@@ -2696,11 +2741,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0052
 			public const int image = 2131558482;
 			
-			// aapt resource value: 0x7f0d0093
-			public const int imageView1 = 2131558547;
+			// aapt resource value: 0x7f0d0092
+			public const int imageView1 = 2131558546;
 			
-			// aapt resource value: 0x7f0d00a8
-			public const int info = 2131558568;
+			// aapt resource value: 0x7f0d00aa
+			public const int info = 2131558570;
 			
 			// aapt resource value: 0x7f0d0021
 			public const int inline = 2131558433;
@@ -2708,11 +2753,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d004c
 			public const int italic = 2131558476;
 			
-			// aapt resource value: 0x7f0d008c
-			public const int ivAppIcon = 2131558540;
+			// aapt resource value: 0x7f0d008b
+			public const int ivAppIcon = 2131558539;
 			
-			// aapt resource value: 0x7f0d00b1
-			public const int ivAvatar = 2131558577;
+			// aapt resource value: 0x7f0d00b3
+			public const int ivAvatar = 2131558579;
 			
 			// aapt resource value: 0x7f0d0029
 			public const int large = 2131558441;
@@ -2735,20 +2780,20 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0054
 			public const int list_item = 2131558484;
 			
-			// aapt resource value: 0x7f0d0094
-			public const int mainMap = 2131558548;
+			// aapt resource value: 0x7f0d0093
+			public const int mainMap = 2131558547;
 			
-			// aapt resource value: 0x7f0d00a1
-			public const int media_actions = 2131558561;
+			// aapt resource value: 0x7f0d00a3
+			public const int media_actions = 2131558563;
 			
-			// aapt resource value: 0x7f0d0099
-			public const int menuBtn = 2131558553;
+			// aapt resource value: 0x7f0d009b
+			public const int menuBtn = 2131558555;
 			
-			// aapt resource value: 0x7f0d00bc
-			public const int message = 2131558588;
+			// aapt resource value: 0x7f0d00c6
+			public const int message = 2131558598;
 			
-			// aapt resource value: 0x7f0d009a
-			public const int messenger_send_button = 2131558554;
+			// aapt resource value: 0x7f0d009c
+			public const int messenger_send_button = 2131558556;
 			
 			// aapt resource value: 0x7f0d003d
 			public const int middle = 2131558461;
@@ -2768,14 +2813,14 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0010
 			public const int normal = 2131558416;
 			
-			// aapt resource value: 0x7f0d00aa
-			public const int notification_background = 2131558570;
+			// aapt resource value: 0x7f0d00ac
+			public const int notification_background = 2131558572;
 			
-			// aapt resource value: 0x7f0d00a4
-			public const int notification_main_column = 2131558564;
+			// aapt resource value: 0x7f0d00a6
+			public const int notification_main_column = 2131558566;
 			
-			// aapt resource value: 0x7f0d00a3
-			public const int notification_main_column_container = 2131558563;
+			// aapt resource value: 0x7f0d00a5
+			public const int notification_main_column_container = 2131558565;
 			
 			// aapt resource value: 0x7f0d001b
 			public const int open_graph = 2131558427;
@@ -2786,32 +2831,50 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0058
 			public const int parentPanel = 2131558488;
 			
-			// aapt resource value: 0x7f0d00b6
-			public const int place_autocomplete_clear_button = 2131558582;
+			// aapt resource value: 0x7f0d00c3
+			public const int photosTakenLayout = 2131558595;
+			
+			// aapt resource value: 0x7f0d0098
+			public const int placeInfoF = 2131558552;
+			
+			// aapt resource value: 0x7f0d00be
+			public const int placeInfoL = 2131558590;
+			
+			// aapt resource value: 0x7f0d00c2
+			public const int placeNameText = 2131558594;
+			
+			// aapt resource value: 0x7f0d00c4
+			public const int placePhotosCountIcon = 2131558596;
+			
+			// aapt resource value: 0x7f0d00c5
+			public const int placePhotosCountText = 2131558597;
 			
 			// aapt resource value: 0x7f0d00b8
-			public const int place_autocomplete_powered_by_google = 2131558584;
+			public const int place_autocomplete_clear_button = 2131558584;
 			
 			// aapt resource value: 0x7f0d00ba
-			public const int place_autocomplete_prediction_primary_text = 2131558586;
+			public const int place_autocomplete_powered_by_google = 2131558586;
+			
+			// aapt resource value: 0x7f0d00bc
+			public const int place_autocomplete_prediction_primary_text = 2131558588;
+			
+			// aapt resource value: 0x7f0d00bd
+			public const int place_autocomplete_prediction_secondary_text = 2131558589;
 			
 			// aapt resource value: 0x7f0d00bb
-			public const int place_autocomplete_prediction_secondary_text = 2131558587;
+			public const int place_autocomplete_progress = 2131558587;
 			
-			// aapt resource value: 0x7f0d00b9
-			public const int place_autocomplete_progress = 2131558585;
-			
-			// aapt resource value: 0x7f0d00b4
-			public const int place_autocomplete_search_button = 2131558580;
-			
-			// aapt resource value: 0x7f0d00b5
-			public const int place_autocomplete_search_input = 2131558581;
+			// aapt resource value: 0x7f0d00b6
+			public const int place_autocomplete_search_button = 2131558582;
 			
 			// aapt resource value: 0x7f0d00b7
-			public const int place_autocomplete_separator = 2131558583;
+			public const int place_autocomplete_search_input = 2131558583;
 			
-			// aapt resource value: 0x7f0d0096
-			public const int positionText = 2131558550;
+			// aapt resource value: 0x7f0d00b9
+			public const int place_autocomplete_separator = 2131558585;
+			
+			// aapt resource value: 0x7f0d0095
+			public const int positionText = 2131558549;
 			
 			// aapt resource value: 0x7f0d0080
 			public const int progress_bar = 2131558528;
@@ -2828,11 +2891,11 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0025
 			public const int right = 2131558437;
 			
-			// aapt resource value: 0x7f0d00a9
-			public const int right_icon = 2131558569;
+			// aapt resource value: 0x7f0d00ab
+			public const int right_icon = 2131558571;
 			
-			// aapt resource value: 0x7f0d00a5
-			public const int right_side = 2131558565;
+			// aapt resource value: 0x7f0d00a7
+			public const int right_side = 2131558567;
 			
 			// aapt resource value: 0x7f0d0011
 			public const int satellite = 2131558417;
@@ -2849,8 +2912,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d005b
 			public const int scrollView = 2131558491;
 			
-			// aapt resource value: 0x7f0d0098
-			public const int searchBtn = 2131558552;
+			// aapt resource value: 0x7f0d009a
+			public const int searchBtn = 2131558554;
 			
 			// aapt resource value: 0x7f0d0073
 			public const int search_badge = 2131558515;
@@ -2918,8 +2981,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0016
 			public const int standard = 2131558422;
 			
-			// aapt resource value: 0x7f0d00a0
-			public const int status_bar_latest_event_content = 2131558560;
+			// aapt resource value: 0x7f0d00a2
+			public const int status_bar_latest_event_content = 2131558562;
 			
 			// aapt resource value: 0x7f0d0069
 			public const int submenuarrow = 2131558505;
@@ -2933,8 +2996,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0012
 			public const int terrain = 2131558418;
 			
-			// aapt resource value: 0x7f0d0095
-			public const int testText = 2131558549;
+			// aapt resource value: 0x7f0d0094
+			public const int testText = 2131558548;
 			
 			// aapt resource value: 0x7f0d000b
 			public const int text = 2131558411;
@@ -2948,8 +3011,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d005c
 			public const int textSpacerNoTitle = 2131558492;
 			
-			// aapt resource value: 0x7f0d00a6
-			public const int time = 2131558566;
+			// aapt resource value: 0x7f0d00a8
+			public const int time = 2131558568;
 			
 			// aapt resource value: 0x7f0d000d
 			public const int title = 2131558413;
@@ -2960,14 +3023,14 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0062
 			public const int title_template = 2131558498;
 			
-			// aapt resource value: 0x7f0d00af
-			public const int tlTip1 = 2131558575;
-			
-			// aapt resource value: 0x7f0d00b0
-			public const int tlTip2 = 2131558576;
+			// aapt resource value: 0x7f0d00b1
+			public const int tlTip1 = 2131558577;
 			
 			// aapt resource value: 0x7f0d00b2
-			public const int tlTip3 = 2131558578;
+			public const int tlTip2 = 2131558578;
+			
+			// aapt resource value: 0x7f0d00b4
+			public const int tlTip3 = 2131558580;
 			
 			// aapt resource value: 0x7f0d0022
 			public const int top = 2131558434;
@@ -2975,11 +3038,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0061
 			public const int topPanel = 2131558497;
 			
-			// aapt resource value: 0x7f0d008e
-			public const int tvOr = 2131558542;
-			
-			// aapt resource value: 0x7f0d008b
-			public const int tvText = 2131558539;
+			// aapt resource value: 0x7f0d008d
+			public const int tvOr = 2131558541;
 			
 			// aapt resource value: 0x7f0d0039
 			public const int uniform = 2131558457;
@@ -2993,8 +3053,8 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d0032
 			public const int useLogo = 2131558450;
 			
-			// aapt resource value: 0x7f0d0097
-			public const int userBtn = 2131558551;
+			// aapt resource value: 0x7f0d0099
+			public const int userBtn = 2131558553;
 			
 			// aapt resource value: 0x7f0d0017
 			public const int wide = 2131558423;
@@ -3161,94 +3221,94 @@ namespace Playfie.Droid
 			public const int com_facebook_tooltip_bubble = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int Fragment_Photo_List = 2130903072;
+			public const int Login = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int Login = 2130903073;
+			public const int MainScreen = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int MainScreen = 2130903074;
+			public const int messenger_button_send_blue_large = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int messenger_button_send_blue_large = 2130903075;
+			public const int messenger_button_send_blue_round = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int messenger_button_send_blue_round = 2130903076;
+			public const int messenger_button_send_blue_small = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int messenger_button_send_blue_small = 2130903077;
+			public const int messenger_button_send_white_large = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int messenger_button_send_white_large = 2130903078;
+			public const int messenger_button_send_white_round = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int messenger_button_send_white_round = 2130903079;
+			public const int messenger_button_send_white_small = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int messenger_button_send_white_small = 2130903080;
+			public const int notification_action = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int notification_action = 2130903081;
+			public const int notification_action_tombstone = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int notification_action_tombstone = 2130903082;
+			public const int notification_media_action = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int notification_media_action = 2130903083;
+			public const int notification_media_cancel_action = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int notification_media_cancel_action = 2130903084;
+			public const int notification_template_big_media = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int notification_template_big_media = 2130903085;
+			public const int notification_template_big_media_custom = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int notification_template_big_media_custom = 2130903086;
+			public const int notification_template_big_media_narrow = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int notification_template_big_media_narrow = 2130903087;
+			public const int notification_template_big_media_narrow_custom = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int notification_template_big_media_narrow_custom = 2130903088;
+			public const int notification_template_custom_big = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int notification_template_custom_big = 2130903089;
+			public const int notification_template_icon_group = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int notification_template_icon_group = 2130903090;
+			public const int notification_template_lines_media = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int notification_template_lines_media = 2130903091;
+			public const int notification_template_media = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int notification_template_media = 2130903092;
+			public const int notification_template_media_custom = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int notification_template_media_custom = 2130903093;
+			public const int notification_template_part_chronometer = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int notification_template_part_chronometer = 2130903094;
+			public const int notification_template_part_time = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int notification_template_part_time = 2130903095;
+			public const int PhotoTutorial = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int PhotoTutorial = 2130903096;
+			public const int PhotoTutorialResult = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int PhotoTutorialResult = 2130903097;
+			public const int place_autocomplete_fragment = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int place_autocomplete_fragment = 2130903098;
+			public const int place_autocomplete_item_powered_by_google = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int place_autocomplete_item_powered_by_google = 2130903099;
+			public const int place_autocomplete_item_prediction = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int place_autocomplete_item_prediction = 2130903100;
+			public const int place_autocomplete_progress = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int place_autocomplete_progress = 2130903101;
+			public const int PlaceInfo = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
 			public const int select_dialog_item_material = 2130903102;

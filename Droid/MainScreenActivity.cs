@@ -28,213 +28,112 @@ using Android.Gms.Location.Places.UI;
 using Android.Gms.Location.Places;
 using Android.Gms.Common;
 using System.Collections.Generic;
+using static Playfie.Droid.AnimatedMarkers;
+using static Playfie.Droid.CompletingAnimation;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "MainScreenActivity",Theme = "@style/splashscreen", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-    public class MainScreenActivity : FragmentActivity, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
+    [Activity(Label = "MainScreenActivity", Theme = "@style/splashscreen", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    public class LoginActivity : FragmentActivity, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
     {
-        static GoogleMap map;
-        static GoogleApiClient GClient;
-        static ImageButton searchB;
-        static Bitmap cursorExample, PhotoExample;
-        static Resources ResourceT;
-        static List<AnimatedMarker> FoundPlaces=new List<AnimatedMarker>();
+
         AnimatedMarker userMarker;
-
+        View shotBtn_bg;
         SensorManager mManager;
-
-        class AnimatedMarker
-        {
-            LatLng to { get; set; }
-
-            public enum markerType { userMarker, photoMarker }
-
-            public markerType type { get; set; }
-            private Android.OS.Handler animHand { get; set; }
-            private Thread cursorThread { get; set; }
-            private Android.OS.Handler animSearchCircle { get; set; }
-            private Thread searchCirleThread { get; set; }
-
-            private Thread placesThread { get; set; }
-            private PendingResult res;
-
-            public Marker marker { get; set; }
-            public Circle searchCircle { get; set; }
-            public int animSpeed { get; set; }
-
-            private LatLng current { get; set; }
-            
-            public class UserMarker:AnimatedMarker
-            {     
-                public UserMarker(LatLng position):base("userPosition",position,markerType.userMarker)
-                {
-                    this.current = position;
-                }
-            }
-
-            public class PhotoMarker:AnimatedMarker
-            {
-                public PhotoMarker(LatLng position, string title):base(title,position,markerType.photoMarker)
-                {
-                    this.current = new LatLng(position.Latitude+0.001,position.Longitude); to = position;
-                    marker.Position = current;
-                    //animate(to,10);
-                }
-            }
-
-            void animate()
-            {
-                double delayLatitude = (current.Latitude - to.Latitude)/animSpeed;
-                double delayLongitude = (current.Longitude - to.Longitude)/animSpeed;
-
-                //Log.Info("DELAY", "from:"+current.Latitude+"|"+current.Longitude+"///"+to.Latitude+"|"+to.Longitude+" /// "+delayLatitude + "|" + delayLongitude);
-
-                LatLng pos = new LatLng(current.Latitude, current.Longitude);
-                for(int i=0;i<animSpeed; i++)
-                {
-                    current.Latitude -= delayLatitude; current.Longitude -= delayLongitude;
-                    animHand.SendEmptyMessage(1);
-                    Thread.Sleep(1);
-                }
-            }
-            
-            void setPoses(Message msg)
-            {
-                marker.Position = current;
-            }
-
-            public void findPoints()
-            {
-                if (searchCircle == null)
-                {
-                    CircleOptions circOps = new CircleOptions();
-                    circOps.InvokeCenter(current); circOps.InvokeFillColor(Color.Argb(100, 100, 100, 255));
-                    circOps.InvokeStrokeWidth(0);
-                    circOps.InvokeRadius(0);
-
-                    searchCircle = map.AddCircle(circOps);
-                }
-                else
-                {
-                    searchCircle.Radius = 0; searchCircle.FillColor = Color.Argb(100, 100, 100, 255);
-                }
-
-                if (GClient.IsConnected == true)
-                {
-                    AutocompleteFilter.Builder Builder = new AutocompleteFilter.Builder();
-                    Builder.SetTypeFilter(AutocompleteFilter.TypeFilterEstablishment);
-                    var filter = Builder.Build();
-                    LatLng startP = new LatLng(current.Latitude - 0.1, current.Longitude - 0.1);
-                    LatLng endP = new LatLng(current.Latitude + 0.1, current.Longitude + 0.1);
-
-                    //res = PlacesClass.GeoDataApi.GetAutocompletePredictions(GClient, "cafe", new LatLngBounds(startP,endP),filter);
-                    res = PlacesClass.PlaceDetectionApi.GetCurrentPlace(GClient, new PlaceFilter());
-                    //res.SetResultCallback(this,10, Java.Util.Concurrent.TimeUnit.Seconds);
-                    
-                    res.SetResultCallback<PlaceLikelihoodBuffer>(places);
-                }
-                else Log.Info("ERROR CONNECT", "GClient is not connected");
-
-                searchCirleThread = new Thread(new Action(animateSearch));
-                animSearchCircle = new Android.OS.Handler(alterSearch);
-                searchCirleThread.Start();
-            }
-            class ThreadPlaceInserter
-            {
-                System.Collections.Generic.IEnumerator<IPlaceLikelihood> en { get; set; }
-                private Thread th;
-                private int Count;
-                private PlaceLikelihoodBuffer buf;
-                private void inserting()
-                {
-                    for (int i = 0; i < Count; i++)
-                    {
-                        en.MoveNext();
-                        string id = en.Current.Place.Id;
-                        PendingResult placePend = PlacesClass.GeoDataApi.GetPlaceById(GClient, id);
-                        placePend.SetResultCallback<PlaceBuffer>(addPlace);
-                    }
-                    buf.Release();
-                }
-                void addPlace(PlaceBuffer p)
-                {
-                    var e = p.GetEnumerator();
-                    FoundPlaces.Clear();
-                    for (int i = 0; i < p.Count; i++)
-                    {
-                        e.MoveNext();
-                        string name = e.Current.NameFormatted.ToString(); LatLng pos = e.Current.LatLng;
-                        Log.Info("name", name); FoundPlaces.Add(new AnimatedMarker.PhotoMarker(pos, name));
-                    }
-                }
-                public ThreadPlaceInserter(PlaceLikelihoodBuffer buf,int Count)
-                {
-                    this.buf = buf;
-                    this.en = buf.GetEnumerator(); this.Count = Count; th= new Thread(new Action(inserting));
-                    th.Name="GetPlace Thread"; th.Start();
-                }
-            }
-            void places(PlaceLikelihoodBuffer element)
-            {
-                Log.Info("Buffer info", element.Status.StatusCode + "|"+ element.Status.StatusMessage+"|"+ element.Count);
-
-                ThreadPlaceInserter th = new ThreadPlaceInserter(element, element.Count);
-            }
-            
-
-            void animateSearch()
-            {
-                for(int i=0;i<2000;i++)
-                {
-                    animSearchCircle.SendEmptyMessage(i);
-                    Thread.Sleep(1);
-                }
-                animSearchCircle.SendEmptyMessage(-1);
-            }
-            void alterSearch(Message m)
-            {
-                if (m.What == -1) { searchB.Enabled = true; searchB.SetImageResource(Resource.Drawable.btn_search); }
-                if(Color.GetAlphaComponent(searchCircle.FillColor)!=0 && m.What%20==0)
-                {
-                    searchCircle.FillColor=Color.Argb(Color.GetAlphaComponent(searchCircle.FillColor)-1,100,100,255);
-                }
-                searchCircle.Radius++;
-            }
-
-            public void animate(LatLng to, int animSpeed)
-            {
-                this.to = to;
-                this.animSpeed = animSpeed;
-                animHand = new Android.OS.Handler(new Action<Message>(setPoses));
-                cursorThread = new Thread(new Action(animate));
-                cursorThread.Name = "Animation Thread";
-                cursorThread.Start();
-            }
-            
-
-            private AnimatedMarker(string title, LatLng position, markerType type)
-            {
-                this.type = type;
-                Bitmap mrk = type == markerType.userMarker ? cursorExample : PhotoExample;
-                MarkerOptions markOps = new MarkerOptions();
-                markOps.SetIcon(BitmapDescriptorFactory.FromBitmap(mrk));
-
-                markOps.SetTitle(title);
-                markOps.SetPosition(position);
-
-                marker = map.AddMarker(markOps);
-                current = position;
-            }
-        }
+        PhotoFuncs photoF;
 
         #region userFuncs
+        #region shotBtnFuncs
+        Button shotBtn;
+        void showShotBtn()
+        {
+            Animation anim = new TranslateAnimation(0, 0, 200, 0);
+            anim.Duration = 500; anim.FillAfter = true;
+            shotBtn.Enabled = true; shotBtn.Visibility = ViewStates.Visible; shotBtn_bg.Visibility = ViewStates.Visible;
+
+            Animation anim_bg = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlerter);
+            shotBtn.StartAnimation(anim);
+
+            shotBtn_bg.StartAnimation(anim_bg);
+            anim_bg.AnimationEnd += animationBtnBgRepeat;
+        }
+
+        private void animationBtnBgRepeat(object sender, Animation.AnimationEndEventArgs e)
+        {
+            if (shotBtn.Enabled == true) shotBtn_bg.StartAnimation(e.Animation);
+        }
+
+        void hideShotBtn()
+        {
+            Animation anim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlerter);
+
+            shotBtn.Enabled = false; shotBtn.Visibility = ViewStates.Invisible; shotBtn_bg.Visibility = ViewStates.Invisible;
+            shotBtn.StartAnimation(anim);
+        }
+        #endregion
+        #region downPanelButtons
+        void showFindButton()
+        {
+            searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
+            searchB.Enabled = true;
+            searchB.SetImageResource(Resource.Drawable.btn_search);
+        }
+        void hideFindButton()
+        {
+            searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
+            searchB.Enabled = false;
+            searchB.SetImageResource(Resource.Drawable.btn_search_pressed);
+        }
+        #endregion
+        #region placeInfoFuncs
+        /// <summary>
+        /// функція для відображення інфи про плейс у фрагменті
+        /// </summary>
+        void showPlaceInfo(AnimatedMarker.PhotoMarker value)
+        {
+            Animation anim = AnimationUtils.LoadAnimation(this, Resource.Animation.animFromTop);
+
+            PlaceInfoFragment infoF = FragmentManager.FindFragmentById<PlaceInfoFragment>(Resource.Id.placeInfoF);
+            TextView name = infoF.Activity.FindViewById<TextView>(Resource.Id.placeNameText);
+            TextView photoCount = infoF.Activity.FindViewById<TextView>(Resource.Id.placePhotosCountText);
+            RelativeLayout layout = infoF.Activity.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
+            Button btn = infoF.Activity.FindViewById<Button>(Resource.Id.PlaceMoreBtn);
+            //temporaly
+            photoCount.Text = new Random().Next(10, 300).ToString();
+            //temporaly
+            name.Text = value.marker.Title;
+
+            layout.Visibility = ViewStates.Visible;
+            btn.Visibility = ViewStates.Visible;
+            layout.Enabled = true;
+            btn.Enabled = true;
+
+            layout.StartAnimation(anim);
+            btn.StartAnimation(anim);
+        }
+        #endregion
+        bool isInCircle(int radius, Circle circle, Marker marker)
+        {
+            float[] distance = new float[2];
+
+            Location.DistanceBetween(marker.Position.Latitude, marker.Position.Longitude,
+            circle.Center.Latitude, circle.Center.Longitude, distance);
+
+            if (distance[0] < (float)radius)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private void MapBuild()
         {
             if (map == null)
             {
                 MapFragment mp = FragmentManager.FindFragmentById<MapFragment>(Resource.Id.mainMap);
-                if(ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) != Android.Content.PM.Permission.Denied)
+                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) != Android.Content.PM.Permission.Denied)
                 {
                     mp.GetMapAsync(this);
                 }
@@ -250,7 +149,7 @@ namespace Playfie.Droid
                     Toast.MakeText(this, e.Message, ToastLength.Short);
                 }
         }
-        
+
 
         #endregion
         #region callbacks
@@ -267,6 +166,7 @@ namespace Playfie.Droid
             }
 
             map = googleMap;
+            map.SetOnMarkerClickListener(this);
         }
 
         #endregion
@@ -286,13 +186,14 @@ namespace Playfie.Droid
         {
             //picOps
             Bitmap photoB = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.playfieMarker);
-            Bitmap cursorB= BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.userCursor);
+            Bitmap cursorB = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.userCursor);
             Bitmap scaledCursor = Bitmap.CreateScaledBitmap(cursorB, 30, 60, false);
             Bitmap scaledPhoto = Bitmap.CreateScaledBitmap(photoB, 60, 60, false);
             PhotoExample = scaledPhoto; cursorExample = scaledCursor;
+
             //Gclient ops
             GClient = new GoogleApiClient.Builder(this).AddApi(PlacesClass.GEO_DATA_API).AddApi(PlacesClass.PLACE_DETECTION_API).Build();
-            
+
             GClient.RegisterConnectionFailedListener(this);
             GClient.RegisterConnectionCallbacks(this);
             GClient.Connect();
@@ -311,9 +212,76 @@ namespace Playfie.Droid
 
             ImageButton searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
             searchB.Click += findPoints;
+
+            shotBtn = (Button)FindViewById(Resource.Id.btnShot);
+            shotBtn.Enabled = false;
+            shotBtn_bg = FindViewById(Resource.Id.btnShot_bg);
+            shotBtn_bg.Enabled = false;
+            shotBtn.SetOnClickListener(this);
+
+            photoF = new PhotoFuncs(this);
+
+            hideFindButton();
+
+            PlaceInfoFragment infoF = FragmentManager.FindFragmentById<PlaceInfoFragment>(Resource.Id.placeInfoF);
+            RelativeLayout layout = infoF.Activity.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
+            Button btn = infoF.Activity.FindViewById<Button>(Resource.Id.PlaceMoreBtn);
+            layout.Visibility = ViewStates.Invisible;
+            btn.Visibility = ViewStates.Invisible;
+            layout.Enabled = false;
+            btn.Enabled = false;
+            
+            btn.Touch += placeInfoTouch;
             MapBuild();
         }
 
+        #region place info Drag
+        /// <summary>
+        /// функція для пересування верхньої панелі
+        /// </summary>
+        private void placeInfoTouch(object sender, View.TouchEventArgs e)
+        {
+            Button btn = (Button)sender;
+            PlaceInfoFragment infoF = FragmentManager.FindFragmentById<PlaceInfoFragment>(Resource.Id.placeInfoF);
+            RelativeLayout layout = infoF.Activity.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
+
+            MotionEventActions move = e.Event.Action;
+            if (move == MotionEventActions.Move && e.Event.RawY>350)
+            {
+                layout.LayoutParameters.Height += Convert.ToInt32(e.Event.GetY());
+                layout.RequestLayout();
+                //btn.TranslationY += e.Event.GetY();
+                btn.Text = e.Event.RawY.ToString();
+            }
+            if(move==MotionEventActions.Up)
+            {
+                CompletingAnimation anim = new CompletingAnimation(layout);
+
+                anim.from = layout.LayoutParameters.Height;
+                anim.duration = 100;
+                float triggerTop = TypedValue.ApplyDimension(ComplexUnitType.Dip, 200, Resources.DisplayMetrics);
+                float triggerBottom = TypedValue.ApplyDimension(ComplexUnitType.Dip, 400, Resources.DisplayMetrics);
+
+                if (e.Event.RawY >= triggerTop && infoF.Open==false || e.Event.RawY > triggerBottom && infoF.Open == true) 
+                {
+                    float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 450, Resources.DisplayMetrics);
+                    anim.to = to;
+                    anim.Start();
+                    infoF.Open = true;
+                    return;
+                }
+                if(e.Event.RawY<=triggerBottom && infoF.Open==true || e.Event.RawY < triggerTop && infoF.Open == false)
+                {
+                    float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 80, Resources.DisplayMetrics);
+                    anim.to = to;
+                    anim.Start();
+                    infoF.Open = false;
+                    return;
+                }
+                
+            }
+        }
+        #endregion
         private void findPoints(object sender, EventArgs e)
         {
             searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
@@ -334,22 +302,22 @@ namespace Playfie.Droid
                 Java.Lang.JavaSystem.CurrentTimeMillis()
                 );
 
-            
+            showFindButton();
 
-            if (userMarker==null)
+            if (userMarker == null && map!=null)
             {
-                
+
                 userMarker = new AnimatedMarker.UserMarker(new LatLng(location.Latitude, location.Longitude));
-                
+
                 //userMarker.animate(new LatLng(location.Latitude - 1, location.Longitude + 1), 500);
                 userMarker.marker.Flat = true;
 
-                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude,location.Longitude),(float)13));
+                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude, location.Longitude), (float)13));
             }
             else
             {
                 userMarker.animate(new LatLng(location.Latitude, location.Longitude), 1000);
-                if(userMarker.searchCircle!=null) userMarker.searchCircle.Center = new LatLng(location.Latitude, location.Longitude);
+                if (userMarker.markerCircle != null) userMarker.markerCircle.Center = new LatLng(location.Latitude, location.Longitude);
             }
 
             TextView text = (TextView)FindViewById(Resource.Id.positionText);
@@ -375,7 +343,13 @@ namespace Playfie.Droid
         {
 
         }
+        override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            if (requestCode == 12 && resultCode == Result.Ok)
+            { 
 
+            }
+        }
         public void OnSensorChanged(SensorEvent e)
         {
             if (map != null)
@@ -406,7 +380,32 @@ namespace Playfie.Droid
 
         public void OnConnectionSuspended(int cause)
         {
-            throw new NotImplementedException();
+
+        }
+
+        public bool OnMarkerClick(Marker marker)
+        {
+            for (int i = 0; i < FoundPlaces.Count; i++) { FoundPlaces[i].circleClose(); }
+            for (int i = 0; i < FoundPlaces.Count; i++) 
+            {
+                if(marker.Id==FoundPlaces[i].marker.Id)
+                {
+                    FoundPlaces[i].circleOpen();
+                    
+                    if (isInCircle(FoundPlaces[i].usableRadius, FoundPlaces[i].markerCircle, userMarker.marker)) showShotBtn();
+                    else if (shotBtn.Enabled == true) hideShotBtn();
+
+                    showPlaceInfo(FoundPlaces[i]);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void OnClick(View v)
+        {
+            photoF.PhotoTake(v, new EventArgs());
+            if(v.Enabled==true) hideShotBtn();
         }
     }
 

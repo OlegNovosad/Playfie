@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/placeInfoL"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Button
+        android:id="@+id/PlaceMoreBtn"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/PlaceInfoMain"
+        android:text="v"
+        android:textColor="@color/btn_gray_fg"
+        android:background="@drawable/roundcornerbtn" />
+    <RelativeLayout
+        android:id="@+id/PlaceInfoMain"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="@drawable/PlaceInfoShape"
+        android:layout_gravity="top"
+        android:layout_height="80dp">
+        <ImageView
+            android:id="@+id/PlacePhoto"
+            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:src="@drawable/playfieicon"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1" />
+        <TextView
+            android:text="place_Name_Text"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/PlacePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/placeNameText" />
+        <RelativeLayout
+            android:id="@+id/photosTakenLayout"
+            android:layout_below="@id/placeNameText"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/PlacePhoto"
+            android:layout_height="20dp"
+            android:layout_width="wrap_content">
+            <ImageView
+                android:id="@+id/placePhotosCountIcon"
+                android:layout_height="match_parent"
+                android:layout_width="30dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/photoicon" />
+            <TextView
+                android:id="@+id/placePhotosCountText"
+                android:text="place_Photos_Count_Text"
+                android:layout_toRightOf="@id/placePhotosCountIcon"
+                android:textColor="@color/playfie_blue"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content" />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
