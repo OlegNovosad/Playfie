@@ -7,11 +7,6 @@ namespace Playfie.Droid
 {
     public class ProfileFragment : Fragment
     {
-        public override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-        }
-
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View view = inflater.Inflate(Resource.Layout.Fragment_Profile, container, false);

@@ -74,7 +74,9 @@ namespace Playfie.Droid
         /// </summary>
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            if (requestCode == 12 && resultCode == Result.Ok)
+            // We should also check (... && resultCode == Result.Ok)
+            // but CANCELLED is returned.
+            if (requestCode == 12)
             {
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
