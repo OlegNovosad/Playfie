@@ -34,7 +34,7 @@ using static Playfie.Droid.CompletingAnimation;
 namespace Playfie.Droid
 {
     [Activity(Label = "MainScreenActivity", Theme = "@style/splashscreen", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-    public class LoginActivity : FragmentActivity, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
+    public class LoginActivity : FragmentActivity, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, GoogleMap.IOnMapClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
     {
 
         AnimatedMarker userMarker;
@@ -166,6 +166,7 @@ namespace Playfie.Droid
             }
 
             map = googleMap;
+            map.SetOnMapClickListener(this);
             map.SetOnMarkerClickListener(this);
         }
 
@@ -234,7 +235,7 @@ namespace Playfie.Droid
             btn.Touch += placeInfoTouch;
             MapBuild();
         }
-
+        
         #region place info Drag
         /// <summary>
         /// функція для пересування верхньої панелі
@@ -314,7 +315,7 @@ namespace Playfie.Droid
 
                 map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude, location.Longitude), (float)13));
             }
-            else
+            else if(userMarker!=null)
             {
                 userMarker.animate(new LatLng(location.Latitude, location.Longitude), 1000);
                 if (userMarker.markerCircle != null) userMarker.markerCircle.Center = new LatLng(location.Latitude, location.Longitude);
@@ -385,17 +386,17 @@ namespace Playfie.Droid
 
         public bool OnMarkerClick(Marker marker)
         {
-            for (int i = 0; i < FoundPlaces.Count; i++) { FoundPlaces[i].circleClose(); }
-            for (int i = 0; i < FoundPlaces.Count; i++) 
+            for (int i = 0; i < FoundPlacesMarkers.Count; i++) { FoundPlacesMarkers[i].circleClose(); }
+            for (int i = 0; i < FoundPlacesMarkers.Count; i++) 
             {
-                if(marker.Id==FoundPlaces[i].marker.Id)
+                if(marker.Id==FoundPlacesMarkers[i].marker.Id)
                 {
-                    FoundPlaces[i].circleOpen();
+                    FoundPlacesMarkers[i].circleOpen();
                     
-                    if (isInCircle(FoundPlaces[i].usableRadius, FoundPlaces[i].markerCircle, userMarker.marker)) showShotBtn();
+                    if (isInCircle(FoundPlacesMarkers[i].usableRadius, FoundPlacesMarkers[i].markerCircle, userMarker.marker)) showShotBtn();
                     else if (shotBtn.Enabled == true) hideShotBtn();
 
-                    showPlaceInfo(FoundPlaces[i]);
+                    showPlaceInfo(FoundPlacesMarkers[i]);
                     return true;
                 }
             }
@@ -406,6 +407,15 @@ namespace Playfie.Droid
         {
             photoF.PhotoTake(v, new EventArgs());
             if(v.Enabled==true) hideShotBtn();
+        }
+
+        public void OnMapClick(LatLng point)
+        {
+            Log.Info("click info:", "user has clicked on the map");
+            foreach (AnimatedMarker.PhotoMarker mark in FoundPlacesMarkers)
+            {
+                if (mark.opened) mark.circleClose();
+            }
         }
     }
 

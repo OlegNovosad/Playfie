@@ -38,7 +38,7 @@ namespace Playfie.Droid
         public static GoogleApiClient GClient;
         public static ImageButton searchB;
         public static Bitmap cursorExample, PhotoExample;
-        public static List<AnimatedMarker.PhotoMarker> FoundPlaces = new List<AnimatedMarker.PhotoMarker>();
+        public static List<AnimatedMarker.PhotoMarker> FoundPlacesMarkers = new List<AnimatedMarker.PhotoMarker>();
 
 
         public class AnimatedMarker
@@ -54,7 +54,7 @@ namespace Playfie.Droid
             private Thread searchCirleThread { get; set; }
 
             private Thread placesThread { get; set; }
-            private PendingResult res;
+            private PendingResult pendingResults;
 
             public Marker marker { get; set; }
             public Circle markerCircle { get; set; }
@@ -185,11 +185,9 @@ namespace Playfie.Droid
                     LatLng startP = new LatLng(current.Latitude - 0.1, current.Longitude - 0.1);
                     LatLng endP = new LatLng(current.Latitude + 0.1, current.Longitude + 0.1);
 
-                    //res = PlacesClass.GeoDataApi.GetAutocompletePredictions(GClient, "cafe", new LatLngBounds(startP,endP),filter);
-                    res = PlacesClass.PlaceDetectionApi.GetCurrentPlace(GClient, new PlaceFilter());
-                    //res.SetResultCallback(this,10, Java.Util.Concurrent.TimeUnit.Seconds);
+                    pendingResults = PlacesClass.PlaceDetectionApi.GetCurrentPlace(GClient, new PlaceFilter());
 
-                    res.SetResultCallback<PlaceLikelihoodBuffer>(places);
+                    pendingResults.SetResultCallback<PlaceLikelihoodBuffer>(foundPlacesAround);
                 }
                 else Log.Info("ERROR CONNECT", "GClient is not connected");
 
@@ -200,48 +198,79 @@ namespace Playfie.Droid
             class ThreadPlaceInserter
             {
                 System.Collections.Generic.IEnumerator<IPlaceLikelihood> placeCollecion { get; set; }
-                private Thread th;
-                private int Count;
+                private Thread findingThread;
+                private int pCount;
                 private PlaceLikelihoodBuffer buf;
 
                 private void inserting()
                 {
-                    FoundPlaces.Clear();
-                    for (int i = 0; i < Count; i++)
+                    FoundPlacesMarkers.Clear();
+                    for (int i = 0; i < pCount; i++)
                     {
                         placeCollecion.MoveNext();
                         string id = placeCollecion.Current.Place.Id;
+
+                        for (int d = 0; d < placeCollecion.Current.Place.PlaceTypes.Count;d++)
+                        {
+                            Log.Info("place #"+d+" type #"+d, placeCollecion.Current.Place.PlaceTypes[d].ToString());
+                        }
+
+
                         PendingResult placePend = PlacesClass.GeoDataApi.GetPlaceById(GClient, id);
                         placePend.SetResultCallback<PlaceBuffer>(addPlace); Thread.Sleep(100);
                     }
                     buf.Release();
                 }
-                void addPlace(PlaceBuffer p)
+
+                void addPlace(PlaceBuffer placesBufer)
                 {
-                    var e = p.GetEnumerator();
-                    for (int i = 0; i < p.Count; i++)
+                    var pNumerator = placesBufer.GetEnumerator();
+                    for (int i = 0; i < placesBufer.Count; i++)
                     {
-                        e.MoveNext();
-                        string name = e.Current.NameFormatted.ToString(); LatLng pos = e.Current.LatLng;
-                        Log.Info("name", name); FoundPlaces.Add(new AnimatedMarker.PhotoMarker(pos, name));
+                        pNumerator.MoveNext();
+                        string name = pNumerator.Current.NameFormatted.ToString(); LatLng pos = pNumerator.Current.LatLng;
+                        Log.Info("name", name);
+
+                        FoundPlacesMarkers.Add(new AnimatedMarker.PhotoMarker(pos, name));
+                    }
+
+                    if(FoundPlacesMarkers.Count==buf.Count)
+                    {
+                        scaleToMarkers();
                     }
                 }
+
                 public ThreadPlaceInserter(PlaceLikelihoodBuffer buf, int Count)
                 {
-                    for (int i = 0; i < FoundPlaces.Count; i++)
-                    { FoundPlaces[i].marker.Remove(); if(FoundPlaces[i].markerCircle!=null) FoundPlaces[i].markerCircle.Remove(); }
+                    for (int i = 0; i < FoundPlacesMarkers.Count; i++)
+                    { FoundPlacesMarkers[i].marker.Remove(); if(FoundPlacesMarkers[i].markerCircle!=null) FoundPlacesMarkers[i].markerCircle.Remove(); }
+
                     this.buf = buf;
-                    this.placeCollecion = buf.GetEnumerator(); this.Count = Count; th = new Thread(new Action(inserting));
-                    th.Name = "GetPlace Thread"; th.Start();
+                    Log.Info("bufer info: ", buf.Count.ToString());
+
+                    this.placeCollecion = buf.GetEnumerator(); this.pCount = Count; findingThread = new Thread(new Action(inserting));
+                    findingThread.Name = "GetPlace Thread"; findingThread.Start();
                 }
             }
-            void places(PlaceLikelihoodBuffer element)
+
+
+            void foundPlacesAround(PlaceLikelihoodBuffer element)
             {
                 Log.Info("Buffer info", element.Status.StatusCode + "|" + element.Status.StatusMessage + "|" + element.Count);
-
                 ThreadPlaceInserter th = new ThreadPlaceInserter(element, element.Count);
             }
 
+            static void scaleToMarkers()
+            {
+
+                var bounds = new LatLngBounds.Builder();
+                for (var i = 0; i < FoundPlacesMarkers.Count; i++)
+                {
+                    bounds.Include(FoundPlacesMarkers[i].marker.Position);
+                }
+                CameraUpdate cu = CameraUpdateFactory.NewLatLngBounds(bounds.Build(), 0);
+                map.AnimateCamera(cu);
+            }
 
             void animateSearch()
             {
