@@ -150,7 +150,7 @@
     <Compile Include="Views\Fragments\PlaceInfoFragment.cs" />
     <Compile Include="Views\Fragments\ProfileFragment.cs" />
     <Compile Include="Views\Fragments\RatingFragment.cs" />
-    <Compile Include="Views\Fragments\SearchFragment.cs" />
+    <Compile Include="Views\Fragments\PlayfieMapFragment.cs" />
     <Compile Include="Views\Activities\LoginActivity.cs" />
     <Compile Include="Views\Activities\MainActivity.cs" />
     <Compile Include="Views\Activities\PhotoTutorialActivity.cs" />
@@ -185,7 +185,7 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Fragment_Profile.axml" />
     <AndroidResource Include="Resources\layout\Fragment_Rating.axml" />
-    <AndroidResource Include="Resources\layout\Fragment_Search.axml" />
+    <AndroidResource Include="Resources\layout\Fragment_Map.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

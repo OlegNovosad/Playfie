@@ -57,7 +57,6 @@ namespace Playfie.Droid
             t2.StartAnimation(anim);
         }
 
-
         /// <summary>
         /// Goes to the main screen.
         /// </summary>

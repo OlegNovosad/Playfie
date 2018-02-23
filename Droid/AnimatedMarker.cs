@@ -22,7 +22,6 @@ namespace Playfie.Droid
         public static Bitmap cursorExample, PhotoExample;
         public static List<AnimatedMarker.PhotoMarker> FoundPlacesMarkers = new List<AnimatedMarker.PhotoMarker>();
 
-
         public class AnimatedMarker
         {
             LatLng to { get; set; }
