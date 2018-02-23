@@ -10,8 +10,8 @@ using Java.Lang;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "Playfie",Theme = "@style/splashscreen", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-    public class MainActivity : Activity, IFacebookCallback
+    [Activity(Label = "Playfie", Theme = "@style/splashscreen", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    public class LoginActivity : Activity, IFacebookCallback
     { 
         private ICallbackManager CallbackManager;
         Button btnSignIn;
@@ -29,10 +29,13 @@ namespace Playfie.Droid
             CallbackManager = CallbackManagerFactory.Create();
 
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
-            SetContentView(Resource.Layout.Login);
+            SetContentView(Resource.Layout.Activity_Login);
 
             //chek if user logged in fb
-            if (IsAuthenticatedWithFacebook()) goMainScreen();
+            if (IsAuthenticatedWithFacebook()) 
+            {
+                GoToMainScreen();    
+            }
 
             // Initialize login button with permissions and manager
             LoginButton btnLoginWithFacebook = (LoginButton) FindViewById(Resource.Id.btnLoginFB);
@@ -49,6 +52,7 @@ namespace Playfie.Droid
             toastSignIn = Toast.MakeText(this, "Sign in via email and password is not available yet.", ToastLength.Short);
         }
 
+        /// <inheritdoc />
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
@@ -70,9 +74,7 @@ namespace Playfie.Droid
             }
 
             toastSignUp.Show();
-            GoPhotoTutorial();
-
-            GoPhotoTutorial();
+            GoToPhotoTutorial();
             
             // TODO: Add registration via email and password in the future.
         }
@@ -106,39 +108,56 @@ namespace Playfie.Droid
 
         #region Facebook Callbacks
 
+        /// <summary>
+        /// Called when user has cancelled Facebook authentication.
+        /// </summary>
         public void OnCancel()
         {
             Log.Debug(Constants.DEFAULT_TAG, "User cancelled FB authentication");
         }
 
+        /// <summary>
+        /// Called when error occurred during Facebook authentication.
+        /// </summary>
+        /// <param name="error">Error.</param>
         public void OnError(FacebookException error)
         {
             Log.Error(Constants.DEFAULT_TAG, "An error occured during FB authentication", error);
         }
 
+        /// <summary>
+        /// Called when Facebook authentication was successful.
+        /// </summary>
+        /// <param name="result">Result.</param>
         public void OnSuccess(Object result)
         {
             LoginResult res = (LoginResult) result;
             Log.Info(Constants.DEFAULT_TAG, "Result of authentication is: " + result + " " + AccessToken.CurrentAccessToken);
-            GoPhotoTutorial();
+            GoToPhotoTutorial();
         }
 
         #endregion
 
         #region Links
-        //link to phototutorial
-        private void GoPhotoTutorial()
+
+        /// <summary>
+        /// Open photo tutorial activity.
+        /// </summary>
+        private void GoToPhotoTutorial()
         {
-            Intent tutor = new Intent(this, typeof(PhotoTutorialActivity));
+            Intent photoTutorialActivityIntent = new Intent(this, typeof(PhotoTutorialActivity));
             Finish();
-            StartActivity(tutor);
+            StartActivity(photoTutorialActivityIntent);
         }
 
-        private void goMainScreen()
+        /// <summary>
+        /// Open main screen activity.
+        /// </summary>
+        private void GoToMainScreen()
         {
-            Intent loginActivityIntent = new Intent(this, typeof(LoginActivity));
+            Intent mainActivityIntent = new Intent(this, typeof(MainActivity));
             Finish();
-            StartActivity(loginActivityIntent);
+            StartActivity(mainActivityIntent);
         }
         #endregion
     }

@@ -5,21 +5,19 @@ using Android.Widget;
 
 namespace Playfie.Droid
 {
-    public class SearchFragment : Fragment
+    public class ProfileFragment : Fragment
     {
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            // Create your fragment here
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            View view = inflater.Inflate(Resource.Layout.Fragment_Main_Map, container, false);
+            View view = inflater.Inflate(Resource.Layout.Fragment_Profile, container, false);
 
             TextView tvText = (TextView)view.FindViewById(Resource.Id.tvText);
-            tvText.SetText("Here will be search", TextView.BufferType.Normal);
+            tvText.SetText("My Profile", TextView.BufferType.Normal);
 
             return view;
         }

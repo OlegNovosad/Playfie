@@ -25,13 +25,13 @@ using static Playfie.Droid.AnimatedMarkers;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "MainScreenActivity", Theme = "@style/splashscreen", ScreenOrientation = ScreenOrientation.Portrait)]
-    public class LoginActivity : FragmentActivity, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, GoogleMap.IOnMapClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
+    [Activity(Label = "Playfie", Theme = "@style/splashscreen", ScreenOrientation = ScreenOrientation.Portrait)]
+    public class MainActivity : FragmentActivity, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, GoogleMap.IOnMapClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
     {
         AnimatedMarker userMarker;
         View shotBtn_bg;
         SensorManager mManager;
-        PhotoFuncs photoF;
+        PhotoUtils photoF;
 
         #region userFuncs
         #region shotBtnFuncs
@@ -198,7 +198,7 @@ namespace Playfie.Droid
 
             // Set theme for google maps
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
-            SetContentView(Resource.Layout.MainScreen);
+            SetContentView(Resource.Layout.Activity_Main);
 
             var lm = (LocationManager)GetSystemService(LocationService);
             Criteria criteria = new Criteria();
@@ -213,7 +213,7 @@ namespace Playfie.Droid
             shotBtn_bg.Enabled = false;
             shotBtn.SetOnClickListener(this);
 
-            photoF = new PhotoFuncs(this);
+            photoF = new PhotoUtils(this);
 
             hideFindButton();
 
@@ -257,21 +257,21 @@ namespace Playfie.Droid
                 float triggerTop = TypedValue.ApplyDimension(ComplexUnitType.Dip, 200, Resources.DisplayMetrics);
                 float triggerBottom = TypedValue.ApplyDimension(ComplexUnitType.Dip, 400, Resources.DisplayMetrics);
 
-                if (e.Event.RawY >= triggerTop && infoF.Open == false || e.Event.RawY > triggerBottom && infoF.Open == true) 
+                if (e.Event.RawY >= triggerTop && infoF.IsOpened == false || e.Event.RawY > triggerBottom && infoF.IsOpened == true) 
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 450, Resources.DisplayMetrics);
                     anim.to = to;
                     anim.Start();
-                    infoF.Open = true;
+                    infoF.IsOpened = true;
                     return;
                 }
 
-                if (e.Event.RawY <= triggerBottom && infoF.Open == true || e.Event.RawY < triggerTop && infoF.Open == false)
+                if (e.Event.RawY <= triggerBottom && infoF.IsOpened == true || e.Event.RawY < triggerTop && infoF.IsOpened == false)
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 80, Resources.DisplayMetrics);
                     anim.to = to;
                     anim.Start();
-                    infoF.Open = false;
+                    infoF.IsOpened = false;
                     return;
                 }
                 

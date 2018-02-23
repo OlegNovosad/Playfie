@@ -10,16 +10,14 @@ namespace Playfie.Droid
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            // Create your fragment here
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            View view = inflater.Inflate(Resource.Layout.Fragment_Main_Map, container, false);
+            View view = inflater.Inflate(Resource.Layout.Fragment_Rating, container, false);
 
             TextView tvText = (TextView)view.FindViewById(Resource.Id.tvText);
-            tvText.SetText("Here will be rating of users", TextView.BufferType.Normal);
+            tvText.SetText("Rating Table", TextView.BufferType.Normal);
 
             return view;
         }

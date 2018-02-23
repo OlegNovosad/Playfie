@@ -22,10 +22,10 @@ namespace Playfie.Droid
             PhotoUtils = new PhotoUtils(this);
 
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
-            SetContentView(Resource.Layout.PhotoTutorial);
+            SetContentView(Resource.Layout.Activity_Photo_Tutorial);
 
-            MainActivity m = new MainActivity();
-            Toast isLogged = Toast.MakeText(this, m.isLoggedInFB() 
+            LoginActivity m = new LoginActivity();
+            Toast isLogged = Toast.MakeText(this, m.IsAuthenticatedWithFacebook() 
                   ? "user is already logged in Facebook" 
                   : "user was not logged in Facebook. Maybe you are developer", ToastLength.Short);
             isLogged.Show();
