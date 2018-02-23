@@ -17,8 +17,8 @@ namespace Playfie.Droid
         Button btnSignIn;
         Button btnSignUp;
 
-        Toast signUpToast;
-        Toast signInToast;
+        Toast toastSignUp;
+        Toast toastSignIn;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -32,7 +32,7 @@ namespace Playfie.Droid
             SetContentView(Resource.Layout.Login);
 
             //chek if user logged in fb
-            if (isLoggedInFB()) goMainScreen();
+            if (IsAuthenticatedWithFacebook()) goMainScreen();
 
             // Initialize login button with permissions and manager
             LoginButton btnLoginWithFacebook = (LoginButton) FindViewById(Resource.Id.btnLoginFB);
@@ -45,8 +45,8 @@ namespace Playfie.Droid
             btnSignIn = (Button)FindViewById(Resource.Id.btnSignIn);
             btnSignIn.Click += OnSignInAccountBtnClick;
 
-            signUpToast = Toast.MakeText(this, "Sign up via email and password is not available yet.", ToastLength.Short);
-            signInToast = Toast.MakeText(this, "Sign in via email and password is not available yet.", ToastLength.Short);
+            toastSignUp = Toast.MakeText(this, "Sign up via email and password is not available yet.", ToastLength.Short);
+            toastSignIn = Toast.MakeText(this, "Sign in via email and password is not available yet.", ToastLength.Short);
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -64,12 +64,12 @@ namespace Playfie.Droid
         /// <param name="e">E.</param>
         private void OnRegisterAccountBtnClick(object sender, System.EventArgs e)
         {
-            if (signUpToast.View.IsShown) 
+            if (toastSignUp.View.IsShown) 
             {
                 return;    
             }
 
-            signUpToast.Show();
+            toastSignUp.Show();
             GoPhotoTutorial();
 
             GoPhotoTutorial();
@@ -84,12 +84,12 @@ namespace Playfie.Droid
         /// <param name="e">E.</param>
         private void OnSignInAccountBtnClick(object sender, System.EventArgs e)
         {
-            if (signInToast.View.IsShown)
+            if (toastSignIn.View.IsShown)
             {
                 return;
             }
 
-            signInToast.Show();
+            toastSignIn.Show();
             // TODO: Add authentication via email and password in the future.
         }
 
@@ -97,11 +97,11 @@ namespace Playfie.Droid
         /// chek if user logged in facebook. Cheking if current tocken is not null.
         /// </summary>
         /// <returns></returns>
-        public bool isLoggedInFB()
+        public bool IsAuthenticatedWithFacebook()
         {
-            if (AccessToken.CurrentAccessToken != null) return true;
-            else return false;
+            return AccessToken.CurrentAccessToken != null;
         }
+
         #endregion
 
         #region Facebook Callbacks
@@ -109,7 +109,6 @@ namespace Playfie.Droid
         public void OnCancel()
         {
             Log.Debug(Constants.DEFAULT_TAG, "User cancelled FB authentication");
-            
         }
 
         public void OnError(FacebookException error)
@@ -124,7 +123,6 @@ namespace Playfie.Droid
             GoPhotoTutorial();
         }
 
-
         #endregion
 
         #region Links
@@ -138,9 +136,9 @@ namespace Playfie.Droid
 
         private void goMainScreen()
         {
-            Intent main = new Intent(this, typeof(LoginActivity));
+            Intent loginActivityIntent = new Intent(this, typeof(LoginActivity));
             Finish();
-            StartActivity(main);
+            StartActivity(loginActivityIntent);
         }
         #endregion
     }

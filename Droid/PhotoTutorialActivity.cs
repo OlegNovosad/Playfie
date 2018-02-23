@@ -1,18 +1,13 @@
 ﻿using System;
-
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Widget;
 using Android.Views.Animations;
-using Android.Provider;
 using System.Timers;
 using Android.Graphics;
 using Refractored.Controls;
 using static Android.Graphics.BitmapFactory;
-using Android.Support.V4.Content;
-using Android;
-using static Playfie.Droid.PhotoFuncs;
 
 namespace Playfie.Droid
 {
@@ -20,18 +15,18 @@ namespace Playfie.Droid
     public class PhotoTutorialActivity : Activity
     {
         Timer time = new Timer(1000);
-        PhotoFuncs photos;
+        PhotoUtils PhotoUtils;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            photos = new PhotoFuncs(this);
+            PhotoUtils = new PhotoUtils(this);
 
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.PhotoTutorial);
 
             MainActivity m = new MainActivity();
             Toast isLogged = Toast.MakeText(this, m.isLoggedInFB() 
-                  ? "user already logged in Facebook" 
+                  ? "user is already logged in Facebook" 
                   : "user was not logged in Facebook. Maybe you are developer", ToastLength.Short);
             isLogged.Show();
 
@@ -47,7 +42,7 @@ namespace Playfie.Droid
             t1.StartAnimation(anim);
 
             Button photoB = (Button)FindViewById(Resource.Id.btnPhoto);
-            photoB.Click += photos.PhotoTake;
+            photoB.Click += PhotoUtils.TakePhoto;
         }
 
         /// <summary>
@@ -84,7 +79,7 @@ namespace Playfie.Droid
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
 
-                Bitmap yourPhoto = DecodeFile(photos.photoPath);
+                Bitmap yourPhoto = DecodeFile(PhotoUtils.PhotoPath);
                 avatar.SetImageBitmap(yourPhoto);
 
                 TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);

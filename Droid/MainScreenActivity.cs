@@ -14,29 +14,20 @@ using Android.Support.V4.Content;
 using Android;
 using Android.Runtime;
 using Android.Hardware;
-using Java.Lang;
 using Android.Util;
 using System;
-using System.Timers;
 using Android.Views.Animations;
 using Android.Graphics;
-using Java.Util.Logging;
-using Android.Graphics.Drawables;
 using Android.Content.PM;
-using Android.Gms.Common.Apis;
-using Android.Gms.Location.Places.UI;
 using Android.Gms.Location.Places;
 using Android.Gms.Common;
-using System.Collections.Generic;
 using static Playfie.Droid.AnimatedMarkers;
-using static Playfie.Droid.CompletingAnimation;
 
 namespace Playfie.Droid
 {
-    [Activity(Label = "MainScreenActivity", Theme = "@style/splashscreen", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    [Activity(Label = "MainScreenActivity", Theme = "@style/splashscreen", ScreenOrientation = ScreenOrientation.Portrait)]
     public class LoginActivity : FragmentActivity, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, GoogleMap.IOnMapClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
     {
-
         AnimatedMarker userMarker;
         View shotBtn_bg;
         SensorManager mManager;
@@ -45,7 +36,7 @@ namespace Playfie.Droid
         #region userFuncs
         #region shotBtnFuncs
         Button shotBtn;
-        void showShotBtn()
+        void ShowShotBtn()
         {
             Animation anim = new TranslateAnimation(0, 0, 200, 0);
             anim.Duration = 500; anim.FillAfter = true;
@@ -55,24 +46,29 @@ namespace Playfie.Droid
             shotBtn.StartAnimation(anim);
 
             shotBtn_bg.StartAnimation(anim_bg);
-            anim_bg.AnimationEnd += animationBtnBgRepeat;
+            anim_bg.AnimationEnd += AnimationBtnBgRepeat;
         }
 
-        private void animationBtnBgRepeat(object sender, Animation.AnimationEndEventArgs e)
+        private void AnimationBtnBgRepeat(object sender, Animation.AnimationEndEventArgs e)
         {
-            if (shotBtn.Enabled == true) shotBtn_bg.StartAnimation(e.Animation);
+            if (shotBtn.Enabled == true)
+            {
+                shotBtn_bg.StartAnimation(e.Animation);    
+            }
         }
 
-        void hideShotBtn()
+        void HideShotBtn()
         {
             Animation anim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlerter);
 
             shotBtn.Enabled = false; shotBtn.Visibility = ViewStates.Invisible; shotBtn_bg.Visibility = ViewStates.Invisible;
             shotBtn.StartAnimation(anim);
         }
+
         #endregion
+
         #region downPanelButtons
-        void showFindButton()
+        void ShowFindButton()
         {
             searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
             searchB.Enabled = true;
@@ -89,7 +85,7 @@ namespace Playfie.Droid
         /// <summary>
         /// функція для відображення інфи про плейс у фрагменті
         /// </summary>
-        void showPlaceInfo(AnimatedMarker.PhotoMarker value)
+        void ShowPlaceInfo(AnimatedMarker.PhotoMarker value)
         {
             Animation anim = AnimationUtils.LoadAnimation(this, Resource.Animation.animFromTop);
 
@@ -112,23 +108,18 @@ namespace Playfie.Droid
             btn.StartAnimation(anim);
         }
         #endregion
-        bool isInCircle(int radius, Circle circle, Marker marker)
+
+        private bool IsInCircle(int radius, Circle circle, Marker marker)
         {
             float[] distance = new float[2];
 
             Location.DistanceBetween(marker.Position.Latitude, marker.Position.Longitude,
             circle.Center.Latitude, circle.Center.Longitude, distance);
 
-            if (distance[0] < (float)radius)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return distance[0] < radius;
         }
-        private void MapBuild()
+
+        private void BuildMap()
         {
             if (map == null)
             {
@@ -139,19 +130,20 @@ namespace Playfie.Droid
                 }
             }
             else try
-                {
-                    //bool seccess = googleMap.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(this, Resource.Raw.style_json));
-                    map.SetMapStyle(new MapStyleOptions(GetString(Resource.Raw.style_json)));
-                    //if (!seccess) { Toast.MakeText(this, "error", ToastLength.Short); }
-                }
-                catch (Resources.NotFoundException e)
-                {
-                    Toast.MakeText(this, e.Message, ToastLength.Short);
-                }
+            {
+                //bool success = googleMap.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(this, Resource.Raw.style_json));
+                map.SetMapStyle(new MapStyleOptions(GetString(Resource.Raw.style_json)));
+                //if (!success) { Toast.MakeText(this, "error", ToastLength.Short); }
+            }
+            catch (Resources.NotFoundException e)
+            {
+                Toast.MakeText(this, e.Message, ToastLength.Short);
+                Log.Error(Constants.DEFAULT_TAG, e.Message, e);
+            }
         }
 
-
         #endregion
+
         #region callbacks
         #region googleMapsCallbacks
         public void OnMapReady(GoogleMap googleMap)
@@ -171,6 +163,7 @@ namespace Playfie.Droid
         }
 
         #endregion
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -183,6 +176,7 @@ namespace Playfie.Droid
                 BuildMainScreen();
             }
         }
+
         private void BuildMainScreen()
         {
             //picOps
@@ -193,26 +187,25 @@ namespace Playfie.Droid
             PhotoExample = scaledPhoto; cursorExample = scaledCursor;
 
             //Gclient ops
-            GClient = new GoogleApiClient.Builder(this).AddApi(PlacesClass.GEO_DATA_API).AddApi(PlacesClass.PLACE_DETECTION_API).Build();
+            GClient = new Builder(this).AddApi(PlacesClass.GEO_DATA_API).AddApi(PlacesClass.PLACE_DETECTION_API).Build();
 
             GClient.RegisterConnectionFailedListener(this);
             GClient.RegisterConnectionCallbacks(this);
             GClient.Connect();
             //gyroscope programm
-            mManager = (SensorManager)GetSystemService(Context.SensorService);
+            mManager = (SensorManager)GetSystemService(SensorService);
             mManager.RegisterListener(this, mManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
 
-            //theme for google maps
+            // Set theme for google maps
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
-            //sinsert view
             SetContentView(Resource.Layout.MainScreen);
 
-            var lm = (LocationManager)GetSystemService(Context.LocationService);
+            var lm = (LocationManager)GetSystemService(LocationService);
             Criteria criteria = new Criteria();
             lm.RequestLocationUpdates(LocationManager.NetworkProvider, 0, 0, this);
 
             ImageButton searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
-            searchB.Click += findPoints;
+            searchB.Click += FindPoints;
 
             shotBtn = (Button)FindViewById(Resource.Id.btnShot);
             shotBtn.Enabled = false;
@@ -232,15 +225,15 @@ namespace Playfie.Droid
             layout.Enabled = false;
             btn.Enabled = false;
             
-            btn.Touch += placeInfoTouch;
-            MapBuild();
+            btn.Touch += PlaceInfoTouch;
+            BuildMap();
         }
         
         #region place info Drag
         /// <summary>
-        /// функція для пересування верхньої панелі
+        /// Function to handle pan gesture of the top panel
         /// </summary>
-        private void placeInfoTouch(object sender, View.TouchEventArgs e)
+        private void PlaceInfoTouch(object sender, View.TouchEventArgs e)
         {
             Button btn = (Button)sender;
             PlaceInfoFragment infoF = FragmentManager.FindFragmentById<PlaceInfoFragment>(Resource.Id.placeInfoF);
@@ -254,7 +247,8 @@ namespace Playfie.Droid
                 //btn.TranslationY += e.Event.GetY();
                 btn.Text = e.Event.RawY.ToString();
             }
-            if(move==MotionEventActions.Up)
+
+            if (move == MotionEventActions.Up)
             {
                 CompletingAnimation anim = new CompletingAnimation(layout);
 
@@ -263,7 +257,7 @@ namespace Playfie.Droid
                 float triggerTop = TypedValue.ApplyDimension(ComplexUnitType.Dip, 200, Resources.DisplayMetrics);
                 float triggerBottom = TypedValue.ApplyDimension(ComplexUnitType.Dip, 400, Resources.DisplayMetrics);
 
-                if (e.Event.RawY >= triggerTop && infoF.Open==false || e.Event.RawY > triggerBottom && infoF.Open == true) 
+                if (e.Event.RawY >= triggerTop && infoF.Open == false || e.Event.RawY > triggerBottom && infoF.Open == true) 
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 450, Resources.DisplayMetrics);
                     anim.to = to;
@@ -271,7 +265,8 @@ namespace Playfie.Droid
                     infoF.Open = true;
                     return;
                 }
-                if(e.Event.RawY<=triggerBottom && infoF.Open==true || e.Event.RawY < triggerTop && infoF.Open == false)
+
+                if (e.Event.RawY <= triggerBottom && infoF.Open == true || e.Event.RawY < triggerTop && infoF.Open == false)
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 80, Resources.DisplayMetrics);
                     anim.to = to;
@@ -282,18 +277,22 @@ namespace Playfie.Droid
                 
             }
         }
+
         #endregion
-        private void findPoints(object sender, EventArgs e)
+
+        private void FindPoints(object sender, EventArgs e)
         {
             searchB = (ImageButton)FindViewById(Resource.Id.searchBtn);
             searchB.Enabled = false;
             searchB.SetImageResource(Resource.Drawable.btn_search_pressed);
-            userMarker.findPoints();
+            userMarker.FindPoints();
         }
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
         {
             BuildMainScreen();
         }
+
         public void OnLocationChanged(Location location)
         {
             GeomagneticField field = new GeomagneticField(
@@ -301,24 +300,26 @@ namespace Playfie.Droid
                 (float)location.Longitude,
                 (float)location.Altitude,
                 Java.Lang.JavaSystem.CurrentTimeMillis()
-                );
+            );
 
-            showFindButton();
+            ShowFindButton();
 
-            if (userMarker == null && map!=null)
+            if (userMarker == null && map != null)
             {
-
                 userMarker = new AnimatedMarker.UserMarker(new LatLng(location.Latitude, location.Longitude));
 
                 //userMarker.animate(new LatLng(location.Latitude - 1, location.Longitude + 1), 500);
                 userMarker.marker.Flat = true;
 
-                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude, location.Longitude), (float)13));
+                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude, location.Longitude), 13));
             }
-            else if(userMarker!=null)
+            else if (userMarker != null)
             {
-                userMarker.animate(new LatLng(location.Latitude, location.Longitude), 1000);
-                if (userMarker.markerCircle != null) userMarker.markerCircle.Center = new LatLng(location.Latitude, location.Longitude);
+                userMarker.Animate(new LatLng(location.Latitude, location.Longitude), 1000);
+                if (userMarker.markerCircle != null)
+                {
+                    userMarker.markerCircle.Center = new LatLng(location.Latitude, location.Longitude);    
+                }
             }
 
             TextView text = (TextView)FindViewById(Resource.Id.positionText);
@@ -344,6 +345,7 @@ namespace Playfie.Droid
         {
 
         }
+
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             if (requestCode == 12 && resultCode == Result.Ok)
@@ -351,70 +353,95 @@ namespace Playfie.Droid
 
             }
         }
+
+        /// <summary>
+        /// Handles sensor change events.
+        /// </summary>
+        /// <param name="e">Event.</param>
         public void OnSensorChanged(SensorEvent e)
         {
-            if (map != null)
+            if (map == null)
             {
+                return;
+            }
 
-                CameraPosition camPos = map.CameraPosition;
-                float rotation = (e.Values[2] * 100) * 180 / 100 + camPos.Bearing;
-                TextView t = (TextView)FindViewById(Resource.Id.testText);
-                t.Text = rotation.ToString();
+            CameraPosition camPos = map.CameraPosition;
+            float rotation = (e.Values[2] * 100) * 180 / 100 + camPos.Bearing;
+            TextView t = (TextView)FindViewById(Resource.Id.testText);
+            t.Text = rotation.ToString();
 
-                double deg = Java.Lang.Math.ToDegrees(rotation);
-                //Log.Info("DEGREES", "DEGREES: " + rotation);
+            double deg = Java.Lang.Math.ToDegrees(rotation);
 
-                int degI = (int)deg;
-                if (userMarker != null) userMarker.marker.Rotation = -rotation;
+            int degI = (int)deg;
+            if (userMarker != null)
+            {
+                userMarker.marker.Rotation = -rotation;    
             }
         }
 
         public void OnConnectionFailed(ConnectionResult result)
         {
-            Toast.MakeText(this,"error while connection to GClient", ToastLength.Short);
+            Toast.MakeText(this,"Error while connecting to GClient", ToastLength.Short);
         }
 
         public void OnConnected(Bundle connectionHint)
         {
-            Toast.MakeText(this, "connection to GClient seccessful", ToastLength.Short);
+            Toast.MakeText(this, "Connection to GClient successful", ToastLength.Short);
         }
 
         public void OnConnectionSuspended(int cause)
         {
-
+            Toast.MakeText(this, "Connection to GClient suspended", ToastLength.Short);
         }
 
         public bool OnMarkerClick(Marker marker)
         {
-            for (int i = 0; i < FoundPlacesMarkers.Count; i++) { FoundPlacesMarkers[i].circleClose(); }
+            for (int i = 0; i < FoundPlacesMarkers.Count; i++) 
+            { 
+                FoundPlacesMarkers[i].CircleClose(); 
+            }
+
             for (int i = 0; i < FoundPlacesMarkers.Count; i++) 
             {
-                if(marker.Id==FoundPlacesMarkers[i].marker.Id)
+                if (marker.Id == FoundPlacesMarkers[i].marker.Id)
                 {
-                    FoundPlacesMarkers[i].circleOpen();
+                    FoundPlacesMarkers[i].OpenCircle();
                     
-                    if (isInCircle(FoundPlacesMarkers[i].usableRadius, FoundPlacesMarkers[i].markerCircle, userMarker.marker)) showShotBtn();
-                    else if (shotBtn.Enabled == true) hideShotBtn();
+                    if (IsInCircle(FoundPlacesMarkers[i].usableRadius, FoundPlacesMarkers[i].markerCircle, userMarker.marker)) 
+                    {
+                        ShowShotBtn();    
+                    }
+                    else if (shotBtn.Enabled == true) 
+                    {
+                        HideShotBtn();    
+                    }
 
-                    showPlaceInfo(FoundPlacesMarkers[i]);
+                    ShowPlaceInfo(FoundPlacesMarkers[i]);
                     return true;
                 }
             }
+
             return false;
         }
 
         public void OnClick(View v)
         {
-            photoF.PhotoTake(v, new EventArgs());
-            if(v.Enabled==true) hideShotBtn();
+            photoF.TakePhoto(v, new EventArgs());
+            if (v.Enabled==true) 
+            {
+                HideShotBtn();    
+            }
         }
 
         public void OnMapClick(LatLng point)
         {
-            Log.Info("click info:", "user has clicked on the map");
+            Log.Info("Click info:", "user has clicked on the map");
             foreach (AnimatedMarker.PhotoMarker mark in FoundPlacesMarkers)
             {
-                if (mark.opened) mark.circleClose();
+                if (mark.IsOpened)
+                {
+                    mark.CircleClose();    
+                }
             }
         }
     }

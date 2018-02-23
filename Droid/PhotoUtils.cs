@@ -1,43 +1,37 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Widget;
-using Android.Views.Animations;
 using Android.Provider;
-using System.Timers;
-using Android.Graphics;
-using Refractored.Controls;
-using static Android.Graphics.BitmapFactory;
 using Android.Support.V4.Content;
 using Android;
 
 namespace Playfie.Droid
 {
-    class PhotoFuncs
+    class PhotoUtils
     {
-        public string photoPath;
-        private Activity parent;
+        public string PhotoPath;
+        private Activity _parent;
+
         /// <summary>
         /// start face camera
         /// </summary>
-        public void PhotoTake(object sender, EventArgs e)
+        public void TakePhoto(object sender, EventArgs e)
         {
             Intent photo = new Intent(MediaStore.ActionImageCapture);
 
             var photoName = GeneratePhotoName();
-            var photoUrl = FileProvider.GetUriForFile(parent.ApplicationContext, "com.itstep.Playfie.fileprovider", photoName);
-            photoPath = photoName.Path;
+            var photoUrl = FileProvider.GetUriForFile(_parent.ApplicationContext, "com.itstep.Playfie.fileprovider", photoName);
+            PhotoPath = photoName.Path;
             photo.PutExtra(MediaStore.ExtraOutput, photoUrl);
             photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
 
-            if (ContextCompat.CheckSelfPermission(parent, Manifest.Permission.Camera) == Android.Content.PM.Permission.Denied)
+            if (ContextCompat.CheckSelfPermission(_parent, Manifest.Permission.Camera) == Android.Content.PM.Permission.Denied)
             {
-                parent.RequestPermissions(new string[] { Manifest.Permission.Camera, Manifest.Permission.WriteExternalStorage }, 11);
+                _parent.RequestPermissions(new string[] { Manifest.Permission.Camera, Manifest.Permission.WriteExternalStorage }, 11);
             }
             else
             {
-                parent.StartActivityForResult(photo, 12);
+                _parent.StartActivityForResult(photo, 12);
             }
             //here we start photoActivity (12 - request photo code)
         }
@@ -55,9 +49,9 @@ namespace Playfie.Droid
             return fin;
         }
 
-        public PhotoFuncs(Activity parent)
+        public PhotoUtils(Activity parent)
         {
-            this.parent = parent;
+            _parent = parent;
         }
     }
 }
