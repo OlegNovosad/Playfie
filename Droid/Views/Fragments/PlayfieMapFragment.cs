@@ -68,7 +68,8 @@ namespace Playfie.Droid
         /// </summary>
         void ShowFindButton()
         {
-			AnimatedMarkers.btnSearch.Enabled = true;
+            AnimatedMarkers.btnSearch.Click += FindPoints;
+            AnimatedMarkers.btnSearch.Enabled = true;
 			AnimatedMarkers.btnSearch.SetImageResource(Resource.Drawable.btn_search);
         }
 
@@ -90,6 +91,7 @@ namespace Playfie.Droid
             Animation anim = AnimationUtils.LoadAnimation(Activity, Resource.Animation.animFromTop);
 
             PlaceInfoFragment infoF = (PlaceInfoFragment)FragmentManager.FindFragmentById(Resource.Id.placeInfoF);
+
             TextView name = infoF.Activity.FindViewById<TextView>(Resource.Id.placeNameText);
             TextView photoCount = infoF.Activity.FindViewById<TextView>(Resource.Id.placePhotosCountText);
             RelativeLayout layout = infoF.Activity.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
@@ -165,6 +167,7 @@ namespace Playfie.Droid
         #region googleMapsCallbacks
         public void OnMapReady(GoogleMap googleMap)
         {
+            HideFindButton();
             try
             {
                 googleMap.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(Activity, Resource.Raw.style_json));
@@ -178,7 +181,7 @@ namespace Playfie.Droid
 			AnimatedMarkers.Map.SetOnMapClickListener(this);
 			AnimatedMarkers.Map.SetOnMarkerClickListener(this);
         }
-
+        
         #endregion
 
         private void BuildMainScreen(View view)
@@ -206,8 +209,7 @@ namespace Playfie.Droid
             Criteria criteria = new Criteria();
             lm.RequestLocationUpdates(LocationManager.NetworkProvider, 0, 0, this);
 
-			AnimatedMarkers.btnSearch.Click += FindPoints;
-
+			
             _btnShot = (Button) view.FindViewById(Resource.Id.btnShot);
             _btnShot.Enabled = false;
             _btnShotBackground = view.FindViewById(Resource.Id.btnShot_bg);
@@ -237,6 +239,7 @@ namespace Playfie.Droid
         /// <inheritdoc />
         public void OnLocationChanged(Location location)
         {
+
             GeomagneticField field = new GeomagneticField(
                 (float)location.Latitude,
                 (float)location.Longitude,
