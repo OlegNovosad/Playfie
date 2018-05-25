@@ -10,18 +10,18 @@ namespace Playfie.Droid
     public class PlaceInfoFragment : Fragment
     {
         public bool IsOpened;
+		private RelativeLayout _rlPlaceInfoMain;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Use this to return your custom view for this Fragment
             // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
             View view = inflater.Inflate(Resource.Layout.PlaceInfo, container, false);
-
-            RelativeLayout layout = view.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
+            _rlPlaceInfoMain = view.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
             Button btn = view.FindViewById<Button>(Resource.Id.PlaceMoreBtn);
-            layout.Visibility = ViewStates.Invisible;
+            _rlPlaceInfoMain.Visibility = ViewStates.Invisible;
             btn.Visibility = ViewStates.Invisible;
-            layout.Enabled = false;
+            _rlPlaceInfoMain.Enabled = false;
             btn.Enabled = false;
 
             btn.Touch += PlaceInfoTouch;
@@ -35,42 +35,40 @@ namespace Playfie.Droid
         private void PlaceInfoTouch(object sender, View.TouchEventArgs e)
         {
             Button btn = (Button)sender;
-            PlaceInfoFragment infoF = (PlaceInfoFragment)FragmentManager.FindFragmentById(Resource.Id.placeInfoF);
-            RelativeLayout layout = infoF.Activity.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
 
             MotionEventActions move = e.Event.Action;
             if (move == MotionEventActions.Move && e.Event.RawY > 350)
             {
-                layout.LayoutParameters.Height += Convert.ToInt32(e.Event.GetY());
-                layout.RequestLayout();
+                _rlPlaceInfoMain.LayoutParameters.Height += Convert.ToInt32(e.Event.GetY());
+                _rlPlaceInfoMain.RequestLayout();
                 //btn.TranslationY += e.Event.GetY();
                 btn.Text = e.Event.RawY.ToString();
             }
 
             if (move == MotionEventActions.Up)
             {
-                CompletingAnimation anim = new CompletingAnimation(layout);
+                CompletingAnimation anim = new CompletingAnimation(_rlPlaceInfoMain);
 
-                anim.from = layout.LayoutParameters.Height;
+                anim.from = _rlPlaceInfoMain.LayoutParameters.Height;
                 anim.duration = 100;
                 float triggerTop = TypedValue.ApplyDimension(ComplexUnitType.Dip, 200, Resources.DisplayMetrics);
                 float triggerBottom = TypedValue.ApplyDimension(ComplexUnitType.Dip, 400, Resources.DisplayMetrics);
 
-                if (e.Event.RawY >= triggerTop && infoF.IsOpened == false || e.Event.RawY > triggerBottom && infoF.IsOpened == true)
+                if (e.Event.RawY >= triggerTop && IsOpened == false || e.Event.RawY > triggerBottom && IsOpened == true)
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 450, Resources.DisplayMetrics);
                     anim.to = to;
                     anim.Start();
-                    infoF.IsOpened = true;
+                    IsOpened = true;
                     return;
                 }
 
-                if (e.Event.RawY <= triggerBottom && infoF.IsOpened == true || e.Event.RawY < triggerTop && infoF.IsOpened == false)
+                if (e.Event.RawY <= triggerBottom && IsOpened == true || e.Event.RawY < triggerTop && IsOpened == false)
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 80, Resources.DisplayMetrics);
                     anim.to = to;
                     anim.Start();
-                    infoF.IsOpened = false;
+                    IsOpened = false;
                     return;
                 }
             }

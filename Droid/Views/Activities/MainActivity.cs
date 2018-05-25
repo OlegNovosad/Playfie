@@ -15,7 +15,9 @@ namespace Playfie.Droid
 	public class MainActivity : Activity, IOnClickListener
     {
         PlayfieMapFragment playfieMapFragment = new PlayfieMapFragment();
-        ImageButton btnUser;
+		ProfileFragment profileFragment = new ProfileFragment();
+		PhotoListFragment photoListFragment = new PhotoListFragment();
+        ImageButton btnUser, btnMap, btnList;
         
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -26,7 +28,11 @@ namespace Playfie.Droid
             SetContentView(Resource.Layout.Activity_Main);
 
 			btnUser = FindViewById<ImageButton>(Resource.Id.btnUser);
+			btnMap = FindViewById<ImageButton>(Resource.Id.btnMap);
+			btnList = FindViewById<ImageButton>(Resource.Id.btnList);
             btnUser.SetOnClickListener(this);
+			btnMap.SetOnClickListener(this);
+			btnList.SetOnClickListener(this);
 
             if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Denied)
             {
@@ -36,6 +42,10 @@ namespace Playfie.Droid
             {
 				FragmentTransaction transaction = FragmentManager.BeginTransaction();
                 transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
+				transaction.Add(Resource.Id.container, profileFragment, profileFragment.Class.SimpleName);
+				transaction.Add(Resource.Id.container, photoListFragment, photoListFragment.Class.SimpleName);
+				transaction.Hide(profileFragment);
+				transaction.Hide(photoListFragment);
                 transaction.Commit();
             }
         }
@@ -61,15 +71,23 @@ namespace Playfie.Droid
             switch (v.Id)
             {
                 case Resource.Id.btnUser:
-                    transaction.Add(Resource.Id.container, new ProfileFragment());
-                    transaction.Commit();
+					transaction.Hide(playfieMapFragment);
+                    transaction.Hide(photoListFragment);
+					transaction.Show(profileFragment);
                     break;
 				case Resource.Id.btnMap:
-					transaction.Add(Resource.Id.container, playfieMapFragment);
-                    transaction.Commit();
+					transaction.Hide(profileFragment);
+                    transaction.Hide(photoListFragment);
+					transaction.Show(playfieMapFragment);
+					break;
+				case Resource.Id.btnList:
+					transaction.Hide(profileFragment);
+					transaction.Hide(playfieMapFragment);
+					transaction.Show(photoListFragment);
 					break;
                 default: break;
             }
+			transaction.Commit();
         }
     }
 }
