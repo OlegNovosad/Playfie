@@ -57,6 +57,6 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:background="@null"
-            android:id="@+id/menuBtn" />
+            android:id="@+id/btnList" />
     </LinearLayout>
 </LinearLayout>

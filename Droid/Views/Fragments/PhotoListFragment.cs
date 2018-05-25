@@ -5,14 +5,14 @@ using Android.Widget;
 
 namespace Playfie.Droid
 {
-    public class RatingFragment : Fragment
+    public class PhotoListFragment : Fragment
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            View view = inflater.Inflate(Resource.Layout.Fragment_Rating, container, false);
+			View view = inflater.Inflate(Resource.Layout.Fragment_PhotoList, container, false);
 
             TextView tvText = (TextView)view.FindViewById(Resource.Id.tvText);
-            tvText.SetText("Rating Table", TextView.BufferType.Normal);
+            tvText.SetText("Photos", TextView.BufferType.Normal);
 
             return view;
         }

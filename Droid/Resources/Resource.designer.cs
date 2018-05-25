@@ -2591,6 +2591,9 @@ namespace Playfie.Droid
 			// aapt resource value: 0x7f0d001e
 			public const int box_count = 2131558430;
 			
+			// aapt resource value: 0x7f0d0088
+			public const int btnList = 2131558536;
+			
 			// aapt resource value: 0x7f0d007f
 			public const int btnLoginFB = 2131558527;
 			
@@ -2794,9 +2797,6 @@ namespace Playfie.Droid
 			
 			// aapt resource value: 0x7f0d00a6
 			public const int media_actions = 2131558566;
-			
-			// aapt resource value: 0x7f0d0088
-			public const int menuBtn = 2131558536;
 			
 			// aapt resource value: 0x7f0d00c6
 			public const int message = 2131558598;
@@ -3233,10 +3233,10 @@ namespace Playfie.Droid
 			public const int Fragment_Map = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int Fragment_Profile = 2130903076;
+			public const int Fragment_PhotoList = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int Fragment_Rating = 2130903077;
+			public const int Fragment_Profile = 2130903077;
 			
 			// aapt resource value: 0x7f030026
 			public const int messenger_button_send_blue_large = 2130903078;
