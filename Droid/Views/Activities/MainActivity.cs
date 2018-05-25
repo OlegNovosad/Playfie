@@ -1,6 +1,5 @@
 ﻿using Android.Runtime;
 using Android.Content.PM;
-using Android.Support.V4.App;
 using Android.Widget;
 using Android.OS;
 using Android.Content;
@@ -13,7 +12,7 @@ using Android;
 namespace Playfie.Droid
 {
     [Activity(Label = "Playfie", Theme = "@style/splashscreen", ScreenOrientation = ScreenOrientation.Portrait)]
-    public class MainActivity : FragmentActivity, IOnClickListener
+	public class MainActivity : Activity, IOnClickListener
     {
         PlayfieMapFragment playfieMapFragment = new PlayfieMapFragment();
         ImageButton btnUser;
@@ -26,7 +25,7 @@ namespace Playfie.Droid
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
             SetContentView(Resource.Layout.Activity_Main);
 
-            btnUser = (ImageButton)FindViewById(Resource.Id.userBtn);
+			btnUser = FindViewById<ImageButton>(Resource.Id.btnUser);
             btnUser.SetOnClickListener(this);
 
             if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Denied)
@@ -35,7 +34,7 @@ namespace Playfie.Droid
             }
             else
             {
-                Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
+				FragmentTransaction transaction = FragmentManager.BeginTransaction();
                 transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
                 transaction.Commit();
             }
@@ -43,7 +42,7 @@ namespace Playfie.Droid
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
         {
-            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
+			FragmentTransaction transaction = FragmentManager.BeginTransaction();
             transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
             transaction.Commit();
         }
@@ -58,13 +57,17 @@ namespace Playfie.Droid
 
         public void OnClick(View v)
         {
+			FragmentTransaction transaction = FragmentManager.BeginTransaction();
             switch (v.Id)
             {
-                case Resource.Id.userBtn:
-                    Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
+                case Resource.Id.btnUser:
                     transaction.Add(Resource.Id.container, new ProfileFragment());
                     transaction.Commit();
                     break;
+				case Resource.Id.btnMap:
+					transaction.Add(Resource.Id.container, playfieMapFragment);
+                    transaction.Commit();
+					break;
                 default: break;
             }
         }

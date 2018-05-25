@@ -13,13 +13,12 @@ using System.Collections.Generic;
 
 namespace Playfie.Droid
 {
-
     class AnimatedMarkers
     {
-        public static GoogleMap map;
+        public static GoogleMap Map;
         public static GoogleApiClient GClient;
-        public static ImageButton searchB;
-        public static Bitmap cursorExample, PhotoExample;
+        public static ImageButton btnSearch;
+		public static Bitmap CursorExample, PhotoExample;
         public static List<AnimatedMarker.PhotoMarker> FoundPlacesMarkers = new List<AnimatedMarker.PhotoMarker>();
 
         public class AnimatedMarker
@@ -102,7 +101,7 @@ namespace Playfie.Droid
                         circOps.InvokeStrokeWidth(0);
                         circOps.InvokeRadius(0);
 
-                        markerCircle = map.AddCircle(circOps);
+                        markerCircle = Map.AddCircle(circOps);
                     }
                     else
                     {
@@ -154,7 +153,7 @@ namespace Playfie.Droid
                     circOps.InvokeStrokeWidth(0);
                     circOps.InvokeRadius(0);
 
-                    markerCircle = map.AddCircle(circOps);
+                    markerCircle = Map.AddCircle(circOps);
                 }
                 else
                 {
@@ -259,7 +258,7 @@ namespace Playfie.Droid
                 }
 
                 CameraUpdate cu = CameraUpdateFactory.NewLatLngBounds(bounds.Build(), 0);
-                map.AnimateCamera(cu);
+                Map.AnimateCamera(cu);
             }
 
             void AnimateSearch()
@@ -275,7 +274,7 @@ namespace Playfie.Droid
 
             void AlterSearch(Message m)
             {
-                if (m.What == -1) { searchB.Enabled = true; searchB.SetImageResource(Resource.Drawable.btn_search); }
+                if (m.What == -1) { btnSearch.Enabled = true; btnSearch.SetImageResource(Resource.Drawable.btn_search); }
                 if (Color.GetAlphaComponent(markerCircle.FillColor) != 0 && m.What % 20 == 0)
                 {
                     markerCircle.FillColor = Color.Argb(Color.GetAlphaComponent(markerCircle.FillColor) - 1, 100, 100, 255);
@@ -296,14 +295,14 @@ namespace Playfie.Droid
             private AnimatedMarker(string title, LatLng position, markerType type)
             {
                 this.type = type;
-                Bitmap mrk = type == markerType.userMarker ? cursorExample : PhotoExample;
+                Bitmap mrk = type == markerType.userMarker ? CursorExample : PhotoExample;
                 MarkerOptions markOps = new MarkerOptions();
                 markOps.SetIcon(BitmapDescriptorFactory.FromBitmap(mrk));
 
                 markOps.SetTitle(title);
                 markOps.SetPosition(position);
 
-                marker = map.AddMarker(markOps);
+                marker = Map.AddMarker(markOps);
                 current = position;
             }
         }
