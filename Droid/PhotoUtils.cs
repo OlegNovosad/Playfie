@@ -23,7 +23,8 @@ namespace Playfie.Droid
             var photoUrl = FileProvider.GetUriForFile(_parent.ApplicationContext, "com.itstep.Playfie.fileprovider", photoName);
             PhotoPath = photoName.Path;
             photo.PutExtra(MediaStore.ExtraOutput, photoUrl);
-            photo.PutExtra("android.intent.extras.CAMERA_FACING", 1);
+            
+            photo.PutExtra("android.intent.extras.CAMERA_FACING_FRONT", 1);
 
             if (ContextCompat.CheckSelfPermission(_parent, Manifest.Permission.Camera) == Android.Content.PM.Permission.Denied)
             {

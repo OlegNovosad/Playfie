@@ -77,30 +77,33 @@ namespace Playfie.Droid
             // but CANCELLED is returned.
             if (requestCode == 12)
             {
-                Toast.MakeText(this, resultCode.ToString(), ToastLength.Short);
-                SetContentView(Resource.Layout.PhotoTutorialResult);
-                CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
-
                 Bitmap yourPhoto = DecodeFile(PhotoUtils.PhotoPath);
-                avatar.SetImageBitmap(yourPhoto);
-
-                TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);
-                Random rnd = new Random();
-                switch (rnd.Next(0, 3))
+                if (yourPhoto != null)
                 {
-                    case (0): txt.Text = "DAMN! You look amazing!"; break;
-                    case (1): txt.Text = "You are just beautiful!"; break;
-                    case (2): txt.Text = "You have the best face in our Database!"; break;
+                    Toast.MakeText(this, resultCode.ToString(), ToastLength.Short);
+                    SetContentView(Resource.Layout.PhotoTutorialResult);
+
+                    CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
+                    avatar.SetImageBitmap(yourPhoto);
+
+                    TextView txt = (TextView)FindViewById(Resource.Id.tlTip3);
+                    Random rnd = new Random();
+                    switch (rnd.Next(0, 3))
+                    {
+                        case (0): txt.Text = "DAMN! You look amazing!"; break;
+                        case (1): txt.Text = "You are just beautiful!"; break;
+                        case (2): txt.Text = "You have the best face in our Database!"; break;
+                    }
+                    Animation textAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlpha);
+                    txt.StartAnimation(textAnim);
+
+                    Resource.UpdateIdValues();
+                    Animation photoAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animJumper);
+                    avatar.StartAnimation(photoAnim);
+
+                    Button Next = (Button)FindViewById(Resource.Id.btnNext);
+                    Next.Click += ToMainScreen;
                 }
-                Animation textAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animAlpha);
-                txt.StartAnimation(textAnim);
-
-                Resource.UpdateIdValues();
-                Animation photoAnim = AnimationUtils.LoadAnimation(this, Resource.Animation.animJumper);
-                avatar.StartAnimation(photoAnim);
-
-                Button Next = (Button) FindViewById(Resource.Id.btnNext);
-                Next.Click += ToMainScreen;
             }
             else
             {
