@@ -1,12 +1,12 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Widget;
-using Android.Views.Animations;
-using System.Timers;
 using Android.Graphics;
+using Android.OS;
+using Android.Views.Animations;
+using Android.Widget;
 using Refractored.Controls;
+using System;
+using System.Timers;
 using static Android.Graphics.BitmapFactory;
 
 namespace Playfie.Droid
@@ -77,6 +77,7 @@ namespace Playfie.Droid
             // but CANCELLED is returned.
             if (requestCode == 12)
             {
+                Toast.MakeText(this, resultCode.ToString(), ToastLength.Short);
                 SetContentView(Resource.Layout.PhotoTutorialResult);
                 CircleImageView avatar = (CircleImageView)FindViewById(Resource.Id.ivAvatar);
 
@@ -100,6 +101,10 @@ namespace Playfie.Droid
 
                 Button Next = (Button) FindViewById(Resource.Id.btnNext);
                 Next.Click += ToMainScreen;
+            }
+            else
+            {
+                Toast.MakeText(this, "error: "+requestCode, ToastLength.Short);
             }
         }
     }

@@ -42,10 +42,15 @@ namespace Playfie.Droid
         public Java.IO.File GeneratePhotoName()
         {
             DateTime d = DateTime.UtcNow;
-            Java.IO.File sdCardPath = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
+            Java.IO.File sdCardPath = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory.CanonicalPath);
             Java.IO.File pics = new Java.IO.File(Android.OS.Environment.DirectoryPictures);
-            Java.IO.File fin = new Java.IO.File(sdCardPath.AbsolutePath + "/" + pics.AbsolutePath + "/Playfie/" + "Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg");
-            //if (!fin.Exists()) { sdCardPath.Mkdir(); }
+
+            Java.IO.File picPath = new Java.IO.File(sdCardPath.CanonicalPath + "/" + pics.CanonicalPath + "/Playfie/");
+            Java.IO.File fin = new Java.IO.File(sdCardPath.CanonicalPath + "/" + pics.CanonicalPath + "/Playfie/" + "Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg");
+
+            bool Exist = picPath.Exists();
+            if (Exist==false) { picPath.Mkdir(); }
+
             return fin;
         }
 
