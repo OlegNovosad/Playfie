@@ -1,5 +1,6 @@
 ﻿using System;
 using Android;
+using Android.App;
 using Android.Content.Res;
 using Android.Gms.Common;
 using Android.Gms.Location.Places;
@@ -10,48 +11,44 @@ using Android.Hardware;
 using Android.Locations;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V4.App;
-using Android.Support.V4.Content;
 using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
 using Android.Widget;
 using static Android.Gms.Common.Apis.GoogleApiClient;
-using static Playfie.Droid.AnimatedMarkers;
 
 namespace Playfie.Droid
 {
-    public class PlayfieMapFragment : Fragment, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, GoogleMap.IOnMapClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
+	public class PlayfieMapFragment : Fragment, View.IOnClickListener, GoogleMap.IOnMarkerClickListener, GoogleMap.IOnMapClickListener, IOnMapReadyCallback, ILocationListener, ISensorEventListener, IConnectionCallbacks, IOnConnectionFailedListener
     {
-        AnimatedMarker userMarker;
-        View shotBtn_bg;
-        SensorManager mManager;
-        PhotoUtils photoF;
-
-        TextView testText;
-        TextView positionText;
+		private MapFragment _mapFragment;
+		private AnimatedMarkers.AnimatedMarker _animatedUserMarker;
+		private View _btnShotBackground;
+		private SensorManager _sensorManager;
+		private PhotoUtils _photoUtils;
 
         #region userFuncs
         #region shotBtnFuncs
-        Button shotBtn;
+
+		private Button _btnShot;
         void ShowShotBtn()
         {
             Animation anim = new TranslateAnimation(0, 0, 200, 0);
             anim.Duration = 500; anim.FillAfter = true;
-            shotBtn.Enabled = true; shotBtn.Visibility = ViewStates.Visible; shotBtn_bg.Visibility = ViewStates.Visible;
+            _btnShot.Enabled = true; _btnShot.Visibility = ViewStates.Visible; _btnShotBackground.Visibility = ViewStates.Visible;
 
             Animation anim_bg = AnimationUtils.LoadAnimation(Activity, Resource.Animation.animAlerter);
-            shotBtn.StartAnimation(anim);
+            _btnShot.StartAnimation(anim);
 
-            shotBtn_bg.StartAnimation(anim_bg);
+            _btnShotBackground.StartAnimation(anim_bg);
             anim_bg.AnimationEnd += AnimationBtnBgRepeat;
         }
 
         private void AnimationBtnBgRepeat(object sender, Animation.AnimationEndEventArgs e)
         {
-            if (shotBtn.Enabled == true)
+            if (_btnShot.Enabled == true)
             {
-                shotBtn_bg.StartAnimation(e.Animation);
+                _btnShotBackground.StartAnimation(e.Animation);
             }
         }
 
@@ -59,8 +56,8 @@ namespace Playfie.Droid
         {
             Animation anim = AnimationUtils.LoadAnimation(Activity, Resource.Animation.animAlerter);
 
-            shotBtn.Enabled = false; shotBtn.Visibility = ViewStates.Invisible; shotBtn_bg.Visibility = ViewStates.Invisible;
-            shotBtn.StartAnimation(anim);
+            _btnShot.Enabled = false; _btnShot.Visibility = ViewStates.Invisible; _btnShotBackground.Visibility = ViewStates.Invisible;
+            _btnShot.StartAnimation(anim);
         }
 
         #endregion
@@ -71,8 +68,8 @@ namespace Playfie.Droid
         /// </summary>
         void ShowFindButton()
         {
-            searchB.Enabled = true;
-            searchB.SetImageResource(Resource.Drawable.btn_search);
+			AnimatedMarkers.btnSearch.Enabled = true;
+			AnimatedMarkers.btnSearch.SetImageResource(Resource.Drawable.btn_search);
         }
 
         /// <summary>
@@ -80,15 +77,15 @@ namespace Playfie.Droid
         /// </summary>
         void HideFindButton()
         {
-            searchB.Enabled = false;
-            searchB.SetImageResource(Resource.Drawable.btn_search_pressed);
+			AnimatedMarkers.btnSearch.Enabled = false;
+			AnimatedMarkers.btnSearch.SetImageResource(Resource.Drawable.btn_search_pressed);
         }
         #endregion
 
         /// <summary>
         /// функція для відображення інфи про плейс у фрагменті
         /// </summary>
-        void ShowPlaceInfo(AnimatedMarker.PhotoMarker value)
+		void ShowPlaceInfo(AnimatedMarkers.AnimatedMarker.PhotoMarker value)
         {
             Animation anim = AnimationUtils.LoadAnimation(Activity, Resource.Animation.animFromTop);
 
@@ -123,25 +120,43 @@ namespace Playfie.Droid
 
         private void BuildMap()
         {
-            if (map == null)
+			if (AnimatedMarkers.Map == null)
             {
-                SupportMapFragment mp = (SupportMapFragment)FragmentManager.FindFragmentById(Resource.Id.mainMap);
-                if (ContextCompat.CheckSelfPermission(Activity, Manifest.Permission.AccessFineLocation) != Android.Content.PM.Permission.Denied)
+				_mapFragment = FragmentManager.FindFragmentByTag("map") as MapFragment;
+
+				if (_mapFragment == null)
                 {
-                    mp.GetMapAsync(this);
+					GoogleMapOptions mapOptions = new GoogleMapOptions()
+						.InvokeMapType(GoogleMap.MapTypeNormal);
+
+					FragmentTransaction transaction = FragmentManager.BeginTransaction();
+					_mapFragment = MapFragment.NewInstance(mapOptions);
+					transaction.Add(Resource.Id.mainMap, _mapFragment, "map");
+					transaction.Commit();
+                }
+
+				if (Activity.CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Android.Content.PM.Permission.Denied)
+                {
+					_mapFragment.GetMapAsync(this);
                 }
             }
             else try
-                {
-                    //bool success = googleMap.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(this, Resource.Raw.style_json));
-                    map.SetMapStyle(new MapStyleOptions(GetString(Resource.Raw.style_json)));
-                    //if (!success) { Toast.MakeText(this, "error", ToastLength.Short); }
-                }
-                catch (Resources.NotFoundException e)
-                {
-                    Toast.MakeText(Activity, e.Message, ToastLength.Short);
-                    Log.Error(Constants.DEFAULT_TAG, e.Message, e);
-                }
+            {
+				bool success = AnimatedMarkers.Map.SetMapStyle(MapStyleOptions.LoadRawResourceStyle(Activity, Resource.Raw.style_json));
+			    if (!success) 
+				{ 
+					Toast.MakeText(Activity, "Error loading map style.", ToastLength.Short);
+				}
+				else
+				{
+					AnimatedMarkers.Map.SetMapStyle(new MapStyleOptions(GetString(Resource.Raw.style_json)));	
+				}
+            }
+            catch (Resources.NotFoundException e)
+            {
+                Toast.MakeText(Activity, e.Message, ToastLength.Short);
+                Log.Error(Constants.DEFAULT_TAG, e.Message, e);
+            }
         }
 
         #endregion
@@ -159,49 +174,47 @@ namespace Playfie.Droid
                 Toast.MakeText(Activity, e.Message, ToastLength.Short);
             }
 
-            map = googleMap;
-            map.SetOnMapClickListener(this);
-            map.SetOnMarkerClickListener(this);
+			AnimatedMarkers.Map = googleMap;
+			AnimatedMarkers.Map.SetOnMapClickListener(this);
+			AnimatedMarkers.Map.SetOnMarkerClickListener(this);
         }
 
         #endregion
 
         private void BuildMainScreen(View view)
         {
-            testText = (TextView)view.FindViewById(Resource.Id.testText);
-            searchB = (ImageButton) view.FindViewById(Resource.Id.searchBtn);
-            positionText = (TextView) view.FindViewById(Resource.Id.positionText);
+			AnimatedMarkers.btnSearch = (ImageButton) view.FindViewById(Resource.Id.btnSearch);
 
             //picOps
-            Bitmap photoB = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.playfieMarker);
-            Bitmap cursorB = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.userCursor);
+            Bitmap photoB = BitmapFactory.DecodeResource(Resources, Resource.Drawable.playfieMarker);
+            Bitmap cursorB = BitmapFactory.DecodeResource(Resources, Resource.Drawable.userCursor);
             Bitmap scaledCursor = Bitmap.CreateScaledBitmap(cursorB, 30, 60, false);
             Bitmap scaledPhoto = Bitmap.CreateScaledBitmap(photoB, 60, 60, false);
-            PhotoExample = scaledPhoto; cursorExample = scaledCursor;
+			AnimatedMarkers.PhotoExample = scaledPhoto; AnimatedMarkers.CursorExample = scaledCursor;
 
             //Gclient ops
-            GClient = new Builder(Activity).AddApi(PlacesClass.GEO_DATA_API).AddApi(PlacesClass.PLACE_DETECTION_API).Build();
+			AnimatedMarkers.GClient = new Builder(Activity).AddApi(PlacesClass.GEO_DATA_API).AddApi(PlacesClass.PLACE_DETECTION_API).Build();
 
-            GClient.RegisterConnectionFailedListener(this);
-            GClient.RegisterConnectionCallbacks(this);
-            GClient.Connect();
+			AnimatedMarkers.GClient.RegisterConnectionFailedListener(this);
+			AnimatedMarkers.GClient.RegisterConnectionCallbacks(this);
+			AnimatedMarkers.GClient.Connect();
             //gyroscope programm
-            mManager = (SensorManager)Activity.GetSystemService(Android.Content.Context.SensorService);
-            mManager.RegisterListener(this, mManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
+            _sensorManager = (SensorManager)Activity.GetSystemService(Android.Content.Context.SensorService);
+            _sensorManager.RegisterListener(this, _sensorManager.GetDefaultSensor(SensorType.RotationVector), SensorDelay.Ui);
 
             var lm = (LocationManager)Activity.GetSystemService(Android.Content.Context.LocationService);
             Criteria criteria = new Criteria();
             lm.RequestLocationUpdates(LocationManager.NetworkProvider, 0, 0, this);
 
-            searchB.Click += FindPoints;
+			AnimatedMarkers.btnSearch.Click += FindPoints;
 
-            shotBtn = (Button) view.FindViewById(Resource.Id.btnShot);
-            shotBtn.Enabled = false;
-            shotBtn_bg = view.FindViewById(Resource.Id.btnShot_bg);
-            shotBtn_bg.Enabled = false;
-            shotBtn.SetOnClickListener(this);
+            _btnShot = (Button) view.FindViewById(Resource.Id.btnShot);
+            _btnShot.Enabled = false;
+            _btnShotBackground = view.FindViewById(Resource.Id.btnShot_bg);
+            _btnShotBackground.Enabled = false;
+            _btnShot.SetOnClickListener(this);
 
-            photoF = new PhotoUtils(Activity);
+            _photoUtils = new PhotoUtils(Activity);
 
             HideFindButton();
 
@@ -209,13 +222,19 @@ namespace Playfie.Droid
             BuildMap();
         }
 
+        /// <summary>
+        /// Finds the points.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void FindPoints(object sender, EventArgs e)
         {
-            searchB.Enabled = false;
-            searchB.SetImageResource(Resource.Drawable.btn_search_pressed);
-            userMarker.FindPoints();
+			AnimatedMarkers.btnSearch.Enabled = false;
+			AnimatedMarkers.btnSearch.SetImageResource(Resource.Drawable.btn_search_pressed);
+            _animatedUserMarker.FindPoints();
         }
 
+        /// <inheritdoc />
         public void OnLocationChanged(Location location)
         {
             GeomagneticField field = new GeomagneticField(
@@ -227,45 +246,43 @@ namespace Playfie.Droid
 
             ShowFindButton();
 
-            if (userMarker == null && map != null)
+			if (_animatedUserMarker == null && AnimatedMarkers.Map != null)
             {
-                userMarker = new AnimatedMarker.UserMarker(new LatLng(location.Latitude, location.Longitude));
+                _animatedUserMarker = new AnimatedMarkers.AnimatedMarker.UserMarker(new LatLng(location.Latitude, location.Longitude));
 
                 //userMarker.animate(new LatLng(location.Latitude - 1, location.Longitude + 1), 500);
-                userMarker.marker.Flat = true;
+                _animatedUserMarker.marker.Flat = true;
 
-                map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude, location.Longitude), 13));
+				AnimatedMarkers.Map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude, location.Longitude), 13));
             }
-            else if (userMarker != null)
+            else if (_animatedUserMarker != null)
             {
-                userMarker.Animate(new LatLng(location.Latitude, location.Longitude), 1000);
-                if (userMarker.markerCircle != null)
+                _animatedUserMarker.Animate(new LatLng(location.Latitude, location.Longitude), 1000);
+                if (_animatedUserMarker.markerCircle != null)
                 {
-                    userMarker.markerCircle.Center = new LatLng(location.Latitude, location.Longitude);
+                    _animatedUserMarker.markerCircle.Center = new LatLng(location.Latitude, location.Longitude);
                 }
             }
-
-            positionText.Text = location.Latitude + " | " + location.Longitude;
         }
 
         public void OnProviderDisabled(string provider)
         {
-
+			Toast.MakeText(Activity, "Provider disabled", ToastLength.Short);
         }
 
         public void OnProviderEnabled(string provider)
         {
-
+			Toast.MakeText(Activity, "Provider enabled", ToastLength.Short);
         }
 
         public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
         {
-
+			Toast.MakeText(Activity, "Provider status changed to " + status.ToString(), ToastLength.Short);
         }
 
         public void OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
         {
-
+			Toast.MakeText(Activity, "Accuracy changed to " + accuracy.ToString(), ToastLength.Short);
         }
 
         /// <summary>
@@ -274,21 +291,20 @@ namespace Playfie.Droid
         /// <param name="e">Event.</param>
         public void OnSensorChanged(SensorEvent e)
         {
-            if (map == null)
+			if (AnimatedMarkers.Map == null)
             {
                 return;
             }
 
-            CameraPosition camPos = map.CameraPosition;
+			CameraPosition camPos = AnimatedMarkers.Map.CameraPosition;
             float rotation = (e.Values[2] * 100) * 180 / 100 + camPos.Bearing;
-            testText.Text = rotation.ToString();
 
             double deg = Java.Lang.Math.ToDegrees(rotation);
 
             int degI = (int)deg;
-            if (userMarker != null)
+            if (_animatedUserMarker != null)
             {
-                userMarker.marker.Rotation = -rotation;
+                _animatedUserMarker.marker.Rotation = -rotation;
             }
         }
 
@@ -307,29 +323,34 @@ namespace Playfie.Droid
             Toast.MakeText(Activity, "Connection to GClient suspended", ToastLength.Short);
         }
 
+        /// <summary>
+        /// Handles click on marker.
+        /// </summary>
+        /// <returns><c>true</c>, if marker click was handled, <c>false</c> otherwise.</returns>
+        /// <param name="marker">Marker.</param>
         public bool OnMarkerClick(Marker marker)
         {
-            for (int i = 0; i < FoundPlacesMarkers.Count; i++)
+			for (int i = 0; i < AnimatedMarkers.FoundPlacesMarkers.Count; i++)
             {
-                FoundPlacesMarkers[i].CircleClose();
+				AnimatedMarkers.FoundPlacesMarkers[i].CircleClose();
             }
 
-            for (int i = 0; i < FoundPlacesMarkers.Count; i++)
+			for (int i = 0; i < AnimatedMarkers.FoundPlacesMarkers.Count; i++)
             {
-                if (marker.Id == FoundPlacesMarkers[i].marker.Id)
+				if (marker.Id == AnimatedMarkers.FoundPlacesMarkers[i].marker.Id)
                 {
-                    FoundPlacesMarkers[i].OpenCircle();
+					AnimatedMarkers.FoundPlacesMarkers[i].OpenCircle();
 
-                    if (IsInCircle(FoundPlacesMarkers[i].usableRadius, FoundPlacesMarkers[i].markerCircle, userMarker.marker))
+					if (IsInCircle(AnimatedMarkers.FoundPlacesMarkers[i].usableRadius, AnimatedMarkers.FoundPlacesMarkers[i].markerCircle, _animatedUserMarker.marker))
                     {
                         ShowShotBtn();
                     }
-                    else if (shotBtn.Enabled == true)
+                    else if (_btnShot.Enabled == true)
                     {
                         HideShotBtn();
                     }
 
-                    ShowPlaceInfo(FoundPlacesMarkers[i]);
+					ShowPlaceInfo(AnimatedMarkers.FoundPlacesMarkers[i]);
                     return true;
                 }
             }
@@ -339,7 +360,7 @@ namespace Playfie.Droid
 
         public void OnClick(View v)
         {
-            photoF.TakePhoto(v, new EventArgs());
+            _photoUtils.TakePhoto(v, new EventArgs());
             if (v.Enabled == true)
             {
                 HideShotBtn();
@@ -349,7 +370,7 @@ namespace Playfie.Droid
         public void OnMapClick(LatLng point)
         {
             Log.Info("Click info:", "user has clicked on the map");
-            foreach (AnimatedMarker.PhotoMarker mark in FoundPlacesMarkers)
+			foreach (AnimatedMarkers.AnimatedMarker.PhotoMarker mark in AnimatedMarkers.FoundPlacesMarkers)
             {
                 if (mark.IsOpened)
                 {

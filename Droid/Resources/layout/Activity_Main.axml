@@ -39,7 +39,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:background="@null"
-            android:id="@+id/userBtn" />
+            android:id="@+id/btnUser" />
         <ImageButton
             android:src="@drawable/btn_search"
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:background="@null"
-            android:id="@+id/searchBtn" />
+            android:id="@+id/btnMap" />
         <ImageButton
             android:src="@drawable/btn_menu"
             android:layout_width="match_parent"
