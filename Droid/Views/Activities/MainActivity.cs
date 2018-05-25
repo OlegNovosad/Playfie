@@ -7,6 +7,8 @@ using Android.Content;
 using Android.App;
 using static Android.Views.View;
 using Android.Views;
+using Android.Support.V4.Content;
+using Android;
 
 namespace Playfie.Droid
 {
@@ -27,23 +29,23 @@ namespace Playfie.Droid
             btnUser = (ImageButton)FindViewById(Resource.Id.userBtn);
             btnUser.SetOnClickListener(this);
 
-            //if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Denied)
-            //{
-            //    RequestPermissions(new string[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.WriteExternalStorage }, 11);
-            //}
-            //else
-            //{
-            //    Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
-            //    transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
-            //    //transaction.Commit();
-            //}
+            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Denied)
+            {
+                RequestPermissions(new string[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.WriteExternalStorage }, 11);
+            }
+            else
+            {
+                Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
+                transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
+                transaction.Commit();
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
         {
             Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
             transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
-            //transaction.Commit();
+            transaction.Commit();
         }
 
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)

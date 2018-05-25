@@ -25,7 +25,6 @@ namespace Playfie.Droid
             base.OnCreate(savedInstanceState);
 
             // Init Facebook manager and SDK
-            FacebookSdk.SdkInitialize(ApplicationContext);
             CallbackManager = CallbackManagerFactory.Create();
 
             SetTheme(Android.Resource.Style.ThemeDeviceDefaultLightNoActionBar);
