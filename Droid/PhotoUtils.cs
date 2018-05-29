@@ -36,6 +36,7 @@ namespace Playfie.Droid
             }
             //here we start photoActivity (12 - request photo code)
         }
+
         /// <summary>
         /// Generates the name of the photo.
         /// </summary>
@@ -48,9 +49,8 @@ namespace Playfie.Droid
 
             Java.IO.File picPath = new Java.IO.File(sdCardPath.CanonicalPath + "/" + pics.CanonicalPath + "/Playfie/");
             Java.IO.File fin = new Java.IO.File(sdCardPath.CanonicalPath + "/" + pics.CanonicalPath + "/Playfie/" + "Selfie_" + d.Year + d.Month + d.Day + d.Hour + d.Minute + ".jpg");
-
-            bool Exist = picPath.Exists();
-            if (Exist==false) { picPath.Mkdir(); }
+            
+			if (!picPath.Exists()) { picPath.Mkdir(); }
 
             return fin;
         }
