@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Preferences;
 using Android.Views.Animations;
 using Android.Widget;
 using Refractored.Controls;
@@ -78,6 +79,12 @@ namespace Playfie.Droid
             if (requestCode == 12)
             {
                 Bitmap yourPhoto = DecodeFile(PhotoUtils.PhotoPath);
+
+				ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
+                ISharedPreferencesEditor editor = prefs.Edit();
+                editor.PutString("profilePhoto", PhotoUtils.PhotoPath);
+				editor.Commit();
+
                 if (yourPhoto != null)
                 {
                     Toast.MakeText(this, resultCode.ToString(), ToastLength.Short);

@@ -4,8 +4,46 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
     <TextView
-        android:id="@+id/tvText"
+        android:id="@+id/tvLevel"
+        android:layout_alignParentTop="true"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/civAvatar"
+        android:layout_margin="16dp"
+        android:background="@drawable/round_btn_gray"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white" />
+    <refractored.controls.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_below="@id/tvLevel"
         android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/ivAvatar" />
+    <TextView
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:layout_margin="16dp"
+        android:textColor="@android:color/black"
+        android:id="@+id/tvPhotos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ivAvatar"
+        android:text="Photos taken: " />
+    <TextView
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:layout_margin="16dp"
+        android:textColor="@android:color/black"
+        android:id="@+id/tvPoints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tvPhotos"
+        android:text="Points: " />
 </RelativeLayout>
