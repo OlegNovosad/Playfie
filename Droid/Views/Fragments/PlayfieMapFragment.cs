@@ -103,7 +103,7 @@ namespace Playfie.Droid
         {
             Animation anim = AnimationUtils.LoadAnimation(Activity, Resource.Animation.animFromTop);
 
-			PlaceInfoFragment infoF = (PlaceInfoFragment)ChildFragmentManager.FindFragmentById(Resource.Id.placeInfoF);
+			PlaceInfoFragment infoF = (PlaceInfoFragment)FragmentManager.FindFragmentById(Resource.Id.placeInfoF);
             TextView name = infoF.Activity.FindViewById<TextView>(Resource.Id.placeNameText);
             TextView photoCount = infoF.Activity.FindViewById<TextView>(Resource.Id.placePhotosCountText);
             RelativeLayout layout = infoF.Activity.FindViewById<RelativeLayout>(Resource.Id.PlaceInfoMain);
