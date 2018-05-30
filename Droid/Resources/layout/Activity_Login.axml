@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:gridSpec="1|8|#0093eeff|K:#ee8700ff:16,l:72,l:16,r|S:#83ee00ff:16,0,l:16,56,l:16,0,r">
+    <ImageView
+        android:id="@+id/ivAppIcon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_height="150dp"
+        android:src="@drawable/playfieicon" />
+    <com.facebook.login.widget.LoginButton
+        android:layout_below="@id/ivAppIcon"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btnLoginFB"
+        android:layout_width="300dp"
+        android:layout_height="65dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="- OR -"
+        android:layout_below="@id/btnLoginFB"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tvOr"
+        android:gravity="center"
+        android:padding="20dp" />
+    <EditText
+        android:layout_below="@id/tvOr"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:hint="@string/placeholder_email"
+        android:editable="false"
+        android:inputType="text"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/etLogin" />
+    <EditText
+        android:layout_below="@id/etLogin"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:hint="@string/placeholder_password"
+        android:editable="false"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/etPassword" />
+    <LinearLayout
+        android:layout_below="@id/etPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:weightSum="2"
+        android:orientation="vertical">
+        <Button
+            android:background="@color/btn_2"
+            android:clickable="false"
+            android:text="@string/sign_up"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:id="@+id/btnSignUp" />
+        <Button
+            android:background="@drawable/ripplebutton"
+            android:clickable="false"
+            android:text="@string/sign_in"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:id="@+id/btnSignIn" />
+    </LinearLayout>
+</RelativeLayout>

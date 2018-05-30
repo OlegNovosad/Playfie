@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <color name="btn_1">#273993</color>
+  <color name="btn_2">#425ad4</color>
+  <color name="btn_gray_bg">#757575</color>
+  <color name="btn_gray_fg">#cfcfcf</color>
+  <color name="playfie_blue">#355ed4</color>
+</resources>

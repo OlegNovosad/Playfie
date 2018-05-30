@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <fragment
+        class="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/mainMap"
+        android:tag="map"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+    <View
+        android:id="@+id/btnShot_bg"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="invisible"
+        android:background="@drawable/round_btn_White" />
+    <ImageButton
+        android:src="@drawable/btn_search"
+        android:background="@null"
+        android:id="@+id/btnSearch"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitCenter"
+        android:layout_margin="8dp"
+        android:visibility="visible" />
+    <Button
+        android:textSize="35sp"
+        android:background="@drawable/round_btn_Gray"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="invisible"
+        android:id="@+id/btnShot" />
+    <fragment
+        android:id="@+id/placeInfoF"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        class="playfie.droid.PlaceInfoFragment" />
+</RelativeLayout>

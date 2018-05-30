@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "258857665013",
+    "firebase_url": "https://itstep-playfie.firebaseio.com",
+    "project_id": "itstep-playfie",
+    "storage_bucket": "itstep-playfie.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258857665013:android:cf817d343231f7fe",
+        "android_client_info": {
+          "package_name": "com.itstep.Playfie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258857665013-7kj56spg1e9kn8c2t9jtjuo5s4lehf72.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itstep.Playfie",
+            "certificate_hash": "e20ecc1ebaaaa1a5bbad390f11ab7d741ee37aa5"
+          }
+        },
+        {
+          "client_id": "258857665013-bkjis6mrcma25hg9jdmgvogfkc22kt7n.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "258857665013-bkjis6mrcma25hg9jdmgvogfkc22kt7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-LJ2_W2Ra6wxKuJQEJejEMYRMe766Dog"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258857665013-bkjis6mrcma25hg9jdmgvogfkc22kt7n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

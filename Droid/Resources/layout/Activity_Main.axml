@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:minWidth="25px"
+        android:minHeight="25px">
+        <ImageView
+            android:src="@drawable/playfieLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/container" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent">
+        <ImageButton
+            android:src="@drawable/btn_user"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ripplebutton"
+            android:id="@+id/btnUser" />
+        <ImageButton
+            android:src="@drawable/btn_map"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ripplebutton"
+            android:id="@+id/btnMap" />
+        <ImageButton
+            android:src="@drawable/btn_menu"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ripplebutton"
+            android:id="@+id/btnList" />
+    </LinearLayout>
+</LinearLayout>
