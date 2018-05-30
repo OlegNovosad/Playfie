@@ -23,141 +23,163 @@ namespace Playfie.Droid
 
         public class AnimatedMarker
         {
-            LatLng to { get; set; }
+			private LatLng _to { get; set; }
 
-            public enum markerType { userMarker, photoMarker }
+            public enum MarkerType { userMarker, photoMarker }
 
-            public markerType type { get; set; }
-            private Handler animHand { get; set; }
-            private Thread cursorThread { get; set; }
-            private Handler animMarkerCircle { get; set; }
-            private Thread searchCirleThread { get; set; }
+			public MarkerType Type { get; set; }
+			private Handler _animationHandler { get; set; }
+			private Thread _cursorThread { get; set; }
+			private Handler _animationMarkerCircleHandler { get; set; }
+			private Thread _searchCirleThread { get; set; }
 
-            private Thread placesThread { get; set; }
-            private PendingResult pendingResults;
+			private Thread _placesThread { get; set; }
+			private PendingResult _pendingResults;
 
-            public Marker marker { get; set; }
-            public Circle markerCircle { get; set; }
-            public int animSpeed { get; set; }
+            public Marker Marker { get; set; }
+            public Circle MarkerCircle { get; set; }
+			public int AnimationSpeed { get; set; }
 
-            private LatLng current { get; set; }
+			private LatLng _currentLocation { get; set; }
 
             public class UserMarker : AnimatedMarker
             {
-                public UserMarker(LatLng position) : base("userPosition", position, markerType.userMarker)
+                public UserMarker(LatLng position) : base("userPosition", position, MarkerType.userMarker)
                 {
-                    this.current = position;
+                    _currentLocation = position;
                 }
             }
 
             public class PhotoMarker : AnimatedMarker
             {
-                private Handler hnd;
-                private Thread animation;
+				private Handler _handler;
+				private Thread _animationThread;
                 public bool IsOpened;
-                public int usableRadius { get; set; } = 100;
+                public int UsableRadius { get; set; } = 100;
 
-                public PhotoMarker(LatLng position, string title) : base(title, position, markerType.photoMarker)
+                public PhotoMarker(LatLng position, string title) : base(title, position, MarkerType.photoMarker)
                 {
-                    this.current = new LatLng(position.Latitude + 0.001, position.Longitude); to = position;
-                    marker.Position = current;
+                    this._currentLocation = new LatLng(position.Latitude + 0.001, position.Longitude); _to = position;
+                    Marker.Position = _currentLocation;
                     this.IsOpened = false;
-                    Animate(to, 10);
+                    Animate(_to, 10);
                 }
 
-                private void animCircle()
+                /// <summary>
+                /// Animates the circle.
+                /// </summary>
+				private void AnimateCircle()
                 {
                     if (IsOpened == false)
                     {
-                        for (int i = 0; i < usableRadius; i++)
+                        for (int i = 0; i < UsableRadius; i++)
                         {
-                            hnd.SendEmptyMessage(i);
+                            _handler.SendEmptyMessage(i);
                             Thread.Sleep(1);
                         }
                         IsOpened = true;
                     }
                     else
                     {
-                        for (int i = usableRadius; i >= 0; i--)
+                        for (int i = UsableRadius; i >= 0; i--)
                         {
-                            hnd.SendEmptyMessage(i);
+                            _handler.SendEmptyMessage(i);
                             Thread.Sleep(1);
                         }
                         IsOpened = false;
                     }
                 }
 
+                /// <summary>
+                /// Alters the circle.
+                /// </summary>
+                /// <param name="m">M.</param>
                 private void AlterCircle(Message m)
                 {
-                    markerCircle.Radius = m.What;
+                    MarkerCircle.Radius = m.What;
                 }
 
+                /// <summary>
+                /// Open circle animation.
+                /// </summary>
                 public void OpenCircle()
                 {
-                    if (markerCircle == null)
+                    if (MarkerCircle == null)
                     {
                         CircleOptions circOps = new CircleOptions();
-                        circOps.InvokeCenter(current); circOps.InvokeFillColor(Color.Argb(100, 100, 150, 255));
+                        circOps.InvokeCenter(_currentLocation); circOps.InvokeFillColor(Color.Argb(100, 100, 150, 255));
                         circOps.InvokeStrokeWidth(0);
                         circOps.InvokeRadius(0);
 
-                        markerCircle = Map.AddCircle(circOps);
+                        MarkerCircle = Map.AddCircle(circOps);
                     }
                     else
                     {
-                        markerCircle.Radius = 0; markerCircle.FillColor = Color.Argb(100, 100, 150, 255);
+                        MarkerCircle.Radius = 0; MarkerCircle.FillColor = Color.Argb(100, 100, 150, 255);
                     }
 
-                    hnd = new Handler(AlterCircle);
-                    animation = new Thread(animCircle); animation.Start();
+                    _handler = new Handler(AlterCircle);
+                    _animationThread = new Thread(AnimateCircle); _animationThread.Start();
                 }
 
+                /// <summary>
+                /// Close circle animation.
+                /// </summary>
                 public void CircleClose()
                 {
                     if (IsOpened == true)
                     {
-                        hnd = new Handler(AlterCircle);
-                        animation = new Thread(animCircle); animation.Start();
+                        _handler = new Handler(AlterCircle);
+                        _animationThread = new Thread(AnimateCircle); _animationThread.Start();
                     }
                 }
             }
-            //constant function DO NOT CALL ALONE
-            void Animate()
+
+            /// <summary>
+            /// Does the required animation.
+            /// </summary>
+            private void Animate()
             {
-                double delayLatitude = (current.Latitude - to.Latitude) / animSpeed;
-                double delayLongitude = (current.Longitude - to.Longitude) / animSpeed;
+                double delayLatitude = (_currentLocation.Latitude - _to.Latitude) / AnimationSpeed;
+                double delayLongitude = (_currentLocation.Longitude - _to.Longitude) / AnimationSpeed;
 
                 Interpolator interp = new Interpolator(10, 1000);
-                //Log.Info("DELAY", "from:"+current.Latitude+"|"+current.Longitude+"///"+to.Latitude+"|"+to.Longitude+" /// "+delayLatitude + "|" + delayLongitude);
 
-                LatLng pos = new LatLng(current.Latitude, current.Longitude);
-                for (int i = 0; i < animSpeed; i++)
+                LatLng pos = new LatLng(_currentLocation.Latitude, _currentLocation.Longitude);
+                for (int i = 0; i < AnimationSpeed; i++)
                 {
-                    current.Latitude -= delayLatitude; current.Longitude -= delayLongitude;
-                    animHand.SendEmptyMessage(1);
+                    _currentLocation.Latitude -= delayLatitude; _currentLocation.Longitude -= delayLongitude;
+                    _animationHandler.SendEmptyMessage(1);
                     Thread.Sleep(1);
                 }
             }
 
-            void SetPosition(Message msg)
+            /// <summary>
+            /// Sets the position.
+            /// </summary>
+            /// <param name="msg">Message.</param>
+            private void SetPosition(Message msg)
             {
-                marker.Position = current;
+                Marker.Position = _currentLocation;
             }
 
+            /// <summary>
+            /// Finds the points inside the circle.
+            /// </summary>
             public void FindPoints()
             {
-                if (markerCircle == null)
+                if (MarkerCircle == null)
                 {
                     CircleOptions circOps = new CircleOptions();
-                    circOps.InvokeCenter(current); circOps.InvokeFillColor(Color.Argb(100, 100, 100, 255));
+                    circOps.InvokeCenter(_currentLocation); circOps.InvokeFillColor(Color.Argb(100, 100, 100, 255));
                     circOps.InvokeStrokeWidth(0);
                     circOps.InvokeRadius(0);
 
-                    markerCircle = Map.AddCircle(circOps);
+                    MarkerCircle = Map.AddCircle(circOps);
                 }
                 else
                 {
-                    markerCircle.Radius = 0; markerCircle.FillColor = Color.Argb(100, 100, 100, 255);
+                    MarkerCircle.Radius = 0; MarkerCircle.FillColor = Color.Argb(100, 100, 100, 255);
                 }
 
                 if (GClient.IsConnected == true)
@@ -165,42 +187,45 @@ namespace Playfie.Droid
                     AutocompleteFilter.Builder Builder = new AutocompleteFilter.Builder();
                     Builder.SetTypeFilter(AutocompleteFilter.TypeFilterEstablishment);
                     var filter = Builder.Build();
-                    LatLng startP = new LatLng(current.Latitude - 0.1, current.Longitude - 0.1);
-                    LatLng endP = new LatLng(current.Latitude + 0.1, current.Longitude + 0.1);
+                    LatLng startP = new LatLng(_currentLocation.Latitude - 0.1, _currentLocation.Longitude - 0.1);
+                    LatLng endP = new LatLng(_currentLocation.Latitude + 0.1, _currentLocation.Longitude + 0.1);
 
-                    pendingResults = PlacesClass.PlaceDetectionApi.GetCurrentPlace(GClient, new PlaceFilter());
+                    _pendingResults = PlacesClass.PlaceDetectionApi.GetCurrentPlace(GClient, new PlaceFilter());
 
-                    pendingResults.SetResultCallback<PlaceLikelihoodBuffer>(FindPlacesAround);
+                    _pendingResults.SetResultCallback<PlaceLikelihoodBuffer>(FindPlacesAround);
                 }
                 else
                 {
                     Log.Info("ERROR CONNECT", "GClient is not connected");    
                 }
 
-                searchCirleThread = new Thread(new Action(AnimateSearch));
-                animMarkerCircle = new Handler(AlterSearch);
-                searchCirleThread.Start();
+                _searchCirleThread = new Thread(new Action(AnimateSearch));
+                _animationMarkerCircleHandler = new Handler(AlterSearch);
+                _searchCirleThread.Start();
             }
 
             class ThreadPlaceInserter
             {
-                IEnumerator<IPlaceLikelihood> placeCollecion { get; set; }
-                private Thread findingThread;
-                private int pCount;
-                private PlaceLikelihoodBuffer buffer;
+				private IEnumerator<IPlaceLikelihood> _placesCollecion { get; set; }
+				private Thread _findingThread;
+				private int _placesCount;
+				private PlaceLikelihoodBuffer _placesBuffer;
 
+                /// <summary>
+                /// Inserts places to the collection.
+                /// </summary>
                 private void Inserting()
                 {
                     FoundPlacesMarkers.Clear();
 
-                    for (int i = 0; i < pCount; i++)
+                    for (int i = 0; i < _placesCount; i++)
                     {
-                        placeCollecion.MoveNext();
-                        string id = placeCollecion.Current.Place.Id;
+                        _placesCollecion.MoveNext();
+                        string id = _placesCollecion.Current.Place.Id;
 
-                        for (int d = 0; d < placeCollecion.Current.Place.PlaceTypes.Count;d++)
+                        for (int d = 0; d < _placesCollecion.Current.Place.PlaceTypes.Count;d++)
                         {
-                            Log.Info("place #"+d+" type #"+d, placeCollecion.Current.Place.PlaceTypes[d].ToString());
+                            Log.Info("place #"+d+" type #"+d, _placesCollecion.Current.Place.PlaceTypes[d].ToString());
                         }
 
 
@@ -208,10 +233,14 @@ namespace Playfie.Droid
                         placePend.SetResultCallback<PlaceBuffer>(AddPlace); Thread.Sleep(100);
                     }
 
-                    buffer.Release();
+                    _placesBuffer.Release();
                 }
 
-                void AddPlace(PlaceBuffer placesBufer)
+                /// <summary>
+                /// Adds the place.
+                /// </summary>
+                /// <param name="placesBufer">Places bufer.</param>
+                private void AddPlace(PlaceBuffer placesBufer)
                 {
                     var pNumerator = placesBufer.GetEnumerator();
                     for (int i = 0; i < placesBufer.Count; i++)
@@ -223,7 +252,7 @@ namespace Playfie.Droid
                         FoundPlacesMarkers.Add(new PhotoMarker(pos, name));
                     }
 
-                    if (FoundPlacesMarkers.Count == buffer.Count)
+                    if (FoundPlacesMarkers.Count == _placesBuffer.Count)
                     {
                         ScaleToMarkers();
                     }
@@ -232,78 +261,97 @@ namespace Playfie.Droid
                 public ThreadPlaceInserter(PlaceLikelihoodBuffer buf, int Count)
                 {
                     for (int i = 0; i < FoundPlacesMarkers.Count; i++)
-                    { FoundPlacesMarkers[i].marker.Remove(); if(FoundPlacesMarkers[i].markerCircle!=null) FoundPlacesMarkers[i].markerCircle.Remove(); }
+                    { FoundPlacesMarkers[i].Marker.Remove(); if(FoundPlacesMarkers[i].MarkerCircle!=null) FoundPlacesMarkers[i].MarkerCircle.Remove(); }
 
-                    buffer = buf;
+                    _placesBuffer = buf;
                     Log.Info("bufer info: ", buf.Count.ToString());
 
-                    placeCollecion = buf.GetEnumerator(); pCount = Count; findingThread = new Thread(new Action(Inserting));
-                    findingThread.Name = "GetPlace Thread"; findingThread.Start();
+                    _placesCollecion = buf.GetEnumerator(); _placesCount = Count; _findingThread = new Thread(new Action(Inserting));
+                    _findingThread.Name = "GetPlace Thread"; _findingThread.Start();
                 }
             }
 
-            void FindPlacesAround(PlaceLikelihoodBuffer element)
+            /// <summary>
+            /// Finds the places around.
+            /// </summary>
+            /// <param name="element">Element.</param>
+            private void FindPlacesAround(PlaceLikelihoodBuffer element)
             {
                 Log.Info("Buffer info", element.Status.StatusCode + "|" + element.Status.StatusMessage + "|" + element.Count);
                 ThreadPlaceInserter th = new ThreadPlaceInserter(element, element.Count);
             }
 
+            /// <summary>
+            /// Scales the map to fit all markers.
+            /// </summary>
             static void ScaleToMarkers()
             {
                 var bounds = new LatLngBounds.Builder();
 
                 for (var i = 0; i < FoundPlacesMarkers.Count; i++)
                 {
-                    bounds.Include(FoundPlacesMarkers[i].marker.Position);
+                    bounds.Include(FoundPlacesMarkers[i].Marker.Position);
                 }
 
                 CameraUpdate cu = CameraUpdateFactory.NewLatLngBounds(bounds.Build(), 0);
                 Map.AnimateCamera(cu);
             }
 
-            void AnimateSearch()
+            /// <summary>
+            /// Animates the search.
+            /// </summary>
+            private void AnimateSearch()
             {
                 for (int i = 0; i < 2000; i++)
                 {
-                    animMarkerCircle.SendEmptyMessage(i);
+                    _animationMarkerCircleHandler.SendEmptyMessage(i);
                     Thread.Sleep(1);
                 }
 
-                animMarkerCircle.SendEmptyMessage(-1);
+                _animationMarkerCircleHandler.SendEmptyMessage(-1);
             }
 
-            void AlterSearch(Message m)
+            /// <summary>
+            /// Alters the search.
+            /// </summary>
+            /// <param name="m">M.</param>
+            private void AlterSearch(Message m)
             {
                 if (m.What == -1) { btnSearch.Enabled = true; btnSearch.SetImageResource(Resource.Drawable.btn_search); }
-                if (Color.GetAlphaComponent(markerCircle.FillColor) != 0 && m.What % 20 == 0)
+                if (Color.GetAlphaComponent(MarkerCircle.FillColor) != 0 && m.What % 20 == 0)
                 {
-                    markerCircle.FillColor = Color.Argb(Color.GetAlphaComponent(markerCircle.FillColor) - 1, 100, 100, 255);
+                    MarkerCircle.FillColor = Color.Argb(Color.GetAlphaComponent(MarkerCircle.FillColor) - 1, 100, 100, 255);
                 }
-                markerCircle.Radius++;
+                MarkerCircle.Radius++;
             }
 
+            /// <summary>
+            /// Animate the specified location with animation speed.
+            /// </summary>
+            /// <param name="to">To.</param>
+            /// <param name="animSpeed">Animation speed.</param>
             public void Animate(LatLng to, int animSpeed)
             {
-                this.to = to;
-                this.animSpeed = animSpeed;
-                animHand = new Handler(new Action<Message>(SetPosition));
-                cursorThread = new Thread(new Action(Animate));
-                cursorThread.Name = "Animation Thread";
-                cursorThread.Start();
+                _to = to;
+                AnimationSpeed = animSpeed;
+                _animationHandler = new Handler(new Action<Message>(SetPosition));
+                _cursorThread = new Thread(new Action(Animate));
+                _cursorThread.Name = "Animation Thread";
+                _cursorThread.Start();
             }
-
-            private AnimatedMarker(string title, LatLng position, markerType type)
+            
+            private AnimatedMarker(string title, LatLng position, MarkerType type)
             {
-                this.type = type;
-                Bitmap mrk = type == markerType.userMarker ? CursorExample : PhotoExample;
+                Type = type;
+                Bitmap mrk = type == MarkerType.userMarker ? CursorExample : PhotoExample;
                 MarkerOptions markOps = new MarkerOptions();
                 markOps.SetIcon(BitmapDescriptorFactory.FromBitmap(mrk));
 
                 markOps.SetTitle(title);
                 markOps.SetPosition(position);
 
-                marker = Map.AddMarker(markOps);
-                current = position;
+                Marker = Map.AddMarker(markOps);
+                _currentLocation = position;
             }
         }
     }

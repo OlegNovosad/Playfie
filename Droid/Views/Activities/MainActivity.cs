@@ -52,6 +52,7 @@ namespace Playfie.Droid
             }
         }
 
+        /// <inheritdoc />
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
         {
 			FragmentTransaction transaction = FragmentManager.BeginTransaction();
@@ -63,7 +64,7 @@ namespace Playfie.Droid
             transaction.Commit();
         }
         
-
+		/// <inheritdoc />
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             if (requestCode == 12 && resultCode == Result.Ok)
@@ -72,9 +73,11 @@ namespace Playfie.Droid
             }
         }
 
+		/// <inheritdoc />
         public void OnClick(View v)
         {
 			FragmentTransaction transaction = FragmentManager.BeginTransaction();
+
             switch (v.Id)
             {
                 case Resource.Id.btnUser:
@@ -94,6 +97,7 @@ namespace Playfie.Droid
 					break;
                 default: break;
             }
+
 			transaction.Commit();
         }
     }

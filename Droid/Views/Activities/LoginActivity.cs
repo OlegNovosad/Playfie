@@ -158,6 +158,7 @@ namespace Playfie.Droid
             Finish();
             StartActivity(mainActivityIntent);
         }
+
         #endregion
     }
 }

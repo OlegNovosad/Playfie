@@ -12,6 +12,11 @@ namespace Playfie.Droid
         public string PhotoPath;
         private Activity _parent;
 
+		public PhotoUtils(Activity parent)
+        {
+            _parent = parent;
+        }
+
         /// <summary>
         /// start face camera
         /// </summary>
@@ -34,7 +39,6 @@ namespace Playfie.Droid
             {
                 _parent.StartActivityForResult(photo, 12);
             }
-            //here we start photoActivity (12 - request photo code)
         }
 
         /// <summary>
@@ -53,11 +57,6 @@ namespace Playfie.Droid
 			if (!picPath.Exists()) { picPath.Mkdir(); }
 
             return fin;
-        }
-
-        public PhotoUtils(Activity parent)
-        {
-            _parent = parent;
         }
     }
 }

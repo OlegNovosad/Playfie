@@ -12,6 +12,7 @@ namespace Playfie.Droid
         public bool IsOpened;
 		private RelativeLayout _rlPlaceInfoMain;
 
+		/// <inheritdoc />
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Use this to return your custom view for this Fragment
@@ -49,15 +50,15 @@ namespace Playfie.Droid
             {
                 CompletingAnimation anim = new CompletingAnimation(_rlPlaceInfoMain);
 
-                anim.from = _rlPlaceInfoMain.LayoutParameters.Height;
-                anim.duration = 100;
+                anim.From = _rlPlaceInfoMain.LayoutParameters.Height;
+                anim.Duration = 100;
                 float triggerTop = TypedValue.ApplyDimension(ComplexUnitType.Dip, 200, Resources.DisplayMetrics);
                 float triggerBottom = TypedValue.ApplyDimension(ComplexUnitType.Dip, 400, Resources.DisplayMetrics);
 
                 if (e.Event.RawY >= triggerTop && IsOpened == false || e.Event.RawY > triggerBottom && IsOpened == true)
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 450, Resources.DisplayMetrics);
-                    anim.to = to;
+                    anim.To = to;
                     anim.Start();
                     IsOpened = true;
                     return;
@@ -66,7 +67,7 @@ namespace Playfie.Droid
                 if (e.Event.RawY <= triggerBottom && IsOpened == true || e.Event.RawY < triggerTop && IsOpened == false)
                 {
                     float to = TypedValue.ApplyDimension(ComplexUnitType.Dip, 80, Resources.DisplayMetrics);
-                    anim.to = to;
+                    anim.To = to;
                     anim.Start();
                     IsOpened = false;
                     return;

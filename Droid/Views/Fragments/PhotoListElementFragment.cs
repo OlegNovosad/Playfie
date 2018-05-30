@@ -15,6 +15,7 @@ namespace Playfie.Droid
 {
     public class PhotoListElementFragment : Fragment
     {
+		/// <inheritdoc />
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View thisView= inflater.Inflate(Resource.Layout.Fragment_PhotoListElement, container, false);

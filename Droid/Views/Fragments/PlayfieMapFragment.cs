@@ -27,11 +27,15 @@ namespace Playfie.Droid
 		private SensorManager _sensorManager;
 		private PhotoUtils _photoUtils;
 
-        #region userFuncs
-        #region shotBtnFuncs
+        #region User Functions
+        #region Shot Button Functions
 
 		private Button _btnShot;
-        void ShowShotBtn()
+
+        /// <summary>
+        /// Shows the shot button.
+        /// </summary>
+        private void ShowShotBtn()
         {
             Animation anim = new TranslateAnimation(0, 0, 200, 0);
             anim.Duration = 500; anim.FillAfter = true;
@@ -44,6 +48,11 @@ namespace Playfie.Droid
             anim_bg.AnimationEnd += AnimationBtnBgRepeat;
         }
 
+        /// <summary>
+        /// Animates the button background repeatedly.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void AnimationBtnBgRepeat(object sender, Animation.AnimationEndEventArgs e)
         {
             if (_btnShot.Enabled == true)
@@ -52,7 +61,10 @@ namespace Playfie.Droid
             }
         }
 
-        void HideShotBtn()
+        /// <summary>
+        /// Hides the shot button.
+        /// </summary>
+        private void HideShotBtn()
         {
             Animation anim = AnimationUtils.LoadAnimation(Activity, Resource.Animation.animAlerter);
 
@@ -62,11 +74,12 @@ namespace Playfie.Droid
 
         #endregion
 
-        #region downPanelButtons
+        #region Down Panel Buttons
+
         /// <summary>
         /// Shows the find button.
         /// </summary>
-        void ShowFindButton()
+        private void ShowFindButton()
         {
 			AnimatedMarkers.btnSearch.Enabled = true;
 			AnimatedMarkers.btnSearch.SetImageResource(Resource.Drawable.btn_search);
@@ -75,15 +88,16 @@ namespace Playfie.Droid
         /// <summary>
         /// Hides the find button.
         /// </summary>
-        void HideFindButton()
+        private void HideFindButton()
         {
 			AnimatedMarkers.btnSearch.Enabled = false;
 			AnimatedMarkers.btnSearch.SetImageResource(Resource.Drawable.btn_search_pressed);
         }
+
         #endregion
 
         /// <summary>
-        /// функція для відображення інфи про плейс у фрагменті
+        /// Displays place information inside the fragment.
         /// </summary>
 		void ShowPlaceInfo(AnimatedMarkers.AnimatedMarker.PhotoMarker value)
         {
@@ -97,7 +111,7 @@ namespace Playfie.Droid
             //temporaly
             photoCount.Text = new Random().Next(10, 300).ToString();
             //temporaly
-            name.Text = value.marker.Title;
+            name.Text = value.Marker.Title;
 
             layout.Visibility = ViewStates.Visible;
             btn.Visibility = ViewStates.Visible;
@@ -108,6 +122,13 @@ namespace Playfie.Droid
             btn.StartAnimation(anim);
         }
 
+        /// <summary>
+        /// Detects if marker is inside the in circle.
+        /// </summary>
+        /// <returns><c>true</c>, if is in circle, <c>false</c> otherwise.</returns>
+        /// <param name="radius">Radius.</param>
+        /// <param name="circle">Circle.</param>
+        /// <param name="marker">Marker.</param>
         private bool IsInCircle(int radius, Circle circle, Marker marker)
         {
             float[] distance = new float[2];
@@ -118,6 +139,9 @@ namespace Playfie.Droid
             return distance[0] < radius;
         }
 
+        /// <summary>
+        /// Builds the map.
+        /// </summary>
         private void BuildMap()
         {
 			if (AnimatedMarkers.Map == null)
@@ -161,8 +185,10 @@ namespace Playfie.Droid
 
         #endregion
 
-        #region callbacks
-        #region googleMapsCallbacks
+        #region Callbacks
+        #region Google Maps Callbacks
+
+		/// <inheritdoc />
         public void OnMapReady(GoogleMap googleMap)
         {
             try
@@ -181,6 +207,10 @@ namespace Playfie.Droid
 
         #endregion
 
+        /// <summary>
+        /// Builds the main screen.
+        /// </summary>
+        /// <param name="view">View.</param>
         private void BuildMainScreen(View view)
         {
 			AnimatedMarkers.btnSearch = (ImageButton) view.FindViewById(Resource.Id.btnSearch);
@@ -251,35 +281,39 @@ namespace Playfie.Droid
                 _animatedUserMarker = new AnimatedMarkers.AnimatedMarker.UserMarker(new LatLng(location.Latitude, location.Longitude));
 
                 //userMarker.animate(new LatLng(location.Latitude - 1, location.Longitude + 1), 500);
-                _animatedUserMarker.marker.Flat = true;
+                _animatedUserMarker.Marker.Flat = true;
 
 				AnimatedMarkers.Map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(location.Latitude, location.Longitude), 13));
             }
             else if (_animatedUserMarker != null)
             {
                 _animatedUserMarker.Animate(new LatLng(location.Latitude, location.Longitude), 1000);
-                if (_animatedUserMarker.markerCircle != null)
+                if (_animatedUserMarker.MarkerCircle != null)
                 {
-                    _animatedUserMarker.markerCircle.Center = new LatLng(location.Latitude, location.Longitude);
+                    _animatedUserMarker.MarkerCircle.Center = new LatLng(location.Latitude, location.Longitude);
                 }
             }
         }
 
+		/// <inheritdoc />
         public void OnProviderDisabled(string provider)
         {
 			Toast.MakeText(Activity, "Provider disabled", ToastLength.Short);
         }
 
+		/// <inheritdoc />
         public void OnProviderEnabled(string provider)
         {
 			Toast.MakeText(Activity, "Provider enabled", ToastLength.Short);
         }
 
+		/// <inheritdoc />
         public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
         {
 			Toast.MakeText(Activity, "Provider status changed to " + status.ToString(), ToastLength.Short);
         }
 
+		/// <inheritdoc />
         public void OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
         {
 			Toast.MakeText(Activity, "Accuracy changed to " + accuracy.ToString(), ToastLength.Short);
@@ -304,20 +338,23 @@ namespace Playfie.Droid
             int degI = (int)deg;
             if (_animatedUserMarker != null)
             {
-                _animatedUserMarker.marker.Rotation = -rotation;
+                _animatedUserMarker.Marker.Rotation = -rotation;
             }
         }
 
+		/// <inheritdoc />
         public void OnConnectionFailed(ConnectionResult result)
         {
             Toast.MakeText(Activity, "Error while connecting to GClient", ToastLength.Short);
         }
 
+		/// <inheritdoc />
         public void OnConnected(Bundle connectionHint)
         {
             Toast.MakeText(Activity, "Connection to GClient successful", ToastLength.Short);
         }
 
+		/// <inheritdoc />
         public void OnConnectionSuspended(int cause)
         {
             Toast.MakeText(Activity, "Connection to GClient suspended", ToastLength.Short);
@@ -337,11 +374,11 @@ namespace Playfie.Droid
 
 			for (int i = 0; i < AnimatedMarkers.FoundPlacesMarkers.Count; i++)
             {
-				if (marker.Id == AnimatedMarkers.FoundPlacesMarkers[i].marker.Id)
+				if (marker.Id == AnimatedMarkers.FoundPlacesMarkers[i].Marker.Id)
                 {
 					AnimatedMarkers.FoundPlacesMarkers[i].OpenCircle();
 
-					if (IsInCircle(AnimatedMarkers.FoundPlacesMarkers[i].usableRadius, AnimatedMarkers.FoundPlacesMarkers[i].markerCircle, _animatedUserMarker.marker))
+					if (IsInCircle(AnimatedMarkers.FoundPlacesMarkers[i].UsableRadius, AnimatedMarkers.FoundPlacesMarkers[i].MarkerCircle, _animatedUserMarker.Marker))
                     {
                         ShowShotBtn();
                     }
@@ -358,6 +395,7 @@ namespace Playfie.Droid
             return false;
         }
 
+		/// <inheritdoc />
         public void OnClick(View v)
         {
             _photoUtils.TakePhoto(v, new EventArgs());
@@ -367,6 +405,7 @@ namespace Playfie.Droid
             }
         }
 
+		/// <inheritdoc />
         public void OnMapClick(LatLng point)
         {
             Log.Info("Click info:", "user has clicked on the map");
@@ -381,6 +420,7 @@ namespace Playfie.Droid
 
         #endregion
 
+        /// <inheritdoc />
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View view = inflater.Inflate(Resource.Layout.Fragment_Map, container, false);

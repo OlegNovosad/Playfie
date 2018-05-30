@@ -12,6 +12,7 @@ namespace Playfie.Droid
 {
     public class ProfileFragment : Fragment
     {
+		/// <inheritdoc />
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View view = inflater.Inflate(Resource.Layout.Fragment_Profile, container, false);

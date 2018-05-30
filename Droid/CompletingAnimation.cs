@@ -7,47 +7,58 @@ namespace Playfie.Droid
 {
     class CompletingAnimation
     {
-        Thread mainThread;
-        Handler inserter;
-        View parent;
+		private Thread _mainThread;
+		private Handler _inserter;
+		private View _parent;
 
-        public float from, to;
-        public int duration;
-        float delay { get { return (to - from) / duration; } }
+        public float From, To;
+        public int Duration;
 
-        private void animate()
+		private float _delay { get { return (To - From) / Duration; } }
+
+		public CompletingAnimation(float from, float to, View parent)
         {
-            for (int i = 0; i < duration; i++)
-            {
-                inserter.SendEmptyMessage(1);
-                Thread.Sleep(1);
-            }
-        }
+            this.From = from; this.To = to; this._parent = parent;
+            Duration = 500;
 
-        private void addOne(Message one)
-        {
-            parent.LayoutParameters.Height += (int)delay;
-            parent.RequestLayout();
-        }
-
-        public void Start()
-        {
-            mainThread = new Thread(new Action(animate));
-            mainThread.Start();
-        }
-
-        public CompletingAnimation(float from, float to, View parent)
-        {
-            this.from = from; this.to = to; this.parent = parent;
-            duration = 500;
-
-            inserter = new Handler(new Action<Message>(addOne));
+            _inserter = new Handler(new Action<Message>(AddOne));
         }
 
         public CompletingAnimation(View parent)
         {
-            this.parent = parent;
-            inserter = new Handler(new Action<Message>(addOne));
+            this._parent = parent;
+            _inserter = new Handler(new Action<Message>(AddOne));
+        }
+
+        /// <summary>
+        /// Animate this instance.
+        /// </summary>
+		private void Animate()
+        {
+            for (int i = 0; i < Duration; i++)
+            {
+                _inserter.SendEmptyMessage(1);
+                Thread.Sleep(1);
+            }
+        }
+
+        /// <summary>
+        /// Adds new animation.
+        /// </summary>
+        /// <param name="one">One.</param>
+		private void AddOne(Message one)
+        {
+            _parent.LayoutParameters.Height += (int)_delay;
+            _parent.RequestLayout();
+        }
+
+        /// <summary>
+        /// Start the animation.
+        /// </summary>
+        public void Start()
+        {
+            _mainThread = new Thread(new Action(Animate));
+            _mainThread.Start();
         }
     }
 }
