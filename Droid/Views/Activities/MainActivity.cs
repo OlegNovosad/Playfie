@@ -17,6 +17,8 @@ namespace Playfie.Droid
         PlayfieMapFragment playfieMapFragment = new PlayfieMapFragment();
 		ProfileFragment profileFragment = new ProfileFragment();
 		PhotoListFragment photoListFragment = new PhotoListFragment();
+        
+
         ImageButton btnUser, btnMap, btnList;
         
         protected override void OnCreate(Bundle savedInstanceState)
@@ -43,7 +45,7 @@ namespace Playfie.Droid
 				FragmentTransaction transaction = FragmentManager.BeginTransaction();
                 transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
 				transaction.Add(Resource.Id.container, profileFragment, profileFragment.Class.SimpleName);
-				transaction.Add(Resource.Id.container, photoListFragment, photoListFragment.Class.SimpleName);
+                transaction.Add(Resource.Id.container, photoListFragment, photoListFragment.Class.SimpleName);
 				transaction.Hide(profileFragment);
 				transaction.Hide(photoListFragment);
                 transaction.Commit();
@@ -54,8 +56,13 @@ namespace Playfie.Droid
         {
 			FragmentTransaction transaction = FragmentManager.BeginTransaction();
             transaction.Add(Resource.Id.container, playfieMapFragment, playfieMapFragment.Class.SimpleName);
+            transaction.Add(Resource.Id.container, profileFragment, profileFragment.Class.SimpleName);
+            transaction.Add(Resource.Id.container, photoListFragment, photoListFragment.Class.SimpleName);
+            transaction.Hide(profileFragment);
+            transaction.Hide(photoListFragment);
             transaction.Commit();
         }
+        
 
         override protected void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {

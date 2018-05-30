@@ -11,10 +11,15 @@ namespace Playfie.Droid
         {
 			View view = inflater.Inflate(Resource.Layout.Fragment_PhotoList, container, false);
 
-            TextView tvText = (TextView)view.FindViewById(Resource.Id.tvText);
-            tvText.SetText("Photos", TextView.BufferType.Normal);
+            //TextView tvText = (TextView)view.FindViewById(Resource.Id.tvText);
+            //tvText.SetText("Photos", TextView.BufferType.Normal);
 
             return view;
+        }
+
+        public void findPhotos()
+        {
+
         }
     }
 }

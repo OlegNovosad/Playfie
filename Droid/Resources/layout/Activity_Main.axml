@@ -38,7 +38,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:background="@null"
+            android:background="@drawable/ripplebutton"
             android:id="@+id/btnUser" />
         <ImageButton
             android:src="@drawable/btn_map"
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:background="@null"
+            android:background="@drawable/ripplebutton"
             android:id="@+id/btnMap" />
         <ImageButton
             android:src="@drawable/btn_menu"
@@ -56,7 +56,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:background="@null"
+            android:background="@drawable/ripplebutton"
             android:id="@+id/btnList" />
     </LinearLayout>
 </LinearLayout>
