@@ -219,7 +219,7 @@ namespace Playfie.Droid
             Bitmap photoB = BitmapFactory.DecodeResource(Resources, Resource.Drawable.playfieMarker);
             Bitmap cursorB = BitmapFactory.DecodeResource(Resources, Resource.Drawable.userCursor);
             Bitmap scaledCursor = Bitmap.CreateScaledBitmap(cursorB, 30, 60, false);
-            Bitmap scaledPhoto = Bitmap.CreateScaledBitmap(photoB, 60, 60, false);
+            Bitmap scaledPhoto = Bitmap.CreateScaledBitmap(photoB, 90, 90, false);
 			AnimatedMarkers.PhotoExample = scaledPhoto; AnimatedMarkers.CursorExample = scaledCursor;
 
             //Gclient ops

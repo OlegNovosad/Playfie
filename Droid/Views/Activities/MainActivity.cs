@@ -16,7 +16,7 @@ namespace Playfie.Droid
     {
         PlayfieMapFragment playfieMapFragment = new PlayfieMapFragment();
 		ProfileFragment profileFragment = new ProfileFragment();
-		PhotoListFragment photoListFragment = new PhotoListFragment();
+		PostsListFragment photoListFragment = new PostsListFragment();
         
 
         ImageButton btnUser, btnMap, btnList;

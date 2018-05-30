@@ -8,4 +8,8 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Playfie</Import_RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Post.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)User.cs" />
+  </ItemGroup>
 </Project>
